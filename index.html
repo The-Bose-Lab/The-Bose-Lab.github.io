@@ -10,7 +10,7 @@ layout: default
   {% assign msc = site.data.people | where: "role", "msc" %}
   <div class="hero-meta">
     <div class="rv"><div class="label mono">Principal Investigator</div><div class="value">Joey Bose</div></div>
-    <div class="rv"><div class="label mono">Group</div><div class="value">{{ phd | size }} PhD · {{ msc | size }} MSc</div></div>
+    <div class="rv"><div class="label mono">Group</div><div class="value">{{ phd | size }} PhD{% if msc.size > 0 %} · {{ msc | size }} MSc{% endif %}</div></div>
     <div class="rv"><div class="label mono">Founded</div><div class="value">{{ site.data.lab.founded }}</div></div>
     <div class="rv"><div class="label mono">Based in</div><div class="value">{{ site.data.lab.based_in }}</div></div>
   </div>

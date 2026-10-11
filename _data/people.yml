@@ -50,7 +50,7 @@
   role: phd
   title: PhD Student, Imperial College London
   cosupervised: with Shelly Conroy & Alex Ganose
-  photo: /assets/images/ph-gabriel.svg
+  photo: /assets/images/gabriel.jpg
   website: https://www.linkedin.com/in/gabriel-greenstein-8ba505261/
 
 - name: Joshua Rooijakkers
@@ -60,15 +60,15 @@
   website: https://joshuarooijakkers.github.io/
 
 - name: Hua-Chang Bakker
-  role: msc
-  title: ELLIS MSc Honours, University of Amsterdam
+  role: alumni
+  title: ELLIS MSc Honours 2026, University of Amsterdam
   cosupervised: with Erik Bekkers
   photo: /assets/images/huachang.png
   website: https://huachangb.github.io
 
 - name: Odysseas Boufalis
-  role: msc
-  title: ELLIS MSc Honours, University of Amsterdam
+  role: alumni
+  title: ELLIS MSc Honours 2026, University of Amsterdam
   cosupervised: with Christian Naesseth
   photo: /assets/images/ph-odysseas.svg
   scholar: https://scholar.google.com/citations?user=bOMeLjgAAAAJ
