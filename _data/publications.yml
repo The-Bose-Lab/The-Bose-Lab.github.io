@@ -5,6 +5,7 @@
   title: Normalizing Flow Maps
   authors: F. M. Ruscio, T. J. Hitge, Z. Peng, D. Rehman, Z. W. Blasingame, M. M. Bronstein, N. M. Boffi, A. Tong, A. J. Bose
   link: https://openreview.net/forum?id=guBm2gNlxU
+  figure: /assets/pubfigs/normalizing-flow-maps.jpg
   tags: [flow maps]
 
 - year: 2026
@@ -12,6 +13,7 @@
   title: Fixed-Point Rates for Self-Distillation of Flow Maps
   authors: T. Stanic, Q. Bertrand, A. J. Bose, G. Gidel
   link: https://openreview.net/forum?id=sWVDqeX4ux
+  figure: /assets/pubfigs/fixed-point-rates.jpg
   tags: [flow maps]
 
 - year: 2026
@@ -19,6 +21,7 @@
   title: On the Stability and Convergence of Flow Map Training
   authors: I. Nath, M. Massias, A. J. Bose, G. Gidel, Q. Bertrand
   link: https://openreview.net/forum?id=gRvMLsNENT
+  figure: /assets/pubfigs/stability-convergence-flow-maps.jpg
   tags: [flow maps]
 
 - year: 2026
@@ -26,6 +29,7 @@
   title: "Steered Not Stirred: Effective Tilting in Generative Models using Surrogate Reward Mixing"
   authors: A. Sargood, O. Gallup, G. Maierhofer, N. Ghenassia, P. Duckworth, K. Sinkovics, A. J. Bose
   link: https://openreview.net/forum?id=9Ysy6qcUWm
+  figure: /assets/pubfigs/steered-not-stirred.jpg
   tags: [generative models]
 
 - year: 2026
@@ -218,12 +222,6 @@
   authors: Q. Bertrand, A. J. Bose, A. Duplessis, M. Jiralerspong, G. Gidel
   link: https://arxiv.org/abs/2310.00429
   figure: /assets/pubfigs/2310.00429.jpg
-  tags: [generative models]
-
-- year: 2023
-  venue: PhD Thesis 2023
-  title: A Geometric Perspective to Deep Generative Models
-  authors: A. J. Bose
   tags: [generative models]
 
 - year: 2023
