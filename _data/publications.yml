@@ -3,7 +3,7 @@
 - year: 2026
   venue: NeurIPS 2026 STODY Workshop (Oral)
   title: Normalizing Flow Maps
-  authors: F. M. Ruscio, T. J. Hitge, Z. Peng, D. Rehman, Z. W. Blasingame, M. M. Bronstein, N. M. Boffi, A. Tong, A. J. Bose
+  authors: F. M. Ruscio*, T. J. Hitge*, Z. Peng, D. Rehman, Z. W. Blasingame, M. M. Bronstein, N. M. Boffi, A. Tong, A. J. Bose
   link: https://openreview.net/forum?id=guBm2gNlxU
   figure: /assets/pubfigs/normalizing-flow-maps.jpg
   tags: [flow maps]
