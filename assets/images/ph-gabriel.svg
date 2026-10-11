@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#ecE8e0"/>
+  <rect width="600" height="600" fill="url(#n)" opacity="0.5"/>
+  <defs><radialGradient id="n" cx="0.35" cy="0.3" r="1"><stop offset="0%" stop-color="#f6f3ec"/><stop offset="100%" stop-color="#dcd6c9"/></radialGradient></defs>
+  <circle cx="300" cy="300" r="210" fill="none" stroke="#1c1a17" stroke-width="1.5" opacity="0.35"/>
+  <text x="300" y="352" font-family="Georgia, 'Times New Roman', serif" font-size="150" font-weight="400" fill="#1c1a17" text-anchor="middle" letter-spacing="6">GG</text>
+</svg>

@@ -1,0 +1,54 @@
+---
+layout: default
+title: People
+permalink: /people/
+description: The Bose Lab group — principal investigator, doctoral and masters students, and visitors.
+---
+<div class="page-hero"><div class="wrap">
+  <div class="kicker mono">The group</div>
+  <h1>People</h1>
+</div></div>
+
+<section><div class="wrap">
+  {% assign pi = site.data.people | where: "role", "pi" | first %}
+  <div class="pi rv">
+    <figure><img src="{{ pi.photo | relative_url }}" alt="{{ pi.name }}"><figcaption>{{ pi.name }} — Principal Investigator</figcaption></figure>
+    <div>
+      <h3>{{ pi.name }}</h3>
+      <div class="role mono">{{ pi.position }}</div>
+      <p class="bio">{{ pi.bio | replace: "ELLIS member", "<em>ELLIS member</em>" }}</p>
+      <div class="link-row">
+        {% if pi.website %}<a href="{{ pi.website }}" target="_blank" rel="noopener">website</a>{% endif %}
+        {% if pi.scholar %}<a href="{{ pi.scholar }}" target="_blank" rel="noopener">scholar</a>{% endif %}
+        {% if pi.github %}<a href="{{ pi.github }}" target="_blank" rel="noopener">github</a>{% endif %}
+        {% if pi.twitter %}<a href="{{ pi.twitter }}" target="_blank" rel="noopener">twitter</a>{% endif %}
+        {% if pi.email %}<a href="mailto:{{ pi.email }}">email</a>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% assign groups = "phd,Doctoral Students;msc,Masters Students;visitor,Visitors;alumni,Alumni" | split: ";" %}
+  {% for g in groups %}
+    {% assign parts = g | split: "," %}
+    {% assign ppl = site.data.people | where: "role", parts[0] %}
+    {% if ppl.size > 0 %}
+    <div class="team-sub rv">{{ parts[1] }} <span class="cnt">{{ ppl.size | prepend: "00" | slice: -2, 2 }}</span></div>
+    <div class="team">
+      {% for p in ppl %}
+      <div class="tm rv">
+        <img src="{{ p.photo | relative_url }}" alt="{{ p.name }}" loading="lazy">
+        <div class="nm">{{ p.name }}</div>
+        <div class="ttl">{{ p.title }}</div>
+        {% if p.cosupervised %}<div class="co">{{ p.cosupervised }}</div>{% endif %}
+        <div class="lk">
+          {% if p.website %}<a href="{{ p.website }}" target="_blank" rel="noopener">website</a>{% endif %}
+          {% if p.scholar %}<a href="{{ p.scholar }}" target="_blank" rel="noopener">scholar</a>{% endif %}
+          {% if p.github %}<a href="{{ p.github }}" target="_blank" rel="noopener">github</a>{% endif %}
+          {% if p.email %}<a href="mailto:{{ p.email }}">email</a>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endfor %}
+</div></section>

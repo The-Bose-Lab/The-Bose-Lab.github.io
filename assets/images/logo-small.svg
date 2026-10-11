@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Hexlattice, small-size variant: 5 atoms, heavier strokes -->
+  <polygon points="32,2 58,17 58,47 32,62 6,47 6,17" stroke="#1c1a17" stroke-width="3" opacity=".55" stroke-linejoin="round"/>
+  <g stroke="#1c1a17" stroke-width="3.4" stroke-linejoin="round">
+    <path d="M24 15 V49"/>
+    <path d="M24 15 L42 23 L24 32"/>
+    <path d="M24 32 L45 41 L24 49"/>
+  </g>
+  <g fill="#ffffff" stroke="#1c1a17" stroke-width="3.4">
+    <circle cx="24" cy="15" r="4.6"/><circle cx="24" cy="32" r="4.6"/><circle cx="24" cy="49" r="4.6"/>
+    <circle cx="42" cy="23" r="4.6"/>
+  </g>
+  <circle cx="45" cy="41" r="5.4" fill="#b4351f"/>
+</svg>

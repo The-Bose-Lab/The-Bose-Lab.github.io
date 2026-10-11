@@ -1,0 +1,15 @@
+# Lab-wide settings. Shown in the hero, footer, and metadata.
+name: Bose Lab
+tagline: Generative Models for Science
+blurb: >-
+  Our work spans diffusion, flow matching, and neural samplers — from
+  mathematical foundations to what they make possible in science: protein
+  design, molecular dynamics, and sampling from unnormalized densities.
+institution: Department of Computing, Imperial College London
+address: Huxley Building, 180 Queen's Gate, South Kensington, London SW7 2AZ, UK
+email: joey.bose@imperial.ac.uk
+github: https://github.com/The-Bose-Lab
+twitter: https://twitter.com/bose_joey
+scholar: https://scholar.google.com/citations?user=ybPyI7IAAAAJ
+founded: 2026
+based_in: London, UK

@@ -1,0 +1,24 @@
+title: Bose Lab
+tagline: Generative Models for Science
+description: >-
+  Our work spans diffusion, flow matching, and neural samplers — from
+  mathematical foundations to what they make possible in science: protein
+  design, molecular dynamics, and sampling from unnormalized densities.
+url: "https://the-bose-lab.github.io"
+baseurl: ""
+
+markdown: kramdown
+highlighter: rouge
+permalink: /blog/:year/:title/
+
+plugins:
+  - jekyll-feed
+
+feed:
+  posts_limit: 20
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

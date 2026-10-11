@@ -1,0 +1,370 @@
+# Publications. Add new papers at the top. Fields: year, venue, title,
+# authors, link (optional), figure (optional, drop in assets/pubfigs/), tags.
+- year: 2026
+  venue: NeurIPS 2026 STODY Workshop (Oral)
+  title: Normalizing Flow Maps
+  authors: F. M. Ruscio, T. J. Hitge, Z. Peng, D. Rehman, Z. W. Blasingame, M. M. Bronstein, N. M. Boffi, A. Tong, A. J. Bose
+  link: https://openreview.net/forum?id=guBm2gNlxU
+  tags: [flow maps]
+
+- year: 2026
+  venue: NeurIPS 2026 STODY Workshop
+  title: Fixed-Point Rates for Self-Distillation of Flow Maps
+  authors: T. Stanic, Q. Bertrand, A. J. Bose, G. Gidel
+  link: https://openreview.net/forum?id=sWVDqeX4ux
+  tags: [flow maps]
+
+- year: 2026
+  venue: NeurIPS 2026 STODY Workshop
+  title: On the Stability and Convergence of Flow Map Training
+  authors: I. Nath, M. Massias, A. J. Bose, G. Gidel, Q. Bertrand
+  link: https://openreview.net/forum?id=gRvMLsNENT
+  tags: [flow maps]
+
+- year: 2026
+  venue: NeurIPS 2026 STODY Workshop
+  title: "Steered Not Stirred: Effective Tilting in Generative Models using Surrogate Reward Mixing"
+  authors: A. Sargood, O. Gallup, G. Maierhofer, N. Ghenassia, P. Duckworth, K. Sinkovics, A. J. Bose
+  link: https://openreview.net/forum?id=9Ysy6qcUWm
+  tags: [generative models]
+
+- year: 2026
+  venue: NeurIPS 2026 (Spotlight)
+  title: Few-step Cofolding with All-Atom Flow Maps
+  authors: G. Scarpellini, R. Shprints, P. Holderrieth, J. Nam, P. Murugan, R. Gomez-Bombarelli, T. Jaakola, M. Al-Shedivat, N. M. Boffi, A.J. Bose
+  link: https://arxiv.org/abs/2606.08375
+  figure: /assets/pubfigs/2606.08375.jpg
+  tags: [flow maps]
+
+- year: 2026
+  venue: Preprint 2026
+  title: Learned Relay Representations for Forward-Thinking Discrete Diffusion Models
+  authors: B. Rozonoyer, J. Minniti, D. Patel, N. Band, A. J. Bose, T. G. J. Rudner, A. McCallum
+  link: https://arxiv.org/abs/2605.22967
+  figure: /assets/pubfigs/2605.22967.jpg
+  tags: [diffusion, discrete]
+
+- year: 2026
+  venue: NeurIPS 2026
+  title: Aligning Flow Map Policies with Optimal Q-Guidance
+  authors: C. Ziakas, A. Russo, A.J. Bose
+  link: https://arxiv.org/abs/2605.12416
+  figure: /assets/pubfigs/2605.12416.jpg
+  tags: [flow maps]
+
+- year: 2026
+  venue: NeurIPS 2026
+  title: Coupling Models for One-Step Discrete Generation
+  authors: F. Z. Peng, A.J. Bose, A.R. Zhang, A. Tong
+  link: https://arxiv.org/abs/2605.07193
+  figure: /assets/pubfigs/2605.07193.jpg
+  tags: [discrete]
+
+- year: 2026
+  venue: ICML 2026 (Spotlight)
+  title: Autoregressive Boltzmann Generators
+  authors: D. Rehman, C. Tan, A.J. Bose†, A. Tong†
+  link: https://arxiv.org/abs/2606.27361
+  figure: /assets/pubfigs/2606.27361.jpg
+  tags: [sampling]
+
+- year: 2026
+  venue: Preprint 2026
+  title: General Multimodal Protein Design Enables DNA-Encoding of Chemistry
+  authors: J. Rector-Brooks*, T. Lambert*, M. Skreta*, D. Roth*, ..., C.H. Liu*
+  link: https://arxiv.org/abs/2604.05181
+  figure: /assets/pubfigs/2604.05181.jpg
+  tags: [proteins]
+
+- year: 2026
+  venue: ICLR 2026
+  title: "OXtal: An All-Atom Diffusion Model for Organic Crystal Structure Prediction"
+  authors: E. Jin*, A. Nica*, K. Lee, A. J. Bose, M. Galkin, S. Miret, J. Rector-Brooks, A. Tong, M. Bronstein, F. H. Arnold, C.H. Liu
+  link: https://arxiv.org/abs/2512.06987
+  figure: /assets/pubfigs/2512.06987.jpg
+  tags: [diffusion, chemistry]
+
+- year: 2026
+  venue: ICLR 2026
+  title: Generalised Flow Maps for Few-Step Generative Modelling on Riemannian Manifolds
+  authors: O. Davis, M. Albergo, N. Boffi, M. Bronstein, A. J. Bose
+  link: https://arxiv.org/abs/2510.21608
+  figure: /assets/pubfigs/2510.21608.jpg
+  tags: [flow maps, geometry]
+
+- year: 2026
+  venue: ICLR 2026 (Oral)
+  title: Planner Aware Path Learning in Diffusion Language Models Training
+  authors: F. Z. Peng*, Z. Bezemek*, J. Rector-Brooks, S. Zhang, Anru R. Zhang, J, M. Bronstein, A. Tong†, A. J. Bose†
+  link: https://arxiv.org/abs/2509.23405
+  figure: /assets/pubfigs/2509.23405.jpg
+  tags: [diffusion, language models]
+
+- year: 2026
+  venue: ICLR 2026
+  title: Efficient Regression-Based Training of Normalizing Flows for Boltzmann Generators
+  authors: D. Rehman, O. Davis, J. Lu, J. Tang, M. Bronstein, Y. Bengio, A. Tong†, A. J. Bose†
+  link: https://arxiv.org/abs/2506.01158
+  figure: /assets/pubfigs/2506.01158.jpg
+  tags: [sampling]
+
+- year: 2025
+  venue: NeurIPS 2025 (Spotlight)
+  title: Progressive Inference-Time Annealing of Diffusion Models for Sampling from Boltzmann Densities
+  authors: T. Akhound-Sadegh*, J. Lee*, A. J. Bose, V. De Bortoli, A. Doucet, M. Bronstein, D. Beaini, S. Ravanbakhsh, K. Neklyudov†, A. Tong†
+  link: https://arxiv.org/abs/2506.16471
+  figure: /assets/pubfigs/2506.16471.jpg
+  tags: [sampling, diffusion]
+
+- year: 2025
+  venue: Preprint 2025
+  title: Path Planning for Masked Diffusion Model Sampling
+  authors: F. Z. Peng*, Z. Bezemek*, S. Patel, J. Rector-Brooks, A. J. Bose, A. Tong†, P Chatterjee†
+  link: https://arxiv.org/abs/2502.03540
+  figure: /assets/pubfigs/2502.03540.jpg
+  tags: [sampling, diffusion]
+
+- year: 2025
+  venue: NeurIPS 2025
+  title: "RETRO SYNFLOW: Discrete Flow Matching for Accurate and Diverse Single-Step Retrosynthesis"
+  authors: R. Yadav, Q. Yan, G. Wolf, A. J. Bose, R. Liao
+  link: https://arxiv.org/abs/2506.04439
+  figure: /assets/pubfigs/2506.04439.jpg
+  tags: [flow matching, discrete, chemistry]
+
+- year: 2025
+  venue: NeurIPS 2025
+  title: Curly Flow Matching For Learning Non-Gradient Field Dynamics
+  authors: K. Petrović, L. Atanackovic, V. Morro, K. Kapusniak, M. Bronstein, A. J. Bose†, A Tong†
+  link: https://arxiv.org/abs/2510.26645
+  figure: /assets/pubfigs/curly-flow-matching-for-learning-non-gra.jpg
+  tags: [flow matching]
+
+- year: 2025
+  venue: ICML 2025
+  title: Scalable Equilibrium Sampling with Sequential Boltzmann Generators
+  authors: C. B. Tan*, A. J. Bose*, C. Lin, L. Klein, M. Bronstein, A. Tong
+  link: https://arxiv.org/abs/2502.18462
+  figure: /assets/pubfigs/2502.18462.jpg
+  tags: [sampling]
+
+- year: 2025
+  venue: ICLR 2025 (Spotlight)
+  title: The Superposition of Diffusion Models
+  authors: M. Skreta*, L. Atanackovic*, A. J. Bose, A. Tong, K. Neklyudov
+  link: https://openreview.net/pdf?id=2o58Mbqkd2
+  figure: /assets/pubfigs/the-superposition-of-diffusion-models.jpg
+  tags: [diffusion]
+
+- year: 2025
+  venue: ICLR 2025
+  title: Steering Masked Discrete Diffusion Models via Discrete Denoising Posterior Prediction
+  authors: J. Rector-Brooks, M. Hasan, Z. Peng, Z. Quinn, C. Liu, S. Mittal, N. Dziri, M. Bronstein, Y. Bengio, P. Chatterjee, A. Tong†, A. J. Bose†
+  link: https://arxiv.org/abs/2410.08134
+  figure: /assets/pubfigs/2410.08134.jpg
+  tags: [diffusion, discrete]
+
+- year: 2024
+  venue: NeurIPS 2024
+  title: Sequence-Augmented SE(3)-Flow Matching For Conditional Protein Backbone Generation
+  authors: G. Huguet*, J. Vuckovic*, K. Fatras, E. Thibodeau-Laufer, P. Lemos, R. Islam, C. Liu, J. Rector-Brooks, T. Akhound-Sadegh, M. Bronstein, A. Tong†, A. J. Bose†
+  link: https://arxiv.org/abs/2405.20313
+  figure: /assets/pubfigs/2405.20313.jpg
+  tags: [proteins, flow matching]
+
+- year: 2024
+  venue: NeurIPS 2024 (Spotlight)
+  title: Self-Consuming Generative Models with Curated Data Provably Optimize Human Preferences
+  authors: D. Ferbach, Q. Bertrand, A. J. Bose, G. Gidel
+  link: https://arxiv.org/abs/2407.09499
+  figure: /assets/pubfigs/2407.09499.jpg
+  tags: [generative models]
+
+- year: 2024
+  venue: NeurIPS 2024
+  title: Metric Flow Matching for Smooth Interpolations on the Data Manifold
+  authors: K. Kapusniak, P. Potaptchik, T. Reu, L. Zhang, A. Tong, M. Bronstein, A. J. Bose, F. D. Giovanni
+  link: https://arxiv.org/abs/2405.14780
+  figure: /assets/pubfigs/2405.14780.jpg
+  tags: [flow matching, geometry]
+
+- year: 2024
+  venue: NeurIPS 2024
+  title: Fisher Flow Matching for Generative Modeling over Discrete Data
+  authors: O. Davis, S. Kessler, M. Petrache, I. I. Ceylan, M. Bronstein, A. J. Bose
+  link: https://arxiv.org/abs/2405.14664
+  figure: /assets/pubfigs/2405.14664.jpg
+  tags: [flow matching, discrete]
+
+- year: 2024
+  venue: ICML 2024
+  title: Iterated Denoising Energy Matching for Sampling from Boltzmann Densities
+  authors: T. Akhound-Sadegh*, J. Rector-Brooks*, A.J. Bose*, S. Mittal, P. Lemos, C.H. Liu, M. Sendera, S. Ravanbaksh, G. Gidel, Y. Bengio, N. Malkin, A. Tong
+  link: https://arxiv.org/abs/2402.06121
+  figure: /assets/pubfigs/2402.06121.jpg
+  tags: [sampling]
+
+- year: 2024
+  venue: ICLR 2024 (Spotlight)
+  title: SE(3)-Stochastic Flow Matching for Protein Backbone Generation
+  authors: A. J. Bose*, T. Akhound-Sadegh*, K. Fatras, G. Huguet, J. Rector-Brooks, C.H. Liu, A.C. Nica, M. Korablyov, M. Bronstein, A. Tong
+  link: https://arxiv.org/abs/2310.02391
+  figure: /assets/pubfigs/2310.02391.jpg
+  tags: [proteins, flow matching]
+
+- year: 2024
+  venue: ICLR 2024 (Spotlight)
+  title: On the Stability of Iterative Retraining of Generative Models on their own Data
+  authors: Q. Bertrand, A. J. Bose, A. Duplessis, M. Jiralerspong, G. Gidel
+  link: https://arxiv.org/abs/2310.00429
+  figure: /assets/pubfigs/2310.00429.jpg
+  tags: [generative models]
+
+- year: 2023
+  venue: PhD Thesis 2023
+  title: A Geometric Perspective to Deep Generative Models
+  authors: A. J. Bose
+  tags: [generative models]
+
+- year: 2023
+  venue: NeurIPS 2023
+  title: "EDGI: Equivariant Diffusion for Planning with Embodied Agents"
+  authors: J. Bremer*, A. J. Bose*, P. de Haan, T. Cohen
+  link: https://arxiv.org/abs/2303.12410
+  figure: /assets/pubfigs/2303.12410.jpg
+  tags: [diffusion, geometry]
+
+- year: 2023
+  venue: NeurIPS 2023
+  title: "Feature Likelihood Divergence: Evaluating the Generalization of Generative Models Using Samples"
+  authors: M. Jiralerspong, A. J. Bose, G. Gidel
+  link: https://arxiv.org/abs/2302.04440
+  figure: /assets/pubfigs/2302.04440.jpg
+  tags: [generative models]
+
+- year: 2023
+  venue: ICLR 2023
+  title: A General Framework For Proving The Equivariant Strong Lottery Ticket Hypothesis
+  authors: D. Ferbach*, C. Tsirigotis*, G. Gidel, A.J. Bose
+  link: https://openreview.net/forum?id=vVJZtlZB9D
+  figure: /assets/pubfigs/a-general-framework-for-proving-the-equi.jpg
+  tags: [geometry]
+
+- year: 2022
+  venue: NeurIPS 2022
+  title: Riemannian Diffusion Models
+  authors: C.W. Huang*, M. Aghajohari*, A.J. Bose, P. Panangaden, A. Courville
+  link: https://arxiv.org/abs/2208.07949
+  figure: /assets/pubfigs/2208.07949.jpg
+  tags: [diffusion, geometry]
+
+- year: 2022
+  venue: TMLR 2022
+  title: Controllable Generative Modeling via Causal Reasoning
+  authors: A.J. Bose, R. Monti, A. Grover
+  link: https://openreview.net/pdf?id=Z44YAcLaGw
+  figure: /assets/pubfigs/controllable-generative-modeling-via-cau.jpg
+  tags: [generative models]
+
+- year: 2022
+  venue: Preprint 2022
+  title: Equivariant Finite Normalizing Flows
+  authors: A.J. Bose, I. Kobyzev, M. Brubaker
+  link: https://arxiv.org/abs/2110.08649
+  figure: /assets/pubfigs/equivariant-finite-normalizing-flows.jpg
+  tags: [geometry]
+
+- year: 2022
+  venue: ICML 2022
+  title: Matching Normalizing Flows and Probability Paths on Manifolds
+  authors: H. Ben-Hamu*, S. Cohen*, A.J. Bose, B. Amos, M. Nickel, A. Grover, R. Chen, Y. Lipman
+  link: https://arxiv.org/abs/2207.04711
+  figure: /assets/pubfigs/2207.04711.jpg
+  tags: [geometry]
+
+- year: 2022
+  venue: ICLR 2022
+  title: Online Adversarial Attacks
+  authors: A. Mladenović*, A.J. Bose*, H. Berard*, W.L. Hamilton, S. Lacoste-Julien, P. Vincent, G.Gidel
+  link: https://arxiv.org/abs/2103.02014
+  figure: /assets/pubfigs/2103.02014.jpg
+  tags: [adversarial]
+
+- year: 2021
+  venue: EMNLP 2021
+  title: "Neural Path Hunter: Reducing Hallucination in Dialogue Systems via Path Grounding"
+  authors: N. Dziri, A. Madotto, O. Zaiane, A.J. Bose
+  link: https://arxiv.org/abs/2104.08455
+  figure: /assets/pubfigs/2104.08455.jpg
+  tags: [language models]
+
+- year: 2020
+  venue: NeurIPS 2020
+  title: Adversarial Example Games
+  authors: A.J. Bose*, G. Gidel*, H. Berard*, A. Cianflone, P. Vincent, S. Lacoste-Julien, W.L. Hamilton
+  link: https://arxiv.org/abs/2007.00720
+  figure: /assets/pubfigs/2007.00720.jpg
+  tags: [adversarial]
+
+- year: 2020
+  venue: EMNLP 2020
+  title: Structure Aware Negative Sampling in Knowledge Graphs
+  authors: K. Ahrabian, A. Feizi, Y. Salehi, W. L. Hamilton, A. J. Bose
+  link: https://arxiv.org/abs/2009.11355
+  figure: /assets/pubfigs/2009.11355.jpg
+  tags: [sampling, graphs]
+
+- year: 2020
+  venue: ICML 2020
+  title: Latent Variable Modelling with Hyperbolic Normalizing Flows
+  authors: A. J. Bose, A. Smofsky, R. Liao, P. Panangaden, W. L. Hamilton
+  link: https://arxiv.org/abs/2002.06336
+  figure: /assets/pubfigs/2002.06336.jpg
+  tags: [geometry]
+
+- year: 2019
+  venue: Preprint (Unpublished)
+  title: "Meta-Graph: Few Shot Link Prediction via Meta Learning"
+  authors: A. J. Bose, A. Jain, P. Molino, W. L. Hamilton
+  link: https://arxiv.org/abs/1912.09867
+  figure: /assets/pubfigs/1912.09867.jpg
+  tags: [graphs]
+
+- year: 2019
+  venue: ICML 2019
+  title: Compositional Fairness Constraints for Graph Embeddings
+  authors: A. J. Bose, W. L. Hamilton
+  link: https://arxiv.org/abs/1905.10674
+  figure: /assets/pubfigs/1905.10674.jpg
+  tags: [graphs, fairness]
+
+- year: 2019
+  venue: RLDM 2019
+  title: Discrete off-policy policy gradient using continuous relaxations
+  authors: A. Cianflone, Z. Ahmed, R. Islam, A. J. Bose, W. L. Hamilton
+  figure: /assets/pubfigs/discrete-off-policy-policy-gradient-usin.jpg
+  tags: [discrete]
+
+- year: 2019
+  venue: ACL 2019
+  title: A Cross-Domain Transferable Neural Coherence Model
+  authors: X. Peng, H. Saghir, J. Kang, T. Long, A. J. Bose, Y. Cao, J. Cheung
+  link: https://arxiv.org/abs/1905.11912
+  figure: /assets/pubfigs/1905.11912.jpg
+  tags: [language models]
+
+- year: 2018
+  venue: IEEE MMSP 2018 (Best Paper Runner-Up)
+  title: Adversarial Attacks on Face Detectors using Neural Net based Constrained Optimization
+  authors: A. J. Bose, P. Aarabi
+  link: https://arxiv.org/abs/1805.12302
+  figure: /assets/pubfigs/1805.12302.jpg
+  tags: [adversarial]
+
+- year: 2018
+  venue: ACL 2018 (Oral)
+  title: Adversarial Contrastive Estimation
+  authors: A. J. Bose*, Y. Cao*, H. Ling*
+  link: https://arxiv.org/abs/1805.03642
+  figure: /assets/pubfigs/1805.03642.jpg
+  tags: [adversarial]

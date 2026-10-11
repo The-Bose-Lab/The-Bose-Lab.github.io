@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<article class="post wrap">
+  <div class="post-head">
+    <div class="meta">
+      <span>{{ page.date | date: "%d %b %Y" }}</span>
+      {% if page.author %}<span class="au">{{ page.author }}</span>{% endif %}
+      {% assign words = content | strip_html | number_of_words %}<span>{{ words | divided_by: 220 | at_least: 1 }} min read</span>
+    </div>
+    <h1>{{ page.title }}</h1>
+  </div>
+  <div class="post-body">
+    {{ content }}
+  </div>
+  <div class="post-foot">
+    <a href="{{ '/blog/' | relative_url }}">← All posts</a>
+    <a href="mailto:{{ site.data.lab.email }}">Discuss by email</a>
+  </div>
+</article>
+{% if page.math %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$', right: '$', display: false},
+    {left: '\\(', right: '\\)', display: false},
+    {left: '\\[', right: '\\]', display: true}
+  ]});"></script>
+{% endif %}

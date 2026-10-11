@@ -1,0 +1,81 @@
+# The group. Add yourself here — name, role, title, photo (drop it in
+# assets/images/), and whichever links you have. role: pi | phd | msc | visitor | alumni
+- name: Joey Bose
+  role: pi
+  title: Principal Investigator
+  position: Assistant Professor of Computing, Imperial College London
+  photo: /assets/images/joey_headshot.jpg
+  email: joey.bose@imperial.ac.uk
+  website: https://joeybose.github.io
+  scholar: https://scholar.google.com/citations?user=ybPyI7IAAAAJ
+  twitter: https://twitter.com/bose_joey
+  github: https://github.com/joeybose
+  bio: ELLIS member and Mila affiliate. Previously a postdoc at Oxford with Michael Bronstein; PhD from McGill/Mila.
+
+- name: Oscar Davis
+  role: phd
+  title: DPhil Student, University of Oxford
+  cosupervised: with Michael Bronstein & İsmail İlkan Ceylan
+  photo: /assets/images/oscar.jpg
+  website: https://olsdavis.github.io
+
+- name: Francesco Ruscio
+  role: phd
+  title: PhD Student, AITHYRA
+  cosupervised: with Michael Bronstein
+  photo: /assets/images/francesco.jpg
+  website: https://francescoshox.github.io
+
+- name: Timothy Hitge
+  role: phd
+  title: PhD Student, Imperial College London
+  cosupervised: with Elizaveta Semenova
+  photo: /assets/images/ph-timothy.svg
+  website: https://timhitge.com/
+
+- name: Christos Ziakas
+  role: phd
+  title: PhD Student, Imperial College London
+  cosupervised: with Alessandra Russo
+  photo: /assets/images/christos.png
+  website: https://chziakas.github.io
+
+- name: Roman Poletukhin
+  role: phd
+  title: PhD Student, Imperial College London
+  photo: /assets/images/roman.jpg
+  website: https://rpoletukhin.github.io
+
+- name: Gabriel Greenstein
+  role: phd
+  title: PhD Student, Imperial College London
+  cosupervised: with Shelly Conroy & Alex Ganose
+  photo: /assets/images/ph-gabriel.svg
+  website: https://www.linkedin.com/in/gabriel-greenstein-8ba505261/
+
+- name: Joshua Rooijakkers
+  role: phd
+  title: PhD Student, Imperial College London
+  photo: /assets/images/ph-joshua.svg
+  website: https://joshuarooijakkers.github.io/
+
+- name: Hua-Chang Bakker
+  role: msc
+  title: ELLIS MSc Honours, University of Amsterdam
+  cosupervised: with Erik Bekkers
+  photo: /assets/images/huachang.png
+  website: https://huachangb.github.io
+
+- name: Odysseas Boufalis
+  role: msc
+  title: ELLIS MSc Honours, University of Amsterdam
+  cosupervised: with Christian Naesseth
+  photo: /assets/images/ph-odysseas.svg
+  scholar: https://scholar.google.com/citations?user=bOMeLjgAAAAJ
+
+- name: Jacob Bamberger
+  role: visitor
+  title: Visiting PhD Student, University of Oxford
+  cosupervised: Sep 2026 – Aug 2027
+  photo: /assets/images/jacob.jpg
+  website: https://jacobbamb.github.io
