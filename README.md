@@ -14,7 +14,7 @@ pnpm build
 pnpm preview
 ```
 
-The generated site is in `dist/`. To mount under a path, build with `SITE_BASE=/preview/ pnpm build`. Pull requests are checked without publishing. Merging to `main` runs the production checks, builds with `SITE_BASE=/`, verifies the article route and assets, and publishes `dist/` through GitHub Pages Actions. The `github-pages` environment limits deployment to the production branch.
+The generated site is in `dist/`. To mount under a path, build with `SITE_BASE=/preview/ pnpm build`. GitHub Pages publishes the committed static files from `main` at the repository root, with `.nojekyll`. The editable sources remain in `src/`, `_data/`, `content/` and `public/`. Before committing a website change, run `pnpm check`, `pnpm build`, then `node scripts/publish-static.mjs`. CI rebuilds and checks that every committed production file matches the source build. `.published-files.json` tracks generated files for safe refreshes. A merge to `main` triggers the existing GitHub Pages publication; no repository settings change is required.
 
 ## Editing
 
