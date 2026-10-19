@@ -71,3 +71,13 @@ body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-e
 .story-viewport>.arrival .arrival-name{font-size:clamp(14px,2vmin,17px);margin-top:12px}
 .story-viewport>.arrival .arrival-track{width:clamp(90px,22vw,140px);margin-top:16px}
 .story-viewport>.arrival .arrival-error{font-size:14px;text-align:center}
+
+@container(max-width:420px){
+ .landscape-peaks{grid-template-columns:minmax(0,1fr);gap:10px}
+ .landscape-peaks .peak-link>span:first-child{font-size:clamp(15px,4cqi,18px);min-height:3.3em;padding:.7em 1em}
+}
+@media(max-width:480px){
+ .atlas-publications>summary{font-size:14px;padding:12px 14px;gap:10px}
+ .atlas-publications>summary>.molecular-mark{width:22px;height:22px;flex-basis:22px}
+ .atlas-publications .archive-count{display:none}
+}

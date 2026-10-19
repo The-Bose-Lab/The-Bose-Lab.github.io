@@ -58,7 +58,7 @@ export async function bindResearchLandscape(theme){
    if(mobile){
     for(const view of scienceViews){view.container.style.width=115*unit+'px';view.container.style.height=112*unit+'px';}
     for(const view of samplingViews){view.container.style.width=110*unit+'px';view.container.style.height=85*unit+'px';}
-    sequence.style.fontSize=Math.max(11,18*unit)+'px';
+    sequence.style.fontSize=18*unit+'px';
    }else{for(const view of [...scienceViews,...samplingViews]){view.container.style.width='';view.container.style.height='';}sequence.style.fontSize='';}
    // Both specimens sit just above their own attachment on the Science slope.
    science.style.left=(mobile?0:x)+'px';science.style.top=(mobile?0:y-118)+'px';
