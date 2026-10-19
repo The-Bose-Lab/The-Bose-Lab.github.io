@@ -33,7 +33,7 @@ export function trackResolution(plugin){
   plugin.canvas3dContext.setProps({resolutionMode:'native',pixelScale});plugin.canvas3d.requestDraw();
   canvas.dataset.displaySampling=String(physical/scale);document.documentElement.dataset.renderScale=String(pixelScale);
  }
- sync();addEventListener('resize',sync);sync.dispose=()=>removeEventListener('resize',sync);addEventListener('pagehide',sync.dispose,{once:true});return sync;
+ sync();addEventListener('resize',sync);sync.dispose=()=>{removeEventListener('resize',sync);removeEventListener('pageshow',sync);};addEventListener('pagehide',e=>{if(!e.persisted)sync.dispose();});addEventListener('pageshow',sync);return sync;
 }
 // Move the camera framing rather than resampling a shrunken full-screen bitmap.
 // The molecular geometry, view direction and elastic motion stay unchanged.

@@ -8,6 +8,7 @@ export function siteHref(page,topic=''){
  return base+(paths[page]??'')+(page==='research'&&siteTopics.includes(topic)?topic+'/':'');
 }
 export function bindSiteNavigation(root=document){
+ document.documentElement.dataset.navigationReady='true';
  for(const a of root.querySelectorAll('a[data-page]'))a.href=siteHref(a.dataset.page,a.dataset.topic);
  const toggle=root.querySelector('.nav-toggle'),nav=root.querySelector('#main-navigation');
  toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav.classList.toggle('is-open',open);});

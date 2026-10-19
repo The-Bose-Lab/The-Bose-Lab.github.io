@@ -25,7 +25,7 @@ for(const {group,key}of golden.frames.filter((f,i,a)=>a.findIndex(x=>x.key===f.k
 assert(Math.abs(ribbonPeriod-2*Math.PI/.55)<1e-10);
 for(const base of ['/','/preview/']){
  const paths=await generate(base);assert.equal(paths.length,12);
- for(const path of paths){const html=await readFile(path,'utf8');assert(html.includes(`<base href="${base}">`));assert(!/site\.html|frame\.html|127\.0\.0\.1|shared-palette|design-panel/i.test(html),path);assert(html.includes('<h1'));
+ for(const path of paths){const html=await readFile(path,'utf8');assert(html.includes(`<base href="${base}">`));assert(!/site\.html|frame\.html|127\.0\.0\.1|shared-palette|design-panel/i.test(html),path);assert(html.includes('<h1'));assert(!html.includes('href="#'),'Fragment links must stay on their own route');
   for(const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)){let url=m[1];if(/^(https?:|mailto:|data:)/.test(url))continue;if(url.startsWith(base))url=url.slice(base.length);else if(url.startsWith('/'))continue;url=url.replace(/^\.\//,'').split(/[?#]/)[0];if(!url)continue;const target=url.endsWith('/')?'.generated/'+url+'index.html':url.startsWith('src/')?url:'public/'+url;await stat(target);}
  }
 }

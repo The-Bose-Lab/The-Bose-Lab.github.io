@@ -1,12 +1,4 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
-.bundle
-Gemfile.lock
-.DS_Store
-
 node_modules/
 dist/
 .generated/
+.DS_Store

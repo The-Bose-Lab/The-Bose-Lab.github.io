@@ -132,7 +132,7 @@ html:is([data-state=revealing],[data-state=ready]) #home-header .mode-toggle{opa
 .topic-chip{background:color-mix(in srgb,var(--b) 12%,var(--bg))}
 .venue-label{background:color-mix(in srgb,var(--b) 12%,var(--bg))}
 /* Reveal filled content only after it and its fonts are ready. */
-.site-view:not([data-site-ready=true]) .quiet-content,.site-view:not([data-site-ready=true]) #site-header,.site-view:not([data-site-ready=true]) #site-footer{visibility:hidden}
+/* Static content remains visible even if optional graphics cannot initialise. */
 .site-view .quiet-content{animation:none}
 .site-view[data-site-ready=true] .quiet-content{animation:quiet-content .55s cubic-bezier(.16,1,.3,1) both}
 .site-view[data-site-ready=true] #site-header{animation:quiet-header .25s ease both}
