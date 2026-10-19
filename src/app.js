@@ -5,7 +5,9 @@ import './responsive.css';
 import {bindSiteNavigation} from './site/site-navigation.js';
 import {bindNewsFilters} from './site/news-interactions.js';
 import {bindPublicationFilters} from './site/research-interactions.js';
+import {bindPageLoading,beginPageLoading,finishPageLoading} from './site/page-loading.js';
 const {page,topic}=document.body.dataset;
+bindPageLoading();beginPageLoading();
 bindSiteNavigation();bindNewsFilters();bindPublicationFilters();
 await document.fonts.ready;
 document.documentElement.dataset.siteReady='true';document.body.dataset.siteReady='true';
@@ -22,3 +24,5 @@ try{
  const visual=document.querySelector('#topic-visual');if(visual)visual.hidden=true;
  console.warn('Scientific enhancement unavailable',error);
 }
+
+finishPageLoading();

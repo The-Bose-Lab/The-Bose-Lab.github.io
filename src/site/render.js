@@ -6,6 +6,7 @@ import {loadJSON,loadMolecularRenderer} from './assets.js';
 import {Entrance} from './entrance.js';
 import {MolecularMotion} from './molecular-motion.js';
 import {MemoController} from './memo.js';
+import {bindIntroAnchors} from './intro-anchors.js';
 import {viewerOptions,illustrativeStyle,rendered,fitFootprint,trackResolution} from './molecular-view.js';
 const q=new URLSearchParams(location.search),choice=selectVisit(q),specKey=choice.hero,spec=heroSpecimens[specKey],theme=getTheme(),html=document.documentElement;
 q.set('story','1');q.set('transition','direct');q.set('copy','direct');
@@ -37,8 +38,11 @@ try{
  if(spec.process){
   hero=new ResearchVisual(document.querySelector('#molecule'),spec.process.group,spec.process.key,theme);hero.setActive(false);if(capture&&q.has('pose'))hero.setPose(Math.max(0,Number(q.get('pose'))||0));
  }else{
+  // Start independent asset requests before the molecular runtime is parsed.
+  const metadata=Promise.all(['bounds','chain-groups','views','elastic-modes'].map(loadJSON));
+  const modelPreload=document.createElement('link');modelPreload.rel='preload';modelPreload.as='fetch';modelPreload.crossOrigin='anonymous';modelPreload.href=`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`;document.head.append(modelPreload);
   await loadMolecularRenderer();entrance.stage(.3);
-  const [bounds,groups,views,elastic]=await Promise.all(['bounds','chain-groups','views','elastic-modes'].map(loadJSON));fields=elastic;
+  const [bounds,groups,views,elastic]=await metadata;fields=elastic;
   const viewer=await molstar.Viewer.create('molecule',viewerOptions(theme));plugin=viewer.plugin;resolution=trackResolution(plugin);
   const b=molstar.PluginExtensions.mvs.createBuilder();b.canvas({background_color:theme.bg});
   const st=b.download({url:new URL(`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`,document.baseURI).href}).parse({format:spec.format||'pdb'}).modelStructure();
@@ -53,7 +57,7 @@ try{
  }
  if(hero)await hero.ready;
  await document.fonts.ready;loaded=true;await entrance.finish();activate();
- memo=new MemoController(theme,specKey,q,plugin,framing,fields,hero);await memo.init();
+ memo=new MemoController(theme,specKey,q,plugin,framing,fields,hero);await memo.init();bindIntroAnchors(memo);
  html.dataset.firstVisualReady=String(Math.round(performance.now()));
  if(!capture&&!reduced){const idle=()=>{if(window.molstar||navigator.connection?.saveData)return;const prefetch=document.createElement('link');prefetch.rel='prefetch';prefetch.as='script';prefetch.href='./vendor/molstar.js';document.head.append(prefetch);};if('requestIdleCallback'in window)requestIdleCallback(idle,{timeout:2500});else setTimeout(idle,1200);}
 }catch(error){html.dataset.error=String(error);entrance.fail();console.error(error);}

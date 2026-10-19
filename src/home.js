@@ -5,3 +5,6 @@ import './site/navigation.css';
 import './site/design-code.css';
 import './responsive.css';
 import './site/render.js';
+
+import {bindPageLoading} from './site/page-loading.js';
+bindPageLoading();

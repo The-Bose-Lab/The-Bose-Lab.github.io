@@ -1,14 +1,15 @@
+import {elasticNeighbours} from './elastic-neighbours.js';
 import {motionRate,visualSpeed} from './motion-clock.js';
 // Pinned Mol* sphere-texture adapter. Updates position ValueCells; no atom picking.
 const touch=cell=>{cell.ref={...cell.ref,version:cell.ref.version+1};};
 export class MolecularMotion{
  constructor(plugin,atoms,ribbons,field,{capture=false,report=true}={}){
-  this.report=report;this.plugin=plugin;this.atoms=atoms;this.ribbons=ribbons;this.buffers=[];this.field=field;this.capture=capture;this.elapsed=0;this.frames=0;this.kind='elastic';this.running=false;
+  this.report=report;this.plugin=plugin;this.atoms=atoms;this.ribbons=ribbons;this.buffers=[];this.field=field;this.capture=capture;this.elapsed=0;this.frames=0;this.kind='elastic';this.running=false;const neighbours=field?elasticNeighbours(field):null,nearIds=new Int32Array(4),nearDistances=new Float64Array(4);
   for(const repr of atoms)for(const object of repr.renderObjects){object.state.pickable=false;const cell=object.values.tPositionGroup;if(!cell)continue;const array=cell.ref.value.array;if(!(array instanceof Float32Array))continue;const base=array.slice(),count=Math.min(base.length/4,object.values.uVertexCount.ref.value/6),weights=capture?null:[new Float32Array(count*3),new Float32Array(count*3),new Float32Array(count*3)];
    if(weights&&field){for(let i=0;i<count;i++){
     const x=base[i*4],y=base[i*4+1],z=base[i*4+2];const rigid=field.rigidMap?.[[x,y,z].map(v=>Math.round(v*1000)).join(',')];let nearest=[];
     if(rigid!==undefined)nearest=[[rigid,1]];
-    else{for(let n=0;n<field.nodes.length;n++){const p=field.nodes[n],d=(x-p[0])**2+(y-p[1])**2+(z-p[2])**2;if(nearest.length<4||d<nearest[nearest.length-1][1]){nearest.push([n,d]);nearest.sort((a,b)=>a[1]-b[1]);if(nearest.length>4)nearest.pop();}}let total=0;for(const pair of nearest){pair[1]=1/(pair[1]+2);total+=pair[1];}for(const pair of nearest)pair[1]/=total;}
+    else{neighbours(x,y,z,nearIds,nearDistances);nearest=Array.from(nearIds,(n,j)=>[n,1/(nearDistances[j]+2)]).filter(([n])=>n>=0);let total=0;for(const pair of nearest)total+=pair[1];for(const pair of nearest)pair[1]/=total;}
     for(let m=0;m<3;m++)for(let k=0;k<3;k++)for(const[n,w]of nearest)weights[m][i*3+k]+=field.modes[m][n][k]*w;
    }}this.buffers.push({cell,array,base,count,weights});
   }
