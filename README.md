@@ -14,7 +14,7 @@ pnpm build
 pnpm preview
 ```
 
-The generated site is in `dist/`. To mount under a path, build with `SITE_BASE=/preview/ pnpm build`. The branch's workflow only checks and builds: it does not publish to GitHub Pages. The current live website remains on `main`.
+The generated site is in `dist/`. To mount under a path, build with `SITE_BASE=/preview/ pnpm build`. Pull requests are checked without publishing. Merging to `main` runs the production checks, builds with `SITE_BASE=/`, verifies the article route and assets, and publishes `dist/` through GitHub Pages Actions. The `github-pages` environment limits deployment to the production branch.
 
 ## Editing
 
@@ -49,7 +49,7 @@ For local diagnostics, `?profile=1` exposes sampled rendering FPS and submission
 
 ## Preview and publication
 
-The review build is mounted at `/preview/` on the existing design-review host. The original panel remains at `/opening-studies/`. Publishing the actual lab domain is a separate step after responsive review. No application-intake backend has been added; the group review pipeline is still to be agreed.
+The review build is mounted at `/preview/` on the design-review host. The production build publishes at `https://the-bose-lab.github.io/`; the NFM post keeps `/normalizing-flow-maps/`. The previous Jekyll page addresses redirect to the corresponding new pages. No application-intake backend has been added; the group review pipeline is still to be agreed.
 
 
 The NFM article's 77 equations are rendered by the pinned KaTeX copy during generation. The browser loads only its font stylesheet. The two long molecular loops use muted inline H.264, load within 350px of the figure, and pause outside the viewport. Their original WebP files remain as no-JavaScript fallbacks. `scripts/optimize-article-video.py` regenerates the videos and verifies every decoded frame, dimensions and timing (local Python dependencies: Pillow and imageio-ffmpeg); the report is in `tests/fixtures/article-video-report.json`.

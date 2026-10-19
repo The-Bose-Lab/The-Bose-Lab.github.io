@@ -1,7 +1,7 @@
 name: Build and check
 on:
   push:
-    branches: [codex/production-website-preview]
+    branches: [main, codex/production-website-preview]
   pull_request:
 permissions:
   contents: read
@@ -20,4 +20,5 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+      - run: node scripts/verify-release.mjs
       - run: SITE_BASE=/preview/ pnpm build
