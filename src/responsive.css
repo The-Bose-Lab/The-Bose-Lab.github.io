@@ -1,11 +1,17 @@
 .nav-toggle{display:none}
 @media(max-width:700px){
- .content-header{display:flex;position:relative;min-height:76px;flex-wrap:nowrap;gap:18px}
+ .content-header{display:flex;align-items:center;position:relative;min-height:76px;flex-wrap:nowrap;gap:18px}
  .content-header .wordmark{font-size:26px}
- [data-navigation-ready=true] .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:10px;background:transparent;border:1px solid color-mix(in srgb,var(--ink) 25%,transparent);border-radius:50%;color:var(--ink);margin-left:auto;cursor:pointer}
- .nav-toggle span{display:block;height:1px;background:currentColor;width:100%}
- [data-navigation-ready=true] .content-header nav{display:none!important;position:absolute;right:0;top:calc(100% - 1px);min-width:min(290px,86vw);padding:18px 22px;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:18px;box-shadow:0 8px 32px #162d6510;z-index:30}
- [data-navigation-ready=true] .content-header nav.is-open{display:flex!important}.content-header nav a{padding:12px 10px;font-size:18px}
+ [data-navigation-ready=true] .nav-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:48px;flex:none;padding:8px;margin-left:auto;margin-right:-8px;background:transparent;border:0;color:var(--ink);cursor:pointer}
+ .nav-toggle-icon{position:relative;display:block;width:28px;height:18px;flex:none}
+ .nav-toggle-icon::before,.nav-toggle-icon::after{content:'';position:absolute;left:0;width:28px;height:1.5px;background:currentColor;transform-origin:center;transition:transform .2s ease,top .2s ease}
+ .nav-toggle-icon::before{top:3px}.nav-toggle-icon::after{top:13.5px}
+ .nav-toggle[aria-expanded=true] .nav-toggle-icon::before{top:8.25px;transform:rotate(45deg)}.nav-toggle[aria-expanded=true] .nav-toggle-icon::after{top:8.25px;transform:rotate(-45deg)}
+
+ [data-navigation-ready=true] .content-header nav{display:none!important;position:absolute;left:0;right:0;top:100%;width:100%;min-width:0;margin:0;padding:8px 6vw 24px;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border:0;border-bottom:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:0;box-shadow:none;z-index:30}
+ [data-navigation-ready=true] .content-header nav.is-open{display:flex!important}.content-header nav a{padding:12px 0;font-size:20px;min-height:48px}
+ .content-header:has(nav.is-open){border-bottom-color:transparent}
+
 }
 
 @media(max-width:700px){
