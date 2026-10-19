@@ -37,6 +37,14 @@ python3 scripts/optimize-media.py
 
 `tests/fixtures/approved-geometry.json` records representative geometry and particle samples from approved design commit `520e4a601ae7248ca7a1d6314a512017d6cb0c0f`. Checks validate those samples, ribbon timing, curation, all routes, and local asset links at both root and preview paths.
 
+## Rendering and loading
+
+Scientific canvases share one renderer and retain their outline targets. GPU bitmap presentation is used when supported, with the original canvas-copy fallback. Animated canvases target 60 fps; molecular anti-aliasing accumulates over time rather than rendering all eight samples for every motion update. Small carried molecular views resize their drawing surface to the displayed object while preserving display pixel density. Intro transitions retain one drawing-buffer size during the move.
+
+The landscape caches its time-independent spatial kernels. Static sampling conformers are drawn once and positioned with the changing manifold. Settled memo text/layout is not recomputed every frame. Loading widgets use the shared scientific renderer, including lightweight ribbons derived from deposited protein backbones; they do not load Molstar. Their complete construction has a 900 ms minimum visible duration and a fading exit.
+
+For local diagnostics, `?profile=1` exposes sampled rendering FPS and submission time in `document.documentElement.dataset.renderProfile`. `?profile=copy` exercises the compatibility presentation path. These are browser measurements, not a promise of identical FPS on every device.
+
 ## Preview and publication
 
 The review build is mounted at `/preview/` on the existing design-review host. The original panel remains at `/opening-studies/`. Publishing the actual lab domain is a separate step after responsive review. No application-intake backend has been added; the group review pipeline is still to be agreed.

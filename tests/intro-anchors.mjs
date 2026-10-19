@@ -32,3 +32,20 @@ function harness(reduced=false){
  assert(!h.send('keydown',{key:' ',target:{closest:()=>true}}),'Buttons and form controls retain keyboard behavior');
 }
 console.log('Opening anchors passed: small wheel/swipe, momentum isolation, reverse navigation, reduced motion, and normal News scrolling.');
+
+// Regressions: inputs during motion must reverse or advance, never disappear.
+{
+ const h=harness();h.send('wheel',{deltaY:12});h.advance(140);assert(h.w.scrollY>0&&h.w.scrollY<600);
+ h.send('wheel',{deltaY:-12});h.advance(450);assert.equal(h.w.scrollY,0,'A reversal interrupts an in-flight transition immediately');
+ h.send('wheel',{deltaY:12});h.advance(1);h.send('wheel',{deltaY:-12});h.advance(450);assert.equal(h.w.scrollY,0,'Reversal before the first animation frame still cancels the move');
+}
+{
+ const h=harness();h.send('wheel',{deltaY:12});h.advance(140);h.send('wheel',{deltaY:12});h.advance(450);assert.equal(h.w.scrollY,1200,'A separate second gesture during motion advances to the next anchor');
+ h.send('wheel',{deltaY:-12});h.advance(140);h.send('wheel',{deltaY:-12});h.advance(450);assert.equal(h.w.scrollY,0,'Two quick reverse gestures return through both anchors');
+}
+{
+ const h=harness();h.send('touchstart',{touches:[{clientX:100,clientY:200}]});h.send('touchmove',{touches:[{clientX:100,clientY:180}]});h.advance(100);h.send('touchend');
+ h.send('touchstart',{touches:[{clientX:100,clientY:200}]});h.send('touchmove',{touches:[{clientX:100,clientY:220}]});h.advance(450);assert.equal(h.w.scrollY,0,'A new reverse swipe is accepted while the previous swipe is animating');
+ h.send('wheel',{deltaY:12});h.advance(100);h.send('keydown',{key:'Home'});h.w.scrollY=0;h.advance(500);assert.equal(h.w.scrollY,0,'Home is not overwritten by a stale animation');
+}
+console.log('Rapid reversals, successive gestures, touch interruption, and stale-animation cancellation passed.');

@@ -25,4 +25,4 @@ try{
  console.warn('Scientific enhancement unavailable',error);
 }
 
-finishPageLoading();
+await finishPageLoading();

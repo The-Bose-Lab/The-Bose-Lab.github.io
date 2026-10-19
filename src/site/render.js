@@ -56,7 +56,7 @@ try{
   motion=new MolecularMotion(plugin,cells.map(c=>c.obj.data.repr),[],fields[spec.file],{capture:capture||reduced});motion.limitAmplitude(Math.min(2.2,Math.max(framing.width,framing.height)*.025));await rendered(plugin,1);
  }
  if(hero)await hero.ready;
- await document.fonts.ready;loaded=true;await entrance.finish();activate();
+ await document.fonts.ready;loaded=true;await widgetReady;await entrance.finish();activate();
  memo=new MemoController(theme,specKey,q,plugin,framing,fields,hero);await memo.init();bindIntroAnchors(memo);
  html.dataset.firstVisualReady=String(Math.round(performance.now()));
  if(!capture&&!reduced){const idle=()=>{if(window.molstar||navigator.connection?.saveData)return;const prefetch=document.createElement('link');prefetch.rel='prefetch';prefetch.as='script';prefetch.href='./vendor/molstar.js';document.head.append(prefetch);};if('requestIdleCallback'in window)requestIdleCallback(idle,{timeout:2500});else setTimeout(idle,1200);}

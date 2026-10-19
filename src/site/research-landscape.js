@@ -35,7 +35,7 @@ export async function bindResearchLandscape(theme){
  }
  if(map){
   const wrapper=map.closest('.landscape-overview'),peakNav=wrapper.querySelector('.landscape-peaks'),model=new LandscapeScene(theme),links=[...wrapper.querySelectorAll('.peak-link')],raycaster=new T.Raycaster();peakNav.style.visibility='hidden';
-  main=new SceneView(map,model,theme,'Interactive research manifold: particle transport, alternating Boltzmann reweighting, molecular structures, and sequence-driven local geometry');map.style.position='absolute';main.canvas.style.pointerEvents='auto';
+  main=new SceneView(map,model,theme,'Interactive research manifold: particle transport, alternating Boltzmann reweighting, molecular structures, and sequence-driven local geometry');map.style.position='absolute';main.canvas.style.pointerEvents='auto';main.canvas.style.cursor='default';
   const layer=document.createElement('div');layer.className='atlas-instance-layer';map.after(layer);
   const science=document.createElement('div');science.className='atlas-instance atlas-science-pair';layer.append(science);let scienceViews=[],scienceReady;
   let samplingViews=[],samplingReady;const conformers=document.createElement('div');conformers.className='atlas-sampling-conformers';layer.append(conformers);
@@ -53,7 +53,7 @@ export async function bindResearchLandscape(theme){
   let foundationLayoutKey='',foundationSweep=[],samplingFront=0;
   const sequenceAnchor=new T.Vector3(1.30,model.baseHeight(1.30,1.16)+.055,1.16);
   const project=id=>new T.Vector3(...model.peaks.find(p=>p.id===id).position).project(model.camera);
-  const placeSampling=()=>{const beta=-3.2*Math.sin(model.samplingClock*motionRate),a=.62*Math.exp(-beta*.8),b=.38,total=a+b;samplingViews.forEach((view,i)=>{const x=i?-.35:-1.25,z=i?1.16:.90,q=new T.Vector3(x,model.height(x,z)+.045,z).project(model.camera);const tip=view.model.attachmentPoint();view.container.style.left=((q.x+1)*.5*map.clientWidth-tip.x*view.container.clientWidth/2)+'px';view.container.style.top=((1-q.y)*.5*map.clientHeight-(1-tip.y)*view.container.clientHeight/2-4*(innerWidth<=1020?map.clientWidth/900:1))+'px';const weight=Math.max(0,Math.min(1,((i?b:a)/total-.15)/.70));view.container.style.opacity=String(model.hoverTopic==='sampling'?model.focus.sampling*weight*weight*(3-2*weight):0);view.dirty=model.hoverTopic==='sampling';});};
+  const placeSampling=()=>{const beta=-3.2*Math.sin(model.samplingClock*motionRate),a=.62*Math.exp(-beta*.8),b=.38,total=a+b;samplingViews.forEach((view,i)=>{const x=i?-.35:-1.25,z=i?1.16:.90,q=new T.Vector3(x,model.height(x,z)+.045,z).project(model.camera);const tip=view.model.attachmentPoint();view.container.style.left=((q.x+1)*.5*map.clientWidth-tip.x*view.container.clientWidth/2)+'px';view.container.style.top=((1-q.y)*.5*map.clientHeight-(1-tip.y)*view.container.clientHeight/2-4*(innerWidth<=1020?map.clientWidth/900:1))+'px';const weight=Math.max(0,Math.min(1,((i?b:a)/total-.15)/.70));view.container.style.opacity=String(model.hoverTopic==='sampling'?model.focus.sampling*weight*weight*(3-2*weight):0);});};
   const place=()=>{const mobile=innerWidth<=1020,unit=mobile?map.clientWidth/900:1,p=project('science'),x=(p.x+1)*.5*map.clientWidth,y=(1-p.y)*.5*map.clientHeight;
    // All mobile annotations use the atlas coordinate scale, including sizes and gaps.
    if(mobile){
@@ -76,7 +76,7 @@ export async function bindResearchLandscape(theme){
    science.classList.toggle('is-visible',id==='science'&&scienceViews.length>0);connectors.classList.toggle('is-visible',id==='science'&&scienceViews.length===2);for(const view of scienceViews)view.setActive(id==='science');sequence.classList.toggle('is-visible',id==='safety');sequence.setAttribute('aria-hidden',String(id!=='safety'));
    annotation.classList.toggle('is-visible',!!id);annotation.setAttribute('aria-hidden',String(!id));
    if(id){const link=links.find(link=>link.dataset.topic===id);annotationText.textContent=annotations[id];explore.href=link.querySelector('.peak-title').href;explore.setAttribute('aria-label','Explore '+link.querySelector('.peak-title').textContent);link.append(annotation);}
-   for(const view of samplingViews){view.setActive(id==='sampling');if(id!=='sampling')view.container.style.opacity='0';}
+   for(const view of samplingViews){view.setActive(false);if(id!=='sampling')view.container.style.opacity='0';}
    if(id==='science')prepareScience();if(id==='sampling')prepareSampling();place();
   };
 
@@ -108,7 +108,7 @@ export async function bindResearchLandscape(theme){
   };
   for(const link of links){link.addEventListener('pointerenter',()=>{model.setPointer(null);show(link.dataset.topic);main.tick();});link.addEventListener('focusin',()=>show(link.dataset.topic));link.addEventListener('click',event=>{if(event.target.closest('.atlas-explore')||event.button||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();event.stopPropagation();if(touchOverview()){show(link.dataset.topic);main.tick();}else navigate(link);});}
   const regionAt=event=>{const r=main.canvas.getBoundingClientRect();raycaster.setFromCamera(new T.Vector2((event.clientX-r.left)/r.width*2-1,1-(event.clientY-r.top)/r.height*2),model.camera);const hit=raycaster.intersectObject(model.restSurface)[0];if(!hit||model.baseHeight(hit.point.x,hit.point.z)<-.22)return null;return{id:model.regionAt(hit.point.x,hit.point.z),point:hit.point};};
-  main.canvas.addEventListener('pointermove',event=>{const hit=regionAt(event);if(hit)show(hit.id);main.canvas.style.cursor=hit?'pointer':'default';main.tick();});
+  main.canvas.addEventListener('pointermove',event=>{const hit=regionAt(event);if(hit)show(hit.id);});
   let pressed;main.canvas.addEventListener('pointerdown',event=>{pressed=[event.clientX,event.clientY];});main.canvas.addEventListener('click',event=>{if(pressed&&Math.hypot(event.clientX-pressed[0],event.clientY-pressed[1])>6)return;const hit=regionAt(event);if(hit){if(touchOverview()){show(hit.id);main.tick();}else navigate(links.find(l=>l.dataset.topic===hit.id));}});
   const release=()=>{model.setPointer(null);const focused=wrapper.querySelector('.peak-link:focus-within');show(focused?.dataset.topic||'');main.tick();};main.canvas.addEventListener('pointerleave',()=>{model.setPointer(null);main.tick();});wrapper.addEventListener('pointerleave',()=>{if(!touchOverview())release();});wrapper.addEventListener('focusout',event=>{if(!touchOverview()&&!wrapper.contains(event.relatedTarget))release();});addEventListener('resize',()=>{layoutDirty=true;main.dirty=true;});addEventListener('pagehide',e=>{if(!e.persisted)[...scienceViews,...samplingViews].forEach(v=>v.dispose());},{once:true});wrapper.dataset.ready='true';
  }

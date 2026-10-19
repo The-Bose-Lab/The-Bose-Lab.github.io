@@ -1,5 +1,5 @@
-.page-loading[hidden]{position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--ink);display:flex!important;flex-direction:column;align-items:center;justify-content:center;visibility:hidden;opacity:0;pointer-events:none}
-html[data-page-loading=true] .page-loading[hidden]{visibility:visible;opacity:1;pointer-events:auto}
+.page-loading[hidden]{position:fixed;inset:0;z-index:100;background:var(--bg);color:var(--ink);display:flex!important;flex-direction:column;align-items:center;justify-content:center;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+html[data-page-loading=true] .page-loading[hidden]{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .16s ease}
 #page-loading-widget{position:relative;width:min(90vw,70svh,480px);aspect-ratio:280/190;flex:none;overflow:hidden}
 .page-loading-name{font:400 clamp(14px,2vmin,17px)/1.3 var(--body);margin-top:12px}
 .page-loading-track{width:clamp(90px,22vw,140px);height:1px;margin-top:16px;background:color-mix(in srgb,var(--ink) 12%,transparent);overflow:hidden}

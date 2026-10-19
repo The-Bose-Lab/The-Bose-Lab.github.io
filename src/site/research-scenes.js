@@ -1,6 +1,6 @@
 import {memoMetrics,terrainContourStyle} from './memo-metrics.js';
 import * as T from 'three';
-import {sphericalCohort,spherePoint,loopPhase,transportPhase,landscapeEnergy,heightFromEnergy,colourFromEnergy} from './research-models.js';
+import {sphericalCohort,spherePoint,loopPhase,transportPhase,landscapeEnergy,heightFromEnergy,colourFromEnergy,landscapeParameters} from './research-models.js';
 const V=p=>new T.Vector3(...p);
 const STEPS=80;
 const luminance=hex=>{const c=new T.Color(hex);return .2126*c.r+.7152*c.g+.0722*c.b;};
@@ -44,18 +44,34 @@ export class ResearchScene{
   for(let j=0;j<=this.nz;j++)for(let i=0;i<=this.nx;i++){const u=i/this.nx*2-1,v=j/this.nz*2-1;this.base.push([1.8*u*Math.sqrt(1-v*v*.27),1.3*v*Math.sqrt(1-u*u*.27)]);}
   for(let j=0;j<this.nz;j++)for(let i=0;i<this.nx;i++){const a=j*(this.nx+1)+i,b=a+1,c=a+this.nx+1,d=c+1;indices.push(a,c,b,b,c,d);}
   geom.setAttribute('position',new T.BufferAttribute(positions,3));geom.setAttribute('color',new T.BufferAttribute(colors,3));geom.setIndex(indices);const mat=material(this.theme.a);mat.vertexColors=true;mat.color.set(0xffffff);this.surface=new T.Mesh(geom,mat);this.scene.add(this.surface);this.geo=geom;this.colors=[new T.Color(this.theme.b),new T.Color(this.theme.a),new T.Color(this.theme.c),new T.Color(this.theme.c).lerp(new T.Color(this.theme.b),.28)];
+  // The fixed spatial kernels are independent of time; evaluate their weights once.
+  this.energyBasis=this.base.map(([x,z])=>[.09*(x*x+z*z),Math.exp(-(x*x/.28+z*z/1.5)),...[[ -.95,-.25],[.95,.28],[0,.8]].map(([cx,cz])=>Math.exp(-((x-cx)**2/.37+(z-cz)**2/.43)))]);this.energies=new Float64Array(this.base.length);
+  this.contourA=new T.Vector3();this.contourB=new T.Vector3();this.contourD=new T.Vector3();this.contourAxis=new T.Vector3(0,1,0);this.contourInk=new T.Color(this.theme.ink);this.colouredContours=0;
   this.contourArray=new Float32Array(90000);this.contour=new T.InstancedMesh(new T.CylinderGeometry(terrainContourStyle.radius,terrainContourStyle.radius,1,8,1,true),new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:terrainContourStyle.opacity,depthWrite:false}),15000);this.contour.userData.skipOutline=true;this.contour.count=0;this.contourDummy=new T.Object3D();this.scene.add(this.contour);
   this.perimeter=strip(this.scene,this.theme.outline||(this.theme.mode==='dark'?this.theme.bg:this.theme.ink),.024);this.perimeter.axis=[0,1,0];this.perimeter.m.visible=false; // The shared contour pass draws the rim once.
 
  }
- updateTerrain(t,dt){const positions=this.geo.attributes.position.array,colors=this.geo.attributes.color.array,E=[];const c=new T.Color();for(let i=0;i<this.base.length;i++){const [x,z]=this.base[i],e=landscapeEnergy(x,z,t,this.key),a=colourFromEnergy(e);E.push(e);positions[i*3]=x;positions[i*3+1]=heightFromEnergy(e);positions[i*3+2]=z;const band=Math.min(2,Math.floor(a*3));c.copy(this.colors[band]).lerp(this.colors[band+1],a*3-band);c.toArray(colors,i*3);}
+ updateTerrain(t,dt){const positions=this.geo.attributes.position.array,colors=this.geo.attributes.color.array,E=this.energies,parameters=landscapeParameters(t,this.key),c=this.scratchColour??=new T.Color();
+  for(let i=0;i<this.base.length;i++){
+   const [x,z]=this.base[i],b=this.energyBasis[i],e=b[0]+parameters.ridge*b[1]-parameters.wells[0][2]*b[2]-parameters.wells[1][2]*b[3]-parameters.wells[2][2]*b[4],a=colourFromEnergy(e);E[i]=e;
+   positions[i*3]=x;positions[i*3+1]=heightFromEnergy(e);positions[i*3+2]=z;const band=Math.min(2,Math.floor(a*3));c.copy(this.colors[band]).lerp(this.colors[band+1],a*3-band);c.toArray(colors,i*3);
+  }
   this.geo.attributes.position.needsUpdate=true;this.geo.attributes.color.needsUpdate=true;this.geo.computeVertexNormals();this.geo.computeBoundingSphere();
-  // Contours intersect the exact same triangles used by the visible mesh.
-  let count=0;const index=this.geo.index.array;for(const level of [-1.2,-.6,0,.6,1.2])for(let j=0;j<index.length;j+=3){const ids=[index[j],index[j+1],index[j+2]],hits=[];for(let k=0;k<3;k++){const a=ids[k],b=ids[(k+1)%3],ea=E[a]-level,eb=E[b]-level;if((ea<0)===(eb<0))continue;const u=ea/(ea-eb),A=this.base[a],B=this.base[b];hits.push([A[0]+(B[0]-A[0])*u,heightFromEnergy(level)+.008,A[1]+(B[1]-A[1])*u]);}if(hits.length===2){this.contour.setColorAt(count/6,new T.Color(this.theme.ink));for(const point of hits){this.contourArray.set(point,count);count+=3;}}}
-  this.contour.count=count/6;const A=new T.Vector3(),B=new T.Vector3(),D=new T.Vector3(),axis=new T.Vector3(0,1,0);for(let i=0;i<count/6;i++){A.fromArray(this.contourArray,i*6);B.fromArray(this.contourArray,i*6+3);D.subVectors(B,A);const length=D.length();this.contourDummy.position.copy(A).add(B).multiplyScalar(.5);this.contourDummy.quaternion.setFromUnitVectors(axis,D.normalize());this.contourDummy.scale.set(1,length,1);this.contourDummy.updateMatrix();this.contour.setMatrixAt(i,this.contourDummy.matrix);}this.contour.instanceMatrix.needsUpdate=true;this.contour.instanceColor.needsUpdate=true;this.contour.computeBoundingSphere();
+  // Exact triangle intersections, with no arrays or colour objects allocated per triangle.
+  let count=0;const index=this.geo.index.array;
+  for(const level of [-1.2,-.6,0,.6,1.2])for(let j=0;j<index.length;j+=3){
+   const ia=index[j],ib=index[j+1],ic=index[j+2],ya=E[ia],yb=E[ib],yc=E[ic];if(level<Math.min(ya,yb,yc)||level>Math.max(ya,yb,yc))continue;
+   let hits=0,x0=0,z0=0,x1=0,z1=0;
+   for(let k=0;k<3;k++){const a=k===0?ia:k===1?ib:ic,b=k===0?ib:k===1?ic:ia,ea=E[a]-level,eb=E[b]-level;if((ea<0)===(eb<0))continue;const u=ea/(ea-eb),A=this.base[a],B=this.base[b],x=A[0]+(B[0]-A[0])*u,z=A[1]+(B[1]-A[1])*u;if(hits++===0){x0=x;z0=z;}else{x1=x;z1=z;}}
+   if(hits!==2)continue;const y=heightFromEnergy(level)+.008;this.contourArray.set([x0,y,z0,x1,y,z1],count*6);count++;
+  }
+  this.contour.count=count;const A=this.contourA,B=this.contourB,D=this.contourD;
+  for(let i=0;i<count;i++){if(i>=this.colouredContours)this.contour.setColorAt(i,this.contourInk);A.fromArray(this.contourArray,i*6);B.fromArray(this.contourArray,i*6+3);D.subVectors(B,A);const length=D.length();this.contourDummy.position.copy(A).add(B).multiplyScalar(.5);this.contourDummy.quaternion.setFromUnitVectors(this.contourAxis,D.normalize());this.contourDummy.scale.set(1,length,1);this.contourDummy.updateMatrix();this.contour.setMatrixAt(i,this.contourDummy.matrix);}
+  this.contour.instanceMatrix.needsUpdate=true;if(count>this.colouredContours){this.colouredContours=count;this.contour.instanceColor.needsUpdate=true;}this.contour.computeBoundingSphere();
+  // Retain the approved perimeter vertices for framing and geometry checks.
   updateStrip(this.perimeter,s=>{const f=Math.min(3.999999,s*4),side=Math.floor(f),q=f-side,[u,v]=[[-1+2*q,-1],[1,-1+2*q],[1-2*q,1],[-1,1-2*q]][side],x=1.8*u*Math.sqrt(1-v*v*.27),z=1.3*v*Math.sqrt(1-u*u*.27);return[x,heightFromEnergy(landscapeEnergy(x,z,t,this.key))+.006,z];});
-
  }
+
  update(time,dt){this.elapsed=time;this.phase=this.group==='foundations'?transportPhase(time):loopPhase(time);if(this.group==='samplers')this.updateTerrain(time,dt);else if(this.group==='foundations'){this.beads.update(this.cohort.map(p=>spherePoint(p,this.phase)));for(const guide of this.guides)this.updateGuide(guide);this.sphereGroup.rotation.set(.38,time*.32,0);this.sphereGroup.updateMatrixWorld(true);}}
  dispose(){this.scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});}
 }

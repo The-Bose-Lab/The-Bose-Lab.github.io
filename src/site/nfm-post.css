@@ -25,7 +25,9 @@
 .nfm-post .csl-right-inline{min-width:0;overflow-wrap:anywhere}
 .nfm-post .footnotes{margin-top:2em;border-top:1px solid var(--rule);padding-top:1em;font-size:.85rem}
 .nfm-post [id]{scroll-margin-top:110px}
-.nfm-post a{text-decoration:underline;text-underline-offset:3px}
+.nfm-post a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.12em;text-decoration-skip-ink:auto}
+.nfm-post a.footnote-ref{text-decoration:none}
+.nfm-post a.footnote-ref sup{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.08em}
 .blog-post:has(.nfm-post) .prose{padding:0;border:0;background:none}
 @media(max-width:700px){.nfm-post #fig-posttrain .nfm-layout-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.nfm-post .nfm-layout-row{grid-template-columns:minmax(0,1fr);gap:24px}.nfm-post .nfm-layout-cell figcaption{min-height:0}.nfm-post figcaption{font-size:13px}}
