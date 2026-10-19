@@ -26,7 +26,7 @@ export function fitFootprint(plugin,cells,{box,artWidth=1440,artHeight=900,paddi
 // Large canvases have a bounded physical pixel budget, not a blanket low-DPI mode.
 export function trackResolution(plugin){
  const canvas=plugin.canvas3dContext.canvas;
- function sync(){const board=document.querySelector('#opening'),scale=board?board.getBoundingClientRect().width/Number(board.dataset.artWidth||1440):1;
+ function sync(){const board=canvas.closest('#opening'),scale=board?board.getBoundingClientRect().width/Number(board.dataset.artWidth||1440):1;
   const gl=plugin.canvas3dContext.webgl.gl,limit=gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),dpr=Math.max(2,devicePixelRatio),w=canvas.clientWidth,h=canvas.clientHeight;
   const physical=Math.min(scale*dpr,Math.sqrt(12000000/(w*h)),limit/Math.max(w,h));
   const pixelScale=physical/devicePixelRatio;

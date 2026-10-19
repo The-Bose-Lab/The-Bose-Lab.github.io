@@ -12,7 +12,7 @@ export class LoadingWidget{
  async prepare(kind,key){kind=kind in widgetChoices?kind:'ribbon';key=widgetChoices[kind].includes(key)?key:widgetChoices[kind][0];if(this.key===key&&this.kind===kind&&this.ready)return;this.key=key;this.kind=kind;this.ready=false;const serial=++this.serial;this.resolution?.dispose();this.viewer?.plugin.dispose();this.scientific?.dispose();this.scientific=null;this.viewer=null;this.reprs=[];this.container.replaceChildren();this.container.hidden=false;this.container.style.clipPath='none';this.container.style.opacity='0';const spec=widgetSpecimens[key];document.documentElement.dataset.widgetSpecimen=key;
   if(kind==='generative'){
    if(serial!==this.serial)return;
-   const inner=document.createElement('div');inner.style.cssText='position:absolute;left:70px;top:26px;width:140px;height:140px';this.container.append(inner);
+   const inner=document.createElement('div');inner.style.cssText='position:absolute;left:25%;top:13.6842%;width:50%;height:73.6842%';this.container.append(inner);
    const model=fitMotionEnvelope(new GenerativeLoaderScene(this.theme,{key}),{times:[0,.2,.4,.6,.8,1],progress:true});
    this.scientific=new SceneView(inner,model,this.theme,generativeLoaders[key].name);
    this.ready=true;this.container.style.opacity='1';document.documentElement.dataset.widgetReady='true';document.documentElement.dataset.widgetEnvelope='140';this.draw(this.progress||0);return;

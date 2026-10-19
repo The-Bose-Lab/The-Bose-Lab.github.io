@@ -64,3 +64,10 @@ body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-e
 .footer-imperial{width:min(205px,100%)}
 .lab-footer .text-link{border-bottom:0;padding-bottom:0;white-space:normal}
 @media(max-width:540px){.footer-contact{justify-self:start;justify-items:start;align-items:start}.footer-affiliation>.text-link,.footer-contact>.text-link{font-size:16px}.footer-contact .social-links{gap:12px}}
+
+/* The loading screen is sized in viewport units, never artboard units. */
+.story-viewport>.arrival{position:absolute;inset:0;padding:24px;background:var(--bg)}
+.story-viewport>.arrival #arrival-ribbon{width:min(90vw,70svh,480px);height:auto;aspect-ratio:280/190;flex:none}
+.story-viewport>.arrival .arrival-name{font-size:clamp(14px,2vmin,17px);margin-top:12px}
+.story-viewport>.arrival .arrival-track{width:clamp(90px,22vw,140px);margin-top:16px}
+.story-viewport>.arrival .arrival-error{font-size:14px;text-align:center}

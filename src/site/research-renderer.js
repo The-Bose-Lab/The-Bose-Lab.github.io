@@ -25,12 +25,12 @@ class RenderManager{
   // One drawing buffer, enlarged once for the complete frame. Each view retains
   // its own outline targets, so different memo sizes never reallocate each other.
   if(this.renderer.domElement.width!==maxWidth||this.renderer.domElement.height!==maxHeight)this.renderer.setSize(maxWidth,maxHeight,false);
-  const board=document.querySelector('#opening'),scale=board?board.getBoundingClientRect().width/Number(board.dataset.artWidth||1440):1;
+  const board=document.querySelector('#opening'),artScale=board?board.getBoundingClientRect().width/Number(board.dataset.artWidth||1440):1;
   for(const{v,w,h,ratio}of jobs){
    const speed=v.model.playbackSpeed??visualSpeed;v.clock=(v.clock??v.model.elapsed)+(v.active?elapsed*speed:0);
    v.model.update(v.pose??(this.reduced?3.4:v.clock),v.pose!=null||this.reduced||!v.active?0:dt*speed);
    this.renderer.setViewport(0,0,w,h);this.renderer.setScissor(0,0,w,h);this.renderer.setScissorTest(true);
-   v.outline??=new ResearchOutline(this.renderer);v.outline.render(v.model.scene,v.model.camera,w,h,ratio*(innerWidth<600?1:scale),v.theme);
+   v.outline??=new ResearchOutline(this.renderer);v.outline.render(v.model.scene,v.model.camera,w,h,ratio*(v.container.closest('#opening')?artScale:1),v.theme);
    v.context.clearRect(0,0,w,h);v.context.drawImage(this.renderer.domElement,0,maxHeight-h,w,h,0,0,w,h);
    v.dirty=false;v.resolveFirstPaint?.();v.resolveFirstPaint=null;v.updateOverlay();v.onDraw?.();
    Object.assign(v.canvas.dataset,{physicalPixels:`${w}x${h}`,sampling:String(ratio),phase:(v.model.phase||0).toFixed(4),elapsed:v.model.elapsed.toFixed(3),outline:'shared-screen-space',particles:String(v.model.beads?.count||0),frame:String(v.frames=(v.frames||0)+1)});

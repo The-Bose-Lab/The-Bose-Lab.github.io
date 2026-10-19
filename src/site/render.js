@@ -22,6 +22,8 @@ function fit(){
  board.dataset.openingTop=openingTop;board.dataset.memoTop=memoTop;board.style.top=openingTop+'px';html.style.setProperty('--story-travel',(portrait?Math.min(innerHeight,Math.max(320,Math.min(680,h*s*.65))):innerHeight)+'px');html.style.setProperty('--page-art-scale',s);
 }
 addEventListener('resize',fit);fit();initHomeShell();
+// Loading is a viewport layer, independent of either scaled artboard.
+document.querySelector('.story-viewport').append(document.querySelector('#arrival'));
 const entrance=new Entrance(theme,null,{loader:choice.loader,widget:choice.widget,reveal:'quiet',capture:capture||skipEntrance});entrance.begin();
 let plugin,motion,memo,hero,loaded=false,onScreen=true,resolution;
 function activate(){const active=loaded&&!capture&&!reduced&&onScreen&&!document.hidden&&html.dataset.state==='ready';motion?.setActive(active);hero?.setActive(active);if(memo)memo.onScreen=onScreen;}
