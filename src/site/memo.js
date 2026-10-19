@@ -20,6 +20,7 @@ export function memoPose(fr,time,amount=1){
  }
  return{...fr,...envelope,direction,centre:fr.centre,padding:fr.padding+1.2};
 }
+const companionBox=container=>{const sx=container.clientWidth/memoMetrics.slotWidth,sy=container.clientHeight/memoMetrics.slotHeight,b=memoMetrics.box;return{x:b.x*sx,y:b.y*sy,width:b.width*sx,height:b.height*sy};};
 const smooth=x=>(x=clamp(x),x*x*(3-2*x));
 export class MemoController {
  constructor(theme,specKey,query,plugin,framing,fields,heroGraphic=null){this.heroGraphic=heroGraphic;this.fields=fields;this.plugin=plugin;this.framing=framing;
@@ -80,6 +81,8 @@ export class MemoController {
   const board=this.board.getBoundingClientRect(),slot=this.slots[this.heroKind].getBoundingClientRect(),scale=board.width/Number(this.board.dataset.artWidth||1440);
   this.destination={x:(slot.left+slot.width/2-board.left)/scale,y:(slot.top+slot.height/2-board.top)/scale,scale:Math.min(slot.width,slot.height)/scale/560};
   this.phrases=[...this.el.querySelectorAll('.memo-phrase')];
+  const bottom=Math.max(...[...this.el.querySelectorAll('.memo-phrase,.memo-slot')].map(el=>el.getBoundingClientRect().bottom)),overlap=Math.max(0,innerHeight-bottom-24);
+  document.documentElement.style.setProperty('--memo-tail-overlap',overlap+'px');document.body.dataset.adaptiveTail=String(overlap>0);
  }
  async prepareCompanion(){
   await loadMolecularRenderer();this.fields??=await loadJSON('elastic-modes');
@@ -120,7 +123,7 @@ export class MemoController {
  animate(now){if(this.disposed)return;const rawDt=Math.min(.2,(now-(this.last||now))/1000),dt=Math.min(.05,rawDt);this.last=now;const before=this.progress;this.progress+= (this.target-this.progress)*(1-Math.exp(-dt*13));if(Math.abs(this.target-this.progress)<.0002)this.progress=this.target;
   if(this.pendingVisuals&&this.progress>.12)this.prepareVisuals().catch(error=>{document.documentElement.dataset.memoError=String(error);});
   if(this.companionPending&&this.progress>.12){this.companionPending=false;this.prepareCompanion().then(()=>{this.measure();this.compose();}).catch(error=>{document.documentElement.dataset.memoError=String(error);});}
-  const active=this.progress>.65&&!document.hidden&&this.onScreen!==false&&!this.reduced;this.motionTime=(this.motionTime||0)+(active&&this.progress>.995&&this.target===1?rawDt*visualSpeed:0);document.documentElement.dataset.memoRotation=((this.motionTime*.7)%(Math.PI*2)).toFixed(3);if(before!==this.progress||this.lastPosted===undefined||active)this.compose();this.heroGraphic?.setActive(!document.hidden&&this.onScreen!==false);for(const c of this.companions||[]){c.motion.setActive(active);if(active){frameFootprintBox(c.viewer.plugin,memoPose(c.framing,this.motionTime),memoMetrics.box);c.container.dataset.motion='elastic-and-complete-turn';}}for(const v of this.visuals)v.setActive(this.progress>.65&&!document.hidden&&this.onScreen!==false);
+  const active=this.progress>.65&&!document.hidden&&this.onScreen!==false&&!this.reduced;this.motionTime=(this.motionTime||0)+(active&&this.progress>.995&&this.target===1?rawDt*visualSpeed:0);document.documentElement.dataset.memoRotation=((this.motionTime*.7)%(Math.PI*2)).toFixed(3);if(before!==this.progress||this.lastPosted===undefined||active)this.compose();this.heroGraphic?.setActive(!document.hidden&&this.onScreen!==false);for(const c of this.companions||[]){c.motion.setActive(active);if(active){frameFootprintBox(c.viewer.plugin,memoPose(c.framing,this.motionTime),companionBox(c.container));c.container.dataset.motion='elastic-and-complete-turn';}}for(const v of this.visuals)v.setActive(this.progress>.65&&!document.hidden&&this.onScreen!==false);
   if(this.lastPosted!==this.progress){this.lastPosted=this.progress;if(parent!==window)parent.postMessage({type:'story-progress',progress:this.progress,target:this.target},location.origin);}
   this.raf=requestAnimationFrame(t=>this.animate(t));
  }

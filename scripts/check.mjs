@@ -30,4 +30,5 @@ for(const base of ['/','/preview/']){
  }
 }
 await generate();
+await import('../tests/framing.mjs');
 console.log(`Passed: 12 routes at root and /preview/, all local links/assets, 8 hero choices, 6 loaders, ${count} approved geometry/particle samples and ribbon timing.`);
