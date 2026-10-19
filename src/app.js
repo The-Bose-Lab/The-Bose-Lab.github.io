@@ -1,6 +1,7 @@
 import './site/site.css';
 import './site/navigation.css';
 import './site/design-code.css';
+import './site/nfm-post.css';
 import './responsive.css';
 import {bindSiteNavigation} from './site/site-navigation.js';
 import {bindNewsFilters} from './site/news-interactions.js';
