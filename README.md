@@ -1,44 +1,42 @@
 # Bose Lab website
 
-Source for **https://the-bose-lab.github.io** — the Bose Lab (Department of
-Computing, Imperial College London). Built with Jekyll; GitHub Pages builds and
-deploys it automatically on every push to `main`. There is no build step to run.
+Production implementation of the approved Axiom Sans design. Static HTML pages are generated from `_data/*.yml`; Vite bundles only the JavaScript needed by each route. No server, database, framework runtime, or external font/CDN dependency is required.
 
-## Editing content — lab members start here
+## Local development
 
-All content is data, not markup. You should rarely need to touch HTML.
+Use Node.js 24 and pnpm 11:
 
-| What | Where |
-|---|---|
-| Add yourself / update your entry | `_data/people.yml` (photo goes in `assets/images/`) |
-| Add a paper | `_data/publications.yml` (figure goes in `assets/pubfigs/`, optional) |
-| Post news | `_data/news.yml` (newest first) |
-| Write a blog post | `_posts/YYYY-MM-DD-title.md` — see below |
-| Lab info, research areas, join text | `_data/lab.yml`, `_data/research.yml`, `_data/join.yml` |
-
-## Blog posts
-
-Create `_posts/2026-01-31-my-post.md`:
-
-```yaml
----
-layout: post
-title: My post title
-author: Your Name
-math: true   # only if you need LaTeX (KaTeX)
----
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+pnpm check
+pnpm build
+pnpm preview
 ```
 
-then write standard markdown. Code blocks get syntax highlighting; with
-`math: true`, `$...$` and `$$...$$` render as LaTeX. Open a PR; it publishes
-on merge.
+The generated site is in `dist/`. To mount under a path, build with `SITE_BASE=/preview/ pnpm build`. The branch's workflow only checks and builds: it does not publish to GitHub Pages. The current live website remains on `main`.
 
-## Previewing locally (optional)
+## Editing
 
-```bash
-gem install bundler && bundle install   # once
-bundle exec jekyll serve                # http://localhost:4000
+- `_data/`: people, papers, research text, news, and joining information.
+- `content/normalizing-flow-maps.html`: original article content, preserved verbatim.
+- `src/site/site-components.js`: static page markup; `scripts/generate.mjs`: route generation.
+- `src/site/palette.js`: approved shared colours.
+- `src/site/selection.js`: visit-level random selection, stable through resizing.
+- `src/site/`: scientific models, rendering, opening/memo transition, and interactions.
+- `src/responsive.css`: compact-screen navigation and composition.
+- `public/`: self-hosted assets, font, molecular coordinates, Molstar, and KaTeX.
+
+Main visuals sample uniformly from two proteins, one crystal, sphere, torus, evolving energy landscape, annealed density canopy, and conditional ribbons. Loaders independently sample three proteins and three generative examples. Research details sample the approved structures separately. Ribbons retain their original motion and 11.424-second period; other scientific animations retain the approved 1.5× clock. Reduced-motion preferences and offscreen/background suspension are respected.
+
+Molecular coordinates and the article assets retain their source provenance. The original article GIFs are kept in `content/media-originals/` but are excluded from the published build. Their WebP derivatives have identical decoded RGBA frames, durations, loops, and dimensions. Optional regeneration requires Pillow with animated WebP support:
+
+```sh
+python3 scripts/optimize-media.py
 ```
 
-Pushing to `main` without previewing is fine for data-only edits — Pages
-rebuilds in about a minute.
+`tests/fixtures/approved-geometry.json` records representative geometry and particle samples from approved design commit `520e4a601ae7248ca7a1d6314a512017d6cb0c0f`. Checks validate those samples, ribbon timing, curation, all routes, and local asset links at both root and preview paths.
+
+## Preview and publication
+
+The review build is mounted at `/preview/` on the existing design-review host. The original panel remains at `/opening-studies/`. Publishing the actual lab domain is a separate step after responsive review. No application-intake backend has been added; the group review pipeline is still to be agreed.

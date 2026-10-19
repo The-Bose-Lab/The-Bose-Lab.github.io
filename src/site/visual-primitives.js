@@ -1,0 +1,16 @@
+import * as T from 'three';
+export {T};
+export const material=color=>new T.MeshStandardMaterial({color,roughness:1,metalness:0,side:T.DoubleSide});
+export class BaseScene{
+ constructor(theme,{view=[0,1,6],span=2.6}={}){this.theme=theme;this.span=span;this.scene=new T.Scene();this.scene.add(new T.AmbientLight(0xffffff,2.15));const light=new T.DirectionalLight(0xffffff,1.15);light.position.set(-3,6,6);this.scene.add(light);this.camera=new T.OrthographicCamera(-span,span,span,-span,.05,100);this.camera.position.set(...view);this.camera.lookAt(0,0,0);this.camera.updateMatrixWorld();this.elapsed=0;this.phase=0;this.labels=[];this.strips=[];}
+ fit(w,h){const a=w/h,s=this.span;this.camera.left=-s*Math.max(1,a);this.camera.right=s*Math.max(1,a);this.camera.top=s*Math.max(1,1/a);this.camera.bottom=-s*Math.max(1,1/a);this.camera.updateProjectionMatrix();}
+ dispose(){this.scene.traverse(o=>{o.geometry?.dispose();for(const m of o.material?(Array.isArray(o.material)?o.material:[o.material]):[])m.dispose();});}
+}
+export class Beads{
+ constructor(parent,count,theme,radius=.055,segments=[24,16]){this.count=count;this.radius=radius;this.mesh=new T.InstancedMesh(new T.SphereGeometry(1,...segments),material(0xffffff),count);this.mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);this.dummy=new T.Object3D();this.mesh.frustumCulled=false;parent.add(this.mesh);this.theme=theme;for(let i=0;i<count;i++)this.mesh.setColorAt(i,new T.Color(theme.a));}
+ update(points,radii,colours){for(let i=0;i<this.count;i++){const p=points[i]||[0,0,0];this.dummy.position.set(...p);this.dummy.scale.setScalar(Math.max(.000001,radii?.[i]??this.radius));this.dummy.updateMatrix();this.mesh.setMatrixAt(i,this.dummy.matrix);if(colours)this.mesh.setColorAt(i,new T.Color(colours[i]||this.theme.a));}this.mesh.instanceMatrix.needsUpdate=true;if(colours)this.mesh.instanceColor.needsUpdate=true;}
+}
+export function tube(points,color,radius=.012){const curve=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p)));const mesh=new T.Mesh(new T.TubeGeometry(curve,Math.max(16,points.length*2),radius,6,false),material(color));mesh.userData.tubeRadius=radius;return mesh;}
+export function setTube(mesh,points){mesh.geometry.dispose();mesh.geometry=new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),Math.max(16,points.length*2),mesh.userData.tubeRadius||.012,6,false);}
+export function surfaceGeometry(fn,nu=64,nv=48){const g=new T.BufferGeometry(),p=new Float32Array((nu+1)*(nv+1)*3),c=new Float32Array(p.length),idx=[];g.userData={nu,nv};g.setAttribute('position',new T.BufferAttribute(p,3));g.setAttribute('color',new T.BufferAttribute(c,3));for(let j=0;j<nv;j++)for(let i=0;i<nu;i++){const a=j*(nu+1)+i;idx.push(a,a+nu+1,a+1,a+1,a+nu+1,a+nu+2);}g.setIndex(idx);const fake={geometry:g};updateSurface(fake,fn,()=>new T.Color(0xffffff));return g;}
+export function updateSurface(mesh,fn,colourFn){const g=mesh.geometry,{nu,nv}=g.userData,a=g.attributes.position.array,c=g.attributes.color.array;for(let j=0;j<=nv;j++)for(let i=0;i<=nu;i++){const u=i/nu,v=j/nv,p=fn(u,v,j*(nu+1)+i),k=(j*(nu+1)+i)*3;a.set(p,k);if(colourFn){const value=colourFn(u,v,p);const col=value?.isColor?value:new T.Color(value);col.toArray(c,k);}}g.attributes.position.needsUpdate=true;if(colourFn)g.attributes.color.needsUpdate=true;g.computeVertexNormals();g.computeBoundingSphere();}

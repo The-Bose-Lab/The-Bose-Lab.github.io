@@ -1,0 +1,374 @@
+<!-- HTML preserves the source post's numbered equations, citations, and multi-panel figures. -->
+<div class="nfm-post">
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="Overview of normalizing flow maps and pointwise and distributional matching." class="figure-img" decoding="async" src="./assets/blog/normalizing-flow-maps/transparent-frog/cc-transparent-frog.svg" style="width:100.0%"/></p>
+<figcaption>Overview of Normalizing Flow Map (NFM), which performs generative transport along a stochastic interpolant. NFM-R exploits pointwise matching at the particle level, while NFM-D leverages distributional matching.</figcaption>
+</figure>
+</div>
+<section class="level2" id="generative-modelling-with-interpolants">
+<h2>Generative modelling with interpolants</h2>
+<p>Diffusion <span class="citation">[<a href="#ref-ho_denoising_2020" role="doc-biblioref">9</a>, <a href="#ref-sohl-dickstein_deep_2015" role="doc-biblioref">18</a>, <a href="#ref-song2021scorebased" role="doc-biblioref">19</a>]</span> and flow matching <span class="citation">[<a href="#ref-albergo2023building" role="doc-biblioref">2</a>, <a href="#ref-lipman2023flow" role="doc-biblioref">10</a>, <a href="#ref-liu2023flow" role="doc-biblioref">11</a>]</span> have become the dominant generative modelling paradigm for continuous modalities. Underlying these methods is the idea of defining a time-dependent transport process from a stochastic <em>interpolant</em> <span class="citation">[<a href="#ref-albergo2023building" role="doc-biblioref">2</a>, <a href="#ref-albergo2025stochastic" role="doc-biblioref">3</a>]</span>: <span id="eq-interpolant"><span class="math display">\[
+I_t(x_0,x_1):= \alpha_t x_0 + \beta_t x_1
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(x_0\)</span> is a data sample and <span class="math inline">\(x_1\)</span> is a noise sample jointly sampled from a <em>coupling</em> distribution <span class="math inline">\(\pi(x_0,x_1)\)</span>, with <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> well-behaved time-dependent functions. Put simply, given noise and data samples, an interpolant prescribes how we transition from the one to the other.</p>
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="Animation of linear interpolation between paired data and noise samples." class="figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/interpolants-transparent.gif"/></p>
+<figcaption>Sampling pairs <span class="math inline">\((x_0, x_1)\)</span> and transitioning between them with the common linear interpolant <span class="math inline">\(I_t = (1-t)x_0 + tx_1\)</span>.</figcaption>
+</figure>
+</div>
+<p>At each time <span class="math inline">\(t\)</span>, sampling pairs <span class="math inline">\((x_0, x_1)\sim \pi\)</span> and evaluating <span class="math inline">\(I_t\)</span> gives samples from <span class="math inline">\(p_t\)</span>, the <em>marginal</em> at time <span class="math inline">\(t\)</span>. As <span class="math inline">\(t\)</span> runs from <span class="math inline">\(1\)</span> to <span class="math inline">\(0\)</span>, these distributions transform from the noise distribution <span class="math inline">\(p_1\)</span> to the data distribution <span class="math inline">\(p_0\)</span>:</p>
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="Animation of the marginal distribution changing from noise to data." class="nfm-figure nfm-figure-center figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/distributions-morph-transparent.gif" style="width:40.0%"/></p>
+</figure>
+</div>
+<p>Since sampling from <span class="math inline">\(p_1\)</span> is easy (by design), a generative model only needs to move samples along this path of distributions from <span class="math inline">\(p_1\)</span> to <span class="math inline">\(p_0\)</span>. Flow matching and diffusion models do this by learning and then following the velocity field associated with the interpolant: <span id="eq-instantaneous-marginal-velocity"><span class="math display">\[
+v_t(x) = \mathbb{E}_{x_t\sim p_t(x_t)}\left[\frac{\partial I_t}{\partial t}\vert I_t=x_t\right].
+\tag{2}\]</span></span></p>
+<p>Once a neural network approximation <span class="math inline">\(v^{\theta}_t\)</span> is learnt, we can sample via <span id="eq-flow-matching-sampling-integral"><span class="math display">\[
+\hat{x}_t = x_1 + \int_{\tau=1}^{\tau=t} v^{\theta}_{\tau}(\hat{x}_\tau)d\tau, x_1\sim p_1.
+\tag{3}\]</span></span></p>
+<p>This approach produces incredibly high fidelity samples and is scalable as <span class="math inline">\(v_t\)</span> can be efficiently learnt. In practice, we approximate the integral in <a class="nfm-xref" href="#eq-flow-matching-sampling-integral">Equation 3</a> with numerical solvers (e.g. Euler). This introduces an inference-time tradeoff where more solver steps can produce better samples at the cost of increasing sampling time. Furthermore, models often require dozens of steps at minimum to obtain reasonable samples. Since each step entails a neural network evaluation this can be quite costly.</p>
+</section>
+<section class="level2" id="flow-maps-for-efficient-sampling">
+<h2>Flow maps for efficient sampling</h2>
+<p><em>Flow map</em> <span class="citation">[<a href="#ref-boffi2025flow" role="doc-biblioref">4</a>, <a href="#ref-boffi2025how" role="doc-biblioref">5</a>]</span> models instead learn to directly jump along sampling trajectories. Imagine breaking up an integration from <span class="math inline">\(1\)</span> to <span class="math inline">\(0\)</span> into an integral up to <span class="math inline">\(s\)</span>, then from <span class="math inline">\(s\)</span> to <span class="math inline">\(t\)</span>, and finally <span class="math inline">\(t\)</span> to <span class="math inline">\(0\)</span>:</p>
+<p><span id="eq-broken-up-integration"><span class="math display">\[
+\hat{x}_0 = \left(\left((x_1 + \int_{\tau=1}^{\tau=s}v_{\tau}(x_\tau)d\tau)+\int_{\tau=s}^{\tau=t}v_{\tau}(x_{\tau})d\tau\right)+\int_{\tau=t}^{\tau=0}v_{\tau}(x_{\tau})d\tau\right)
+\tag{4}\]</span></span></p>
+<p>Within each bracket we take the current state and apply some offset by integrating the velocity field over an interval. The flow map <span class="math inline">\(X_{s,t}\)</span> performs exactly this transformation,</p>
+<p><span id="eq-flow-map-as-integrator"><span class="math display">\[
+\hat{x}_0 = X_{t,0}(X_{s,t}(X_{1,s}(x_1))).
+\tag{5}\]</span></span></p>
+<p>Learning the flow map instead of <span class="math inline">\(v_t\)</span> enables us to obtain high quality samples in a single step. Flow maps satisfy some intuitively desirable consistency properties which are often directly incorporated into training losses. For example, the semi-group property specifies that composing jumps should be equivalent to a single jump: <span id="eq-semigroup"><span class="math display">\[
+X_{s,t}(X_{r,s}(x_r)) = X_{r,t}(x_r).
+\tag{6}\]</span></span></p>
+</section>
+<section class="level2" id="sec-what-about-densities">
+<h2>What about densities?</h2>
+<p>Whilst flow maps enable efficient <em>sampling</em>, obtaining <em>exact</em> densities in an efficient way remains challenging. Flow matching models can obtain the log-density of generated samples by integrating the <em>instantaneous</em> change-of-variables formula <span class="citation">[<a href="#ref-chenneuralode" role="doc-biblioref">6</a>]</span>:</p>
+<p><span id="eq-instantaneous-change-of-var"><span class="math display">\[
+\log p^{\theta}_t(\hat{x}_t) = \log p_1 (x_1) - \int_{\tau=1}^{\tau=t}\nabla\cdot v^{\theta}_{\tau}(\hat{x}_\tau)d\tau.
+\tag{7}\]</span></span></p>
+<p>Unfortunately, computing <span class="math inline">\(\log p^{\theta}_t(\hat{x}_t)\)</span> with sufficient accuracy for scientific applications like Boltzmann Generators requires many solver steps, each needing an expensive velocity field divergence evaluation. Furthermore, directly computing the <em>Fisher</em> score <span class="math inline">\(\nabla_{\theta}\log p^{\theta}_0(\hat{x}_0)\)</span>, a quantity commonly used in reinforcement learning algorithms when rewards are non-differentiable, would require differentiating through the solver steps.</p>
+<p>One potential avenue is to simultaneously learn the flow map <span class="math inline">\(X_{s,t}\)</span> and the integral of the divergence from <span class="math inline">\(s\)</span> to <span class="math inline">\(t\)</span>. Assuming both quantities are perfectly learnt this would yield cheap and exact densities. However, in practice this is not the case and this approach has so far lagged behind methods that provide exact densities for Boltzmann Generators <span class="citation">[<a href="#ref-ai2026joint" role="doc-biblioref">1</a>, <a href="#ref-scallop_2026" role="doc-biblioref">14</a>]</span>.</p>
+</section>
+<section class="level2" id="a-resurgence-of-normalising-flows">
+<h2>A resurgence of normalising flows</h2>
+<p>Normalising Flows (NFs) <span class="citation">[<a href="#ref-rezende_variational_2015" role="doc-biblioref">16</a>, <a href="#ref-tabak_family_2013" role="doc-biblioref">20</a>, <a href="#ref-tabak_density_2010" role="doc-biblioref">21</a>]</span> parametrize maps between distributions using an invertible neural network <span class="math inline">\(f^{\theta}\)</span> with Jacobian log-determinants that are cheaply computable. This enables exact and efficient likelihood evaluation via the <em>classical</em> change of variables formula:</p>
+<p><span id="eq-classical-change-of-var"><span class="math display">\[
+\log p^{\theta}_{0}(\hat{x}_0) = \log p_1 (x_1) - \log \left\lvert \mathrm{det} \frac{\partial f^{\theta}(x_1)}{\partial x_1}\right\rvert.
+\tag{8}\]</span></span></p>
+<p>NFs are usually trained by maximum-likelihood estimation using <span class="math inline">\(\log p^{\theta}(x_0) = \log p_1 ((f^{\theta})^{-1}(x_0))+\log \lvert \mathrm{det}\, \partial_{x_0} (f^{\theta})^{-1}(x_0)\rvert\)</span>. Whilst NFs provide exact densities, historically they have been difficult to scale and have lagged behind other generative models when it comes to sample fidelity. Recently, Transformer Autoregressive Flows (TARFlows) <span class="citation">[<a href="#ref-gu2026starflow" role="doc-biblioref">8</a>, <a href="#ref-lu2026bidirectional" role="doc-biblioref">12</a>, <a href="#ref-zhai2025normalizing" role="doc-biblioref">23</a>]</span> have emerged as a class of scalable NFs with high quality samples. However, when scaling these NFs to high-dimensional tasks like image generation it is crucial to smooth out the data distribution <span class="math inline">\(p_0\)</span> via noise injection <span id="eq-noise-injection"><span class="math display">\[
+x_\sigma = x_0 + \epsilon, \,\epsilon \sim \mathcal{N}(0,\sigma^2 I),
+\tag{9}\]</span></span></p>
+<p>which prevents training stability issues and poor performance (e.g. <a class="nfm-xref" href="#fig-mle-with-and-without-noise">Figure 1</a> below), as well as <em>numerical</em> loss of invertibility.</p>
+<div class="nfm-layout-panel" id="fig-mle-with-and-without-noise">
+<figure class="nfm-float nfm-float-fig figure">
+<div aria-describedby="fig-mle-with-and-without-noise-caption">
+<div class="nfm-layout-row">
+
+<div class="nfm-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="MNIST samples from maximum-likelihood training without noise." class="figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/mnist_mle_no_noise_guided.png"/></p>
+<figcaption>MLE without noise.</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="MNIST samples trained with noise and cleaned with Tweedie denoising." class="figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/mnist_mle_tweedie_guided.png"/></p>
+<figcaption>MLE with noise and Tweedie denoising.</figcaption>
+</figure>
+</div>
+</div>
+
+</div>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-float-caption nfm-float-fig" id="fig-mle-with-and-without-noise-caption">
+Figure 1: MNIST samples from an MLE-trained TARFlow model.
+</figcaption>
+</figure>
+</div>
+<p>Consequently, the resulting NF provides exact densities for the learnt <em>noisy</em> distribution <span class="math inline">\(p^{\theta}_{\sigma}\)</span>, and clean samples are produced via Tweedie’s formula<a class="footnote-ref" href="#fn1" id="fnref1" role="doc-noteref"><sup>1</sup></a>,</p>
+<p><span id="eq-tweedies-formula"><span class="math display">\[
+\hat{x}_0 = \mathbb{E}[x_0 \vert x_\sigma] = \hat{x}_{\sigma}+\sigma^{2}\nabla_{\hat{x}_{\sigma}}\log p^{\theta}_{\sigma}(\hat{x}_{\sigma}).
+\tag{10}\]</span></span></p>
+<p>This additional denoising transformation is not covered by the change-of-variables guarantee and thus the likelihoods of clean samples are not available. Therefore, on high-dimensional data TARFlows lose a key advantage of NFs<a class="footnote-ref" href="#fn2" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+</section>
+<section class="level2" id="normalizing-flow-maps">
+<h2>Normalizing Flow Maps</h2>
+<p>Normalizing Flow Maps (NFMs) perform few-step transport between the marginals <span class="math inline">\(p_t\)</span> and combine the advantages of NF architectures with an interpolant-centric approach to generative modelling. Given a set of admissible time pairs <span class="math inline">\(\mathcal{T}\subset \{(s,t): 0\leq t \leq s \leq 1\}\)</span>, an NFM is a jointly parametrized family <span class="math inline">\(\mathcal{F}_{\theta} = {f^{\theta}_{s,t}:\mathbb{R}^{d}\to \mathbb{R}^{d}}_{(s,t)\in \mathcal{T}}\)</span> where for every <span class="math inline">\((s,t)\in \mathcal{T}\)</span>, <span class="math inline">\(f^{\theta}_{s,t}\)</span> is a <span class="math inline">\(\mathcal{C}^\infty\)</span> diffeomorphism satisfying</p>
+<p><span id="eq-nfm-invert"><span class="math display">\[
+(f_{s,t})^{-1}\circ f_{s,t} = f_{s,t} \circ (f_{s,t})^{-1} = \mathrm{Id}.
+\tag{11}\]</span></span></p>
+<p>The exact invertibility of the map enables evaluating sample densities using the classical change-of-variables formula,</p>
+<p><span class="math display">\[
+    \log p^\theta_{s\to t}(x_t)
+    =
+    \log p_s(x_s)
+    -
+   \log\left|
+        \det
+        \frac{\partial f^\theta_{s,t}(x_s)}{\partial x_s}
+    \right|,
+    \qquad
+    x_t=f^{\theta}_{s,t}(x_s),\,x_s\sim p_s.
+    %=(f^\theta_{s,t})^{-1}(x_t).
+\]</span></p>
+<p>Our first approach, called NFM regression (NFM-R), utilises the sample-level consistency objectives of flow maps to train an NFM. The advantage of NFM-R is that mature training recipes in the flow-map literature (e.g. Mean Flow) can be easily adapted.</p>
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="Animation of pointwise consistency: composed jumps match a direct jump." class="figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/claude-fig1-gifs/pointwise-transparent.gif"/></p>
+<figcaption>Pointwise consistency operates at the level of individual samples. Here we illustrate the semi-group condition <span class="math inline">\(f_{s,t}(f_{r,s}(x_r))=f_{r,t}(x_r).\)</span></figcaption>
+</figure>
+</div>
+<p>Our second approach, called NFM distribution (NFM-D), performs distributional matching across interpolation times. Our simplest NFM-D objective learns a one-step map from noise to data via: <span class="math display">\[
+\begin{align}
+&amp;\operatorname*{argmin}_{\theta} \mathbb{E}_{t,x_0}[\mathbb{D}_{\mathrm{KL}}(p_t(\cdot|x_0)\,\lvert\rvert\,p^{\theta}_{t})]\\
+&amp;=\operatorname*{argmin}_{\theta} \mathbb{E}_{t,x_t}\left[\frac{1}{2}\lVert (f^{\theta}_{1,t})^{-1}(x_t) \rVert^2 - \log \left \vert \mathrm{det} \frac{\partial (f^{\theta}_{1,t})^{-1}(x_t)}{\partial x_t}\right \vert\right].
+\end{align}
+\]</span></p>
+<p>Intuitively, this objective teaches the <em>inverse</em> map <span class="math inline">\((f^{\theta}_{1,t})^{-1}\)</span> to transport samples along an interpolant path back to the noise distribution. Then at inference we can use <span class="math inline">\(f^{\theta}_{1,t=0}\)</span> to map from noise to data. This is somewhat restrictive as <span class="math inline">\(f^{\theta}\)</span> can only map from noise, so we don’t benefit from multi-step inference. In the paper, we also detail a more general form of NFM-D that enables multi-step sampling (with densities) at inference.</p>
+<div class="nfm-figure nfm-figure-center">
+<figure class="figure">
+<p><img alt="Animation of distributional consistency across interpolant marginals." class="figure-img" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/claude-fig1-gifs/distributional-transparent.gif"/></p>
+<figcaption>Distributional consistency operates at the level of the marginal distributions. Here we illustrate that <span class="math inline">\((f^{-1}_{s,t})_{\#}({f_{1,t}}_{\#}p_1)=p_s\)</span>.</figcaption>
+</figure>
+</div>
+</section>
+<section class="level2" id="what-can-you-do-with-an-nfm">
+<h2>What can you do with an NFM?</h2>
+<p>Two applications where NFMs are particularly useful are Reinforcement Learning (RL) post-training and Boltzmann generators.</p>
+<section class="level3" id="rl-post-training">
+<h3>RL Post-training</h3>
+<p>For post-training, access to the endpoint density <span class="math inline">\(p^{\theta}_{1\to 0}(x_0)\)</span> enables direct optimisation of classical regularised reward maximisation objectives, <span id="eq-general-rl"><span class="math display">\[
+\mathcal{J}(\theta) = \mathbb{E}_{x_0\sim p^{\theta}_{1\to 0}}[R(x_0)] + \beta \mathrm{Reg}(p^{\theta}_{1\to 0}),\, \beta &gt;0.
+\tag{12}\]</span></span></p>
+<p>The two most common choices for <span class="math inline">\(\mathrm{Reg}(p^{\theta}_{1\to 0})\)</span> are entropy <span class="math inline">\(\mathcal{H}(p^{\theta}_{1\to 0})\)</span> (<em>maximum entropy RL</em>), or <span class="math inline">\(-\mathbb{D}_{\mathrm{KL}}(p_{1\to 0}^\theta\|p_{\rm ref})\)</span> for a fixed reference density (<em>KL-regularised RL</em>). For diffusion and flow matching models, endpoint likelihoods are expensive to evaluate, making <a class="nfm-xref" href="#eq-general-rl">Equation 12</a> difficult to optimise directly. This necessitates alternative approaches, which are often substantially more complex. NFMs avoid these difficulties as endpoint log densities give access to <em>Fisher</em> score-function gradients (i.e. <span class="math inline">\(\nabla_{\theta}\log p^{\theta}_{1\to 0}(x_0)\)</span>), which enable learning from non-differentiable rewards, and they provide the density ratios<a class="footnote-ref" href="#fn3" id="fnref3" role="doc-noteref"><sup>3</sup></a> needed for prominent large language model post-training methods like DPO <span class="citation">[<a href="#ref-rafailov2023direct" role="doc-biblioref">15</a>]</span> and GRPO <span class="citation">[<a href="#ref-shao2024deepseekmathpushinglimitsmathematical" role="doc-biblioref">17</a>]</span>.</p>
+<p>In <a class="nfm-xref" href="#fig-posttrain">Figure 2</a> we demonstrate that <em>purely class-conditional</em> NFM models trained on ImageNet can align their samples with a text-caption supplied to a Visual Language Model (VLM) via on-policy optimisation of <a class="nfm-xref" href="#eq-general-rl">Equation 12</a>. NFM-R uses maximum entropy regularisation and pathwise gradients, while we demonstrate the flexibility of NFM-D’s post-training by using KL-regularised REINFORCE.</p>
+<div class="nfm-layout-panel" id="fig-posttrain">
+<figure class="nfm-float nfm-float-fig figure">
+<div aria-describedby="fig-posttrain-caption">
+<div class="nfm-layout-row">
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-posttrain" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-nfm-d">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-nfm-d-caption">
+<img alt="Golden retriever samples from NFM-D before post-training." class="figure-img" data-ref-parent="fig-posttrain" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/nfmd_pre_trained_dogs.png"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-nfm-d-caption">
+(a) NFM-D
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-posttrain" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-nfm-d-rl">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-nfm-d-rl-caption">
+<img alt="Golden retrievers on sandy beaches after NFM-D post-training." class="figure-img" data-ref-parent="fig-posttrain" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/nfmd_post_trained_dogs.png"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-nfm-d-rl-caption">
+(b) NFM-D + RL
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-posttrain" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-nfm-r">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-nfm-r-caption">
+<img alt="Bighorn sheep samples from NFM-R before post-training." class="figure-img" data-ref-parent="fig-posttrain" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/nfmr_sheep.png"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-nfm-r-caption">
+(c) NFM-R
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-posttrain" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-nfm-r-rl">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-nfm-r-rl-caption">
+<img alt="Bighorn sheep beside the sea after NFM-R post-training." class="figure-img" data-ref-parent="fig-posttrain" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/nfmr_sheep_rl.png"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-nfm-r-rl-caption">
+(d) NFM-R + RL
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-float-caption nfm-float-fig" id="fig-posttrain-caption">
+Figure 2: NFM post-training. (a) NFM-D, <em>golden retriever</em>; (b) NFM-D post-trained, <em>a single golden retriever on a sandy beach</em>; (c) NFM-R, <em>bighorn sheep</em>; (d) NFM-R post-trained, <em>bighorn sheep standing on a sandy beach beside the sea</em>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section class="level3" id="boltzmann-generators">
+<h3>Boltzmann Generators</h3>
+<div class="nfm-layout-panel" id="fig-molecule-gif">
+<figure class="nfm-float nfm-float-fig figure">
+<div aria-describedby="fig-molecule-gif-caption">
+<div class="nfm-layout-row nfm-layout-valign-bottom">
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-molecule-gif" style="flex-basis: 41.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-al2">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-al2-caption">
+<img alt="Animation of tryptophyltyrosine molecular configurations." class="figure-img" data-ref-parent="fig-molecule-gif" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/WY-md-transparent.gif"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-al2-caption">
+(a) Tryptophyltyrosine
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-molecule-gif" style="flex-basis: 59.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-chignolin">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-chignolin-caption">
+<img alt="Animation of chignolin molecular configurations." class="figure-img" data-ref-parent="fig-molecule-gif" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/chignolin-md-transparent.gif"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-chignolin-caption">
+(b) Chignolin
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-float-caption nfm-float-fig" id="fig-molecule-gif-caption">
+Figure 3: Transitioning between different molecular configurations.
+</figcaption>
+</figure>
+</div>
+<p>The problem of sampling configurations from equilibrium ensembles is a fundamental problem in statistical physics <span class="citation">[<a href="#ref-frenkel1997understanding" role="doc-biblioref">7</a>, <a href="#ref-tuckerman2023statistical" role="doc-biblioref">22</a>]</span> with applications in biomolecular modeling and drug discovery. For a configuration <span class="math inline">\(x\)</span> with energy <span class="math inline">\(\mathcal{E}(x)\)</span> at temperature <span class="math inline">\(T\)</span>, the equilibrium distribution is the Boltzmann distribution <span class="math display">\[
+\mu_{\mathrm{target}}(x)=\frac{1}{\mathcal{Z}}\exp(-\beta\mathcal{E}(x)),\qquad\mathcal{Z}=\int \exp(-\beta\mathcal{E}(x))dx,\qquad \beta = \frac{1}{k_{B}T},
+\]</span></p>
+<p>where <span class="math inline">\(\mathcal{Z}\)</span> is the partition function, which is generally intractable for high-dimensional systems. It is challenging to use traditional methods like Markov Chain Monte Carlo and Molecular Dynamics to sample from the molecular systems that are relevant to areas like drug discovery because their energy landscapes are typically high dimensional and multimodal, with metastable regions separated by large free-energy barriers. Boltzmann Generators (BGs) <span class="citation">[<a href="#ref-noe2019boltzmann" role="doc-biblioref">13</a>]</span> tackle this problem by learning a generative model that approximates the target Boltzmann distribution and then applying Monte Carlo correction methods (e.g. self-normalised importance sampling) to account for discrepancies between the learned and target distribution. The need for such correction methods entails that BGs must support both efficient sampling <em>and</em> density evaluation.</p>
+<p>On Chignolin, the most challenging single-peptide benchmark, NFM-D substantially outperforms the best continuous-flow method and matches the current state-of-the-art. Furthermore, on the transferable generation task, which tests zero-shot generalization to unseen peptides, NFM-D consistently beats its MLE-trained TARFlow counterpart and outperforms the current state-of-the-art on five of six metrics.</p>
+<div class="nfm-layout-panel" id="fig-bg-headline">
+<figure class="nfm-float nfm-float-fig figure">
+<div aria-describedby="fig-bg-headline-caption">
+<div class="nfm-layout-row">
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-bg-headline" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-energy-histograms">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-energy-histograms-caption">
+<img alt="Energy histograms comparing molecular dynamics, NFM-D proposals, and resampled distributions." class="figure-img" data-ref-parent="fig-bg-headline" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/energy_histograms.svg"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-energy-histograms-caption">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="nfm-layout-cell-subref nfm-layout-cell" data-ref-parent="fig-bg-headline" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="nfm-float nfm-figure nfm-figure-center" id="fig-ticas">
+<figure class="nfm-float nfm-subfloat-fig figure">
+<div aria-describedby="fig-ticas-caption">
+<img alt="TICA projections comparing molecular dynamics, TARFlow, and NFM-D for NHQYGSDP." class="figure-img" data-ref-parent="fig-bg-headline" decoding="async" loading="lazy" src="./assets/blog/normalizing-flow-maps/tica.svg"/>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-subfloat-caption nfm-subfloat-fig" id="fig-ticas-caption">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="nfm-float-caption-bottom nfm-float-caption nfm-float-fig" id="fig-bg-headline-caption">
+Figure 4: (a) Energy histograms of MD data, the NFM-D proposal, and the resampled distribution, for a single-system model (left) and a transferable model evaluated on a <span class="math inline">\(4\)</span>- and <span class="math inline">\(8\)</span>-residue peptides (middle, right). (b) TICA projections for the ground truth MD, TARFlow, and NFM-D on NHQYGSDP.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section class="level2" id="closing-thoughts">
+<h2>Closing thoughts</h2>
+<p>NFMs combine few step sampling with tractable likelihoods and we are particularly excited about their application to post-training and equilibrium sampling. However, they are not without their limitations. NFM-R obtains the highest sample quality on image generation tasks but is prone to becoming numerically non-invertible, which impedes RL methods relying on the Fisher score or KL-regularization. This points to the importance of designing training schemes that enjoy the benefits of both pointwise and distributional consistency.</p>
+</section>
+<div class="default" id="nfm-appendix"><section class="nfm-appendix-contents" id="nfm-bibliography" role="doc-bibliography"><h2 class="nfm-appendix-heading">References</h2><div class="references csl-bib-body" data-entry-spacing="0" id="refs" role="list">
+<div class="csl-entry" id="ref-ai2026joint" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">X. Ai <em>et al.</em>, <span>“Joint distillation for fast likelihood evaluation and sampling in flow-based models,”</span> in <em>International conference on learning representations</em>, 2026, pp. 44940–44977.</div>
+</div>
+<div class="csl-entry" id="ref-albergo2023building" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">M. S. Albergo and E. Vanden-Eijnden, <span>“Building normalizing flows with stochastic interpolants,”</span> in <em>The eleventh international conference on learning representations</em>, 2023. Available: <a href="https://openreview.net/forum?id=li7qeBbCR1t">https://openreview.net/forum?id=li7qeBbCR1t</a></div>
+</div>
+<div class="csl-entry" id="ref-albergo2025stochastic" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">M. Albergo, N. M. Boffi, and E. Vanden-Eijnden, <span>“Stochastic interpolants: A unifying framework for flows and diffusions,”</span> <em>Journal of Machine Learning Research</em>, vol. 26, no. 209, pp. 1–80, 2025.</div>
+</div>
+<div class="csl-entry" id="ref-boffi2025flow" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">N. M. Boffi, M. S. Albergo, and E. Vanden-Eijnden, <span>“Flow map matching with stochastic interpolants: A mathematical framework for consistency models,”</span> <em>Transactions on Machine Learning Research</em>, 2025, Available: <a href="https://openreview.net/forum?id=cqDH0e6ak2">https://openreview.net/forum?id=cqDH0e6ak2</a></div>
+</div>
+<div class="csl-entry" id="ref-boffi2025how" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">N. M. Boffi, M. S. Albergo, and E. Vanden-Eijnden, <span>“How to build a consistency model: Learning flow maps via self-distillation,”</span> in <em>The thirty-ninth annual conference on neural information processing systems</em>, 2025. Available: <a href="https://openreview.net/forum?id=Di5apl8HSH">https://openreview.net/forum?id=Di5apl8HSH</a></div>
+</div>
+<div class="csl-entry" id="ref-chenneuralode" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">R. T. Chen, Y. Rubanova, J. Bettencourt, and D. K. Duvenaud, <span>“Neural ordinary differential equations,”</span> <em>Advances in neural information processing systems</em>, vol. 31, 2018.</div>
+</div>
+<div class="csl-entry" id="ref-frenkel1997understanding" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">D. Frenkel and B. Smit, <em>Understanding molecular simulation: From algorithms to applications</em>, 1st ed. USA: Academic Press, Inc., 1996.</div>
+</div>
+<div class="csl-entry" id="ref-gu2026starflow" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">J. Gu <em>et al.</em>, <span>“STARFlow: Scaling latent normalizing flows for high-resolution image synthesis,”</span> <em>Advances in Neural Information Processing Systems</em>, vol. 38, pp. 120986–121022, 2026.</div>
+</div>
+<div class="csl-entry" id="ref-ho_denoising_2020" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">J. Ho, A. Jain, and P. Abbeel, <span>“Denoising <span>Diffusion</span> <span>Probabilistic</span> <span>Models</span>,”</span> in <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span></em>, Curran Associates, Inc., 2020, pp. 6840–6851. Accessed: Aug. 16, 2026. [Online]. Available: <a href="https://proceedings.neurips.cc/paper/2020/hash/4c5bcfec8584af0d967f1ab10179ca4b-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/4c5bcfec8584af0d967f1ab10179ca4b-Abstract.html</a></div>
+</div>
+<div class="csl-entry" id="ref-lipman2023flow" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">Y. Lipman, R. T. Q. Chen, H. Ben-Hamu, M. Nickel, and M. Le, <span>“Flow matching for generative modeling,”</span> in <em>The eleventh international conference on learning representations</em>, 2023. Available: <a href="https://openreview.net/forum?id=PqvMRDCJT9t">https://openreview.net/forum?id=PqvMRDCJT9t</a></div>
+</div>
+<div class="csl-entry" id="ref-liu2023flow" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">X. Liu, C. Gong, and qiang liu, <span>“Flow straight and fast: Learning to generate and transfer data with rectified flow,”</span> in <em>The eleventh international conference on learning representations</em>, 2023. Available: <a href="https://openreview.net/forum?id=XVjTT1nw5z">https://openreview.net/forum?id=XVjTT1nw5z</a></div>
+</div>
+<div class="csl-entry" id="ref-lu2026bidirectional" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">Y. Lu, Q. Sun, X. Wang, Z. Jiang, H. Zhao, and K. He, <span>“Bidirectional normalizing flow: From data to noise and back,”</span> in <em>Proceedings of the IEEE/CVF conference on computer vision and pattern recognition</em>, 2026, pp. 2069–2078.</div>
+</div>
+<div class="csl-entry" id="ref-noe2019boltzmann" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">F. Noé, S. Olsson, J. Köhler, and H. Wu, <span>“Boltzmann generators: Sampling equilibrium states of many-body systems with deep learning,”</span> <em>Science</em>, vol. 365, no. 6457, p. eaaw1147, 2019.</div>
+</div>
+<div class="csl-entry" id="ref-scallop_2026" role="listitem">
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">R. OuYang <em>et al.</em>, <span>“Few-<span>Step</span> <span>Boltzmann</span> <span>Generators</span> via <span>Scalable</span> <span>Likelihood</span> <span>Flow</span> <span>Maps</span>.”</span> arXiv, Jun. 2026. doi: <a href="https://doi.org/10.48550/arXiv.2606.29110">10.48550/arXiv.2606.29110</a>.</div>
+</div>
+<div class="csl-entry" id="ref-rafailov2023direct" role="listitem">
+<div class="csl-left-margin">[15] </div><div class="csl-right-inline">R. Rafailov, A. Sharma, E. Mitchell, C. D. Manning, S. Ermon, and C. Finn, <span>“Direct preference optimization: Your language model is secretly a reward model,”</span> <em>Advances in neural information processing systems</em>, vol. 36, pp. 53728–53741, 2023.</div>
+</div>
+<div class="csl-entry" id="ref-rezende_variational_2015" role="listitem">
+<div class="csl-left-margin">[16] </div><div class="csl-right-inline">D. Rezende and S. Mohamed, <span>“Variational <span>Inference</span> with <span>Normalizing</span> <span>Flows</span>,”</span> in <em>Proceedings of the 32nd <span>International</span> <span>Conference</span> on <span>Machine</span> <span>Learning</span></em>, PMLR, Jun. 2015, pp. 1530–1538. Accessed: Aug. 15, 2026. [Online]. Available: <a href="https://proceedings.mlr.press/v37/rezende15.html">https://proceedings.mlr.press/v37/rezende15.html</a></div>
+</div>
+<div class="csl-entry" id="ref-shao2024deepseekmathpushinglimitsmathematical" role="listitem">
+<div class="csl-left-margin">[17] </div><div class="csl-right-inline">Z. Shao <em>et al.</em>, <span>“DeepSeekMath: Pushing the limits of mathematical reasoning in open language models.”</span> 2024. Available: <a href="https://arxiv.org/abs/2402.03300">https://arxiv.org/abs/2402.03300</a></div>
+</div>
+<div class="csl-entry" id="ref-sohl-dickstein_deep_2015" role="listitem">
+<div class="csl-left-margin">[18] </div><div class="csl-right-inline">J. Sohl-Dickstein, E. Weiss, N. Maheswaranathan, and S. Ganguli, <span>“Deep <span>Unsupervised</span> <span>Learning</span> using <span>Nonequilibrium</span> <span>Thermodynamics</span>,”</span> in <em>Proceedings of the 32nd <span>International</span> <span>Conference</span> on <span>Machine</span> <span>Learning</span></em>, PMLR, Jun. 2015, pp. 2256–2265. Accessed: Aug. 16, 2026. [Online]. Available: <a href="https://proceedings.mlr.press/v37/sohl-dickstein15.html">https://proceedings.mlr.press/v37/sohl-dickstein15.html</a></div>
+</div>
+<div class="csl-entry" id="ref-song2021scorebased" role="listitem">
+<div class="csl-left-margin">[19] </div><div class="csl-right-inline">Y. Song, J. Sohl-Dickstein, D. P. Kingma, A. Kumar, S. Ermon, and B. Poole, <span>“Score-based generative modeling through stochastic differential equations,”</span> in <em>International conference on learning representations</em>, 2021. Available: <a href="https://openreview.net/forum?id=PxTIG12RRHS">https://openreview.net/forum?id=PxTIG12RRHS</a></div>
+</div>
+<div class="csl-entry" id="ref-tabak_family_2013" role="listitem">
+<div class="csl-left-margin">[20] </div><div class="csl-right-inline">E. G. Tabak and C. V. Turner, <span>“A <span>Family</span> of <span>Nonparametric</span> <span>Density</span> <span>Estimation</span> <span>Algorithms</span>,”</span> <em>Communications on Pure and Applied Mathematics</em>, vol. 66, no. 2, pp. 145–164, 2013, doi: <a href="https://doi.org/10.1002/cpa.21423">10.1002/cpa.21423</a>.</div>
+</div>
+<div class="csl-entry" id="ref-tabak_density_2010" role="listitem">
+<div class="csl-left-margin">[21] </div><div class="csl-right-inline">E. G. Tabak and E. Vanden-Eijnden, <span>“Density estimation by dual ascent of the log-likelihood,”</span> <em>Communications in Mathematical Sciences</em>, vol. 8, no. 1, pp. 217–233, 2010, doi: <a href="https://doi.org/10.4310/CMS.2010.v8.n1.a11">10.4310/CMS.2010.v8.n1.a11</a>.</div>
+</div>
+<div class="csl-entry" id="ref-tuckerman2023statistical" role="listitem">
+<div class="csl-left-margin">[22] </div><div class="csl-right-inline">M. E. Tuckerman, <em>Statistical mechanics: Theory and molecular simulation</em>. Oxford university press, 2023.</div>
+</div>
+<div class="csl-entry" id="ref-zhai2025normalizing" role="listitem">
+<div class="csl-left-margin">[23] </div><div class="csl-right-inline">S. Zhai <em>et al.</em>, <span>“Normalizing flows are capable generative models,”</span> in <em>Proceedings of the 42nd international conference on machine learning</em>, A. Singh, M. Fazel, D. Hsu, S. Lacoste-Julien, F. Berkenkamp, T. Maharaj, K. Wagstaff, and J. Zhu, Eds., in Proceedings of machine learning research, vol. 267. PMLR, 2025, pp. 74348–74369. Available: <a href="https://proceedings.mlr.press/v267/zhai25d.html">https://proceedings.mlr.press/v267/zhai25d.html</a></div>
+</div>
+</div></section><section class="footnotes footnotes-end-of-document" id="footnotes" role="doc-endnotes"><h2 class="nfm-appendix-heading">Footnotes</h2>
+<ol>
+<li id="fn1"><p>Latent space TARFlows commonly use non-invertible decoders instead of Tweedie’s formula due to the high amount of noise they train with. See Appendix C3 of STARFlow <span class="citation">[<a href="#ref-gu2026starflow" role="doc-biblioref">8</a>]</span> for a discussion.<a class="footnote-back" href="#fnref1" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The need for spatial gradients also makes inference more expensive, increasing both memory usage and sampling time.<a class="footnote-back" href="#fnref2" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For example, in KL-divergence terms or importance sampling ratios.<a class="footnote-back" href="#fnref3" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div>
+</div>
