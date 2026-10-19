@@ -90,3 +90,11 @@ body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-e
  .landscape-peaks .peak-link.is-preview{height:auto;min-height:0;align-self:start}
  .peak-link.is-preview>.peak-title{border-color:transparent;background:none}
 }
+
+/* Safari must not run a second scrolling animation or resize the art when its toolbar moves. */
+html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
+.has-site-scroll .story-stage{height:calc(var(--intro-height,100svh) + var(--story-travel,100svh))}
+.has-site-scroll .story-viewport{height:var(--intro-height,100svh);touch-action:pan-x;overscroll-behavior:none}
+.molecular-stage{transition:opacity .18s ease}
+.peak-link:not(.is-preview) .atlas-annotation{visibility:hidden!important;pointer-events:none!important}
+.peak-link:not(.is-preview) .atlas-explore{pointer-events:none!important}

@@ -17,7 +17,7 @@ export const researchPeaks=[
 ];
 export class LandscapeScene extends BaseScene{
  constructor(theme){
-  super(theme,{view:[0,6.6,9.5],span:4});this.reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion:reduce)').matches;this.hoverTopic='';this.focus={foundations:0,science:0,sampling:0,safety:0};this.foundationsClock=0;this.transport=0;this.safetyClock=0;this.safetyAmount=0;this.particleOpacity=0;this.samplingClock=0;
+  super(theme,{view:[0,6.6,9.5],span:4});this.reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion:reduce)').matches;this.hoverTopic='';this.focus={foundations:0,science:0,sampling:0,safety:0};this.foundationsClock=0;this.transport=0;this.safetyClock=0;this.safetyAmount=0;this.samplingClock=0;
   this.pointer={x:0,z:0,amplitude:0,targetX:0,targetZ:0,targetAmplitude:0};
   this.peaks=researchPeaks.map(p=>({...p,position:[p.x,this.baseHeight(p.x,p.z)+.15,p.z]}));
   this.fn=(u,v,i)=>{if(this.vertexCache&&i!==undefined){const q=this.vertexCache[i],density=this.sampleDensity(q);this.vertexDensity[i]=density;return[q.x,q.base+this.safetyAmount*q.edit+q.edge*this.focus.sampling*(density-q.rest)+this.pointer.amplitude*q.edge*g(q.x,q.z,this.pointer.x,this.pointer.z,.28,.28),q.z];}const x=(u-.5)*8.8,z=(v-.5)*4.5;return[x,this.height(x,z),z];};
@@ -29,7 +29,7 @@ export class LandscapeScene extends BaseScene{
   // The original spiral winds around the peak in its intrinsic x/z chart.
   // Equal 3D arc lengths, rather than a camera-plane stencil, preserve relief.
   const spiral=this.spiralTargets(125);let seed=0x7b1d93a5;const random=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let n=Math.imul(seed^seed>>>15,1|seed);n=n+Math.imul(n^n>>>7,61|n)^n;return((n^n>>>14)>>>0)/4294967296;};this.cohort=spiral.map(target=>{let source;do{const a=random()*Math.PI*2,r=Math.sqrt(random());source=[-2.55+.85*r*Math.cos(a),-.20+.65*r*Math.sin(a)];}while(this.baseHeight(...source)<-.05);return{source,target};});
-  this.particles=new Beads(this.scene,this.cohort.length,theme,.025);this.particles.mesh.renderOrder=3;this.particles.mesh.material.transparent=true;this.particles.mesh.material.opacity=0;this.particles.mesh.visible=false;
+  this.particles=new Beads(this.scene,this.cohort.length,theme,.025);this.particles.mesh.renderOrder=3;this.particles.mesh.visible=false;
   const uv=this.surface.geometry.attributes.uv;
   this.vertexCache=Array.from({length:uv.count},(_,i)=>{const x=(uv.getX(i)-.5)*8.8,z=(uv.getY(i)-.5)*4.5,w=this.regionWeights(x,z),sum=w.reduce((a,b)=>a+b,0)||1;return{x,z,base:this.baseHeight(x,z),weights:w.map(v=>v/sum),rest:this.samplingRelief(x,z,0),edge:smooth((4.4-Math.abs(x))/.50)*smooth((2.25-Math.abs(z))/.45),edit:.48*g(x,z,2.82,.94,.18,.26)-.48*g(x,z,2.29,.79,.28,.25),a:(x+1.25)**2/.40+(z-.90)**2/.24,b:(x+.35)**2/.18+(z-1.16)**2/.15,mask:Math.exp(-((x+.8)**2/1.7+(z-1)**2/.8))};});
   this.vertexDensity=new Float64Array(uv.count);this.tones=[theme.g,theme.a,theme.c,theme.b].map(c=>new T.Color(c));this.darkTones=this.tones.map(c=>c.clone().multiplyScalar(.88));this.ink=new T.Color(theme.ink);this.samplingLow=new T.Color(theme.c).lerp(new T.Color(theme.bg),.12);this.samplingHigh=new T.Color(theme.c).lerp(this.ink,.24);this.scratch=new T.Color();this.heat=new T.Color();
@@ -65,7 +65,7 @@ export class LandscapeScene extends BaseScene{
  }
  height(x,z){const reweight=this.focus.sampling*(this.samplingRelief(x,z,-3.2*Math.sin(this.samplingClock*motionRate))-this.samplingRelief(x,z,0)),p=this.pointer,edge=smooth((4.4-Math.abs(x))/.50)*smooth((2.25-Math.abs(z))/.45),edit=this.safetyAmount*(.48*g(x,z,2.82,.94,.18,.26)-.48*g(x,z,2.29,.79,.28,.25));return this.baseHeight(x,z)+edit+edge*reweight+p.amplitude*edge*g(x,z,p.x,p.z,.28,.28);}
  setPointer(point){const p=this.pointer;if(point){if(!p.targetAmplitude&&!p.amplitude){p.x=point.x;p.z=point.z;}p.targetX=point.x;p.targetZ=point.z;p.targetAmplitude=.30;}else p.targetAmplitude=0;this.needsFrame=true;}
- setHover(id){if(id===this.hoverTopic)return;this.hoverTopic=id;if(id==='foundations')this.foundationsClock=0;if(id==='safety')this.safetyClock=0;if(id==='sampling')this.samplingClock=0;this.needsFrame=true;}
+ setHover(id){if(id===this.hoverTopic)return;this.hoverTopic=id;this.particles.mesh.visible=id==='foundations';if(id==='foundations')this.foundationsClock=0;if(id==='safety')this.safetyClock=0;if(id==='sampling')this.samplingClock=0;this.needsFrame=true;}
  regionWeights(x,z){return researchPeaks.map(p=>Math.exp(-((x-p.x)**2/1.8+(z-p.z)**2/1.05)));}
  regionAt(x,z){const w=this.regionWeights(x,z);return researchPeaks[w.indexOf(Math.max(...w))].id;}
  setSamplingParameters(){const beta=-3.2*Math.sin(this.samplingClock*motionRate),a=.62*Math.exp(-beta*.8),total=a+.38,fa=1-.42*smooth(Math.max(0,-beta)/3.2),fb=1-.06*smooth(Math.max(0,beta)/3.2);this.sampleCoefficients=[a/total/(Math.PI*Math.sqrt(.40*.24)*fa),.38/total/(Math.PI*Math.sqrt(.18*.15)*fb),fa,fb];}
@@ -86,8 +86,7 @@ export class LandscapeScene extends BaseScene{
   let settling=false;for(const id of Object.keys(this.focus)){const target=this.hoverTopic===id?1:0;this.focus[id]+=(target-this.focus[id])*(1-Math.exp(-(id==='foundations'?2.4:8)*dt));if(Math.abs(target-this.focus[id])<.001)this.focus[id]=target;else settling=true;}
   if(!this.reduced&&this.hoverTopic==='foundations')this.foundationsClock+=dt;this.transport=this.reduced?1:atlasTransportPhase(this.foundationsClock);
   if(!this.reduced&&this.hoverTopic==='sampling')this.samplingClock+=dt;if(!this.reduced&&this.hoverTopic==='safety')this.safetyClock+=dt;const edit=sequenceState(this.safetyClock),edited=this.reduced?this.hoverTopic==='safety':edit.response>.5,targetEdit=this.hoverTopic==='safety'?(this.reduced?1:edit.response):0;this.safetyAmount+=(targetEdit-this.safetyAmount)*(1-Math.exp(-18*dt));this.sequence={letters:edit.sequence.slice(edit.index-4,edit.index+5).join(''),active:4};
-  this.particleOpacity+=((this.hoverTopic==='foundations'?1:0)-this.particleOpacity)*(1-Math.exp(-10*dt));if(this.particleOpacity<.001)this.particleOpacity=0;this.particles.mesh.visible=this.particleOpacity>.001;this.particles.mesh.material.opacity=this.particleOpacity;
-  this.needsFrame=settling||!this.reduced&&['foundations','safety','sampling'].includes(this.hoverTopic)||Math.abs(this.particleOpacity-(this.hoverTopic==='foundations'?1:0))>.001||Math.abs(this.safetyAmount-targetEdit)>.001||Math.abs(p.amplitude-p.targetAmplitude)>.0003||p.targetAmplitude>0&&(Math.abs(p.x-p.targetX)+Math.abs(p.z-p.targetZ)>.001);
+  this.needsFrame=settling||!this.reduced&&['foundations','safety','sampling'].includes(this.hoverTopic)||Math.abs(this.safetyAmount-targetEdit)>.001||Math.abs(p.amplitude-p.targetAmplitude)>.0003||p.targetAmplitude>0&&(Math.abs(p.x-p.targetX)+Math.abs(p.z-p.targetZ)>.001);
   this.elapsed=t;this.phase=p.amplitude/.30;
   this.setSamplingParameters();
   const shape=[this.focus.sampling,this.samplingClock,this.safetyAmount,p.amplitude,p.x,p.z],tone=Object.values(this.focus),changed=(a,b)=>!b||a.some((v,i)=>Math.abs(v-b[i])>1e-9),geometryChanged=changed(shape,this.lastShape),colourChanged=geometryChanged||changed(tone,this.lastTone);

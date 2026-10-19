@@ -49,3 +49,9 @@ console.log('Opening anchors passed: small wheel/swipe, momentum isolation, reve
  h.send('wheel',{deltaY:12});h.advance(100);h.send('keydown',{key:'Home'});h.w.scrollY=0;h.advance(500);assert.equal(h.w.scrollY,0,'Home is not overwritten by a stale animation');
 }
 console.log('Rapid reversals, successive gestures, touch interruption, and stale-animation cancellation passed.');
+{
+ const h=harness();h.send('touchstart',{touches:[{clientX:100,clientY:200}]});h.send('touchmove',{touches:[{clientX:100,clientY:197}]});h.send('touchend');h.advance(500);assert.equal(h.w.scrollY,600,'A three-pixel completed swipe selects the next frame');
+ h.send('touchstart',{touches:[{clientX:100,clientY:200}]});h.send('touchmove',{touches:[{clientX:100,clientY:203}]});h.send('touchend');h.advance(500);assert.equal(h.w.scrollY,0,'A tiny reverse swipe returns completely');
+ h.w.innerWidth=390;h.nav.width=390;h.send('wheel',{deltaY:12});h.advance(100);h.w.innerHeight=720;h.send('resize');h.advance(500);assert.equal(h.w.scrollY,600,'Safari toolbar height changes cannot cancel a frame transition');
+}
+console.log('Tiny iPhone swipes and toolbar-height changes passed.');

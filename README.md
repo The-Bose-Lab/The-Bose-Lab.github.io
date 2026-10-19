@@ -39,9 +39,11 @@ python3 scripts/optimize-media.py
 
 ## Rendering and loading
 
-Scientific canvases share one renderer and retain their outline targets. GPU bitmap presentation is used when supported, with the original canvas-copy fallback. Animated canvases target 60 fps; molecular anti-aliasing accumulates over time rather than rendering all eight samples for every motion update. Small carried molecular views resize their drawing surface to the displayed object while preserving display pixel density. Intro transitions retain one drawing-buffer size during the move.
+Scientific canvases share one renderer and retain their outline targets. GPU bitmap presentation is used when supported, with the original canvas-copy fallback. Animated canvases target 60 fps. Molecular views use spatial supersampling at a minimum of three drawing pixels per displayed pixel, with SMAA instead of temporal accumulation to keep moving structures sharp. Small carried molecular views resize their drawing surface to the displayed object while preserving display pixel density. Intro transitions retain one drawing-buffer size during the move.
 
-The landscape caches its time-independent spatial kernels. Static sampling conformers are drawn once and positioned with the changing manifold. Settled memo text/layout is not recomputed every frame. Loading widgets use the shared scientific renderer, including lightweight ribbons derived from deposited protein backbones; they do not load Molstar. Their complete construction has a 900 ms minimum visible duration and a fading exit.
+The landscape caches its time-independent spatial kernels. Static sampling conformers are drawn once and positioned with the changing manifold. Settled memo text/layout is not recomputed every frame. Both intro frames are prepared before gestures become available; molecular stages stay hidden until their camera is fitted. The memo shares the News content rail and its measured bounds determine vertical centering. Height-only browser-toolbar changes preserve the intro viewport and anchor positions.
+
+Loading widgets use the shared scientific renderer, including lightweight ribbons derived from deposited protein backbones; they do not load Molstar. The opening construction lasts at least 650 ms. Route changes paint an opaque veil before navigation; fast text pages do not import a widget or wait for its animation. Pages still loading after 250 ms get a widget with a 500 ms construction and fading exit.
 
 For local diagnostics, `?profile=1` exposes sampled rendering FPS and submission time in `document.documentElement.dataset.renderProfile`. `?profile=copy` exercises the compatibility presentation path. These are browser measurements, not a promise of identical FPS on every device.
 

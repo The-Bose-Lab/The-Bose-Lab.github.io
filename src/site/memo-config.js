@@ -2,7 +2,7 @@ export const memoCopies={direct:{name:'Research memo',lines:[
  ['We turn noise into structure,','foundations'],
  ['design proteins','protein','and crystals,','crystal'],
  ['sample','samplers','equilibrium states,'],
- ['and study safety and robustness.','safety']
+ ['and study safety & robustness.','safety']
 ]}};
 export const memoTransitions={direct:'Carry · direct path'};
 export const researchSources={

@@ -22,6 +22,14 @@ console.log(`Full-motion framing passed for all five procedural visuals at three
 // Mobile specimens are anchored to the same projected surface coordinates.
 const {LandscapeScene}=await import('../src/site/landscape-scene.js');
 const atlas=new LandscapeScene(getTheme());
+atlas.setHover('foundations');atlas.update(.3,.03);
+assert(atlas.particles.mesh.visible,'Foundations transport appears on selection');
+assert.equal(atlas.particles.mesh.material.opacity,1,'Transport dots retain their ink colour');
+for(const topic of['','safety','science','sampling']){
+ atlas.setHover('foundations');atlas.setHover(topic);
+ assert.equal(atlas.particles.mesh.visible,false,'Leaving Foundations removes dots before the next frame');
+ atlas.update(.6,.03);assert.equal(atlas.particles.mesh.visible,false,'Settling the surface must not restore residual dots');
+}
 for(const width of[240,320,480,720,900]){
  const height=width*560/900,unit=width/900;atlas.setViewport(width,height);atlas.fit(width,height);
  for(const topic of['sampling','safety']){

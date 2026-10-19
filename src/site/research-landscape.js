@@ -1,3 +1,4 @@
+import {navigatePage} from './page-loading.js';
 import {motionRate} from './motion-clock.js';
 import {openingMolecules} from './config.js';
 import {SceneView,ResearchVisual} from './research-renderer.js';
@@ -43,7 +44,7 @@ export async function bindResearchLandscape(theme){
   const connectors=document.createElementNS(svgNS,'svg');connectors.classList.add('atlas-connectors');connectors.setAttribute('aria-hidden','true');layer.append(connectors);
   const connectorParts=[0,1].map(()=>{const path=document.createElementNS(svgNS,'path'),dots=[0,1].map(()=>document.createElementNS(svgNS,'circle'));path.setAttribute('fill','none');for(const dot of dots)dot.setAttribute('r','3.1');connectors.append(path,...dots);return{path,dots};});
   const safetyLink=links.find(link=>link.dataset.topic==='safety'),sequence=document.createElement('span');sequence.className='atlas-sequence';sequence.setAttribute('aria-hidden','true');sequence.setAttribute('aria-label','Illustrative sequence-dependent surface: F87 to A');layer.append(sequence);for(let i=0;i<9;i++)sequence.append(document.createElement('span'));for(const link of links)link.setAttribute('aria-label',link.textContent.trim());
-  const annotation=wrapper.querySelector('.atlas-annotation'),annotationText=annotation.querySelector('p'),explore=annotation.querySelector('.atlas-explore');annotation.setAttribute('aria-hidden','true');
+  const annotation=wrapper.querySelector('.atlas-annotation'),annotationText=annotation.querySelector('p'),explore=annotation.querySelector('.atlas-explore');annotation.setAttribute('aria-hidden','true');annotation.inert=true;
   function drawConnections(){
    const visible=model.hoverTopic==='science'&&scienceViews.length===2;connectors.classList.toggle('is-visible',visible);if(!visible)return;
    const box=map.getBoundingClientRect(),scale=map.clientWidth/box.width;connectors.setAttribute('viewBox',`0 0 ${map.clientWidth} ${map.clientHeight}`);
@@ -70,11 +71,11 @@ export async function bindResearchLandscape(theme){
    sequence.style.left=(mobile?(sp.x+1)*.5*map.clientWidth:Math.max(railInset+half,Math.min((sp.x+1)*.5*map.clientWidth,cardLeft-half-24)))+'px';sequence.style.top=((1-sp.y)*.5*map.clientHeight-sequence.offsetHeight/2)+'px';
    drawConnections();};
 
-  const navigate=link=>{wrapper.classList.add('landscape-opening');const go=()=>{if(parent!==window)parent.postMessage({type:'site-navigation',page:'research',topic:link.dataset.topic},location.origin);else location.assign(link.querySelector('.peak-title').href);};if(matchMedia('(prefers-reduced-motion:reduce)').matches)go();else setTimeout(go,240);};
+  const navigate=link=>navigatePage(link.querySelector('.peak-title').href);
   const show=id=>{
    if(id===model.hoverTopic)return;model.setHover(id);main.tick();wrapper.dataset.preview=id;for(const link of links)link.classList.toggle('is-preview',link.dataset.topic===id);
    science.classList.toggle('is-visible',id==='science'&&scienceViews.length>0);connectors.classList.toggle('is-visible',id==='science'&&scienceViews.length===2);for(const view of scienceViews)view.setActive(id==='science');sequence.classList.toggle('is-visible',id==='safety');sequence.setAttribute('aria-hidden',String(id!=='safety'));
-   annotation.classList.toggle('is-visible',!!id);annotation.setAttribute('aria-hidden',String(!id));
+   annotation.classList.toggle('is-visible',!!id);annotation.setAttribute('aria-hidden',String(!id));annotation.inert=!id;
    if(id){const link=links.find(link=>link.dataset.topic===id);annotationText.textContent=annotations[id];explore.href=link.querySelector('.peak-title').href;explore.setAttribute('aria-label','Explore '+link.querySelector('.peak-title').textContent);link.append(annotation);}
    for(const view of samplingViews){view.setActive(false);if(id!=='sampling')view.container.style.opacity='0';}
    if(id==='science')prepareScience();if(id==='sampling')prepareSampling();place();
@@ -106,7 +107,10 @@ export async function bindResearchLandscape(theme){
    if(model.hoverTopic==='sampling')placeSampling();
    [...sequence.children].forEach((el,i)=>{el.textContent=model.sequence.letters[i];el.classList.toggle('is-edit',i===4);});main.canvas.dataset.lift=model.pointer.amplitude.toFixed(4);main.canvas.dataset.transport=model.transport.toFixed(3);main.canvas.dataset.samplingTilt=(-3.2*Math.sin(model.samplingClock*motionRate)).toFixed(3);main.active=model.needsFrame;
   };
-  for(const link of links){link.addEventListener('pointerenter',()=>{model.setPointer(null);show(link.dataset.topic);main.tick();});link.addEventListener('focusin',()=>show(link.dataset.topic));link.addEventListener('click',event=>{if(event.target.closest('.atlas-explore')||event.button||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();event.stopPropagation();if(touchOverview()){show(link.dataset.topic);main.tick();}else navigate(link);});}
+  let press=null;
+  wrapper.addEventListener('pointerdown',event=>{const card=event.target.closest('.peak-link');press=card?{topic:card.dataset.topic,touch:event.pointerType!=='mouse',explore:event.target.closest('.atlas-explore'),selected:model.hoverTopic===card.dataset.topic}:null;},{capture:true});
+  wrapper.addEventListener('click',event=>{const target=event.target.closest('.atlas-explore');if(!target)return;const card=target.closest('.peak-link'),valid=card?.classList.contains('is-preview')&&(!press||press.explore===target&&press.selected&&press.topic===card.dataset.topic);if(!valid){event.preventDefault();event.stopImmediatePropagation();if(card)show(card.dataset.topic);}press=null;},{capture:true});
+  for(const link of links){link.addEventListener('pointerenter',event=>{if(event.pointerType!=='mouse'||touchOverview())return;model.setPointer(null);show(link.dataset.topic);main.tick();});link.addEventListener('focusin',()=>{if(!press?.touch)show(link.dataset.topic);});link.addEventListener('click',event=>{if(event.target.closest('.atlas-explore')||event.button||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();event.stopPropagation();if(touchOverview()||press?.touch){show(link.dataset.topic);main.tick();}else navigate(link);press=null;});}
   const regionAt=event=>{const r=main.canvas.getBoundingClientRect();raycaster.setFromCamera(new T.Vector2((event.clientX-r.left)/r.width*2-1,1-(event.clientY-r.top)/r.height*2),model.camera);const hit=raycaster.intersectObject(model.restSurface)[0];if(!hit||model.baseHeight(hit.point.x,hit.point.z)<-.22)return null;return{id:model.regionAt(hit.point.x,hit.point.z),point:hit.point};};
   main.canvas.addEventListener('pointermove',event=>{const hit=regionAt(event);if(hit)show(hit.id);});
   let pressed;main.canvas.addEventListener('pointerdown',event=>{pressed=[event.clientX,event.clientY];});main.canvas.addEventListener('click',event=>{if(pressed&&Math.hypot(event.clientX-pressed[0],event.clientY-pressed[1])>6)return;const hit=regionAt(event);if(hit){if(touchOverview()){show(hit.id);main.tick();}else navigate(links.find(l=>l.dataset.topic===hit.id));}});
