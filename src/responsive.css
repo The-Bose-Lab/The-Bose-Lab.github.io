@@ -17,27 +17,25 @@
 @media(max-width:700px){
  #home-header-art{width:100%;transform:none}#home-header .content-header{min-height:76px;padding:14px 6vw}
  #home-header .content-header .wordmark{font-size:24px}
- #opening .copy h1{left:48px;top:210px;font-size:140px}
- #opening .sub{left:52px;top:395px;font-size:32px;width:620px;letter-spacing:-.6px}
- #opening #molecule{left:80px;top:570px;width:560px;height:560px}
- #opening .opening-imperial{left:52px;bottom:48px}
- #opening .memo{left:48px;top:120px!important;width:624px;font-size:60px!important;line-height:1.14}
- #opening .memo-line{display:grid;width:624px;min-height:0;height:auto;grid-template-columns:minmax(0,1fr) 160px;gap:0 18px;padding:10px 0;align-content:center;align-items:center;white-space:normal}
- #opening .memo-phrase{white-space:normal;max-width:none;grid-column:1}
- #opening .memo-slot{grid-column:2;width:160px;height:144px}
- #opening .memo-line[data-row="1"]{row-gap:12px}
- #opening .memo-line[data-row="1"]>.memo-phrase:first-child{grid-row:1}#opening .memo-line[data-row="1"]>.protein{grid-row:1}
- #opening .memo-line[data-row="1"]>.memo-phrase:nth-child(3){grid-row:2}#opening .memo-line[data-row="1"]>.crystal{grid-row:2}
+ body[data-art-layout=stacked] #opening .copy h1{left:43.2px;top:var(--opening-title-y);font-size:140px}
+ body[data-art-layout=stacked] #opening .sub{left:43.2px;top:var(--opening-sub-y);font-size:32px;width:633.6px;letter-spacing:-.6px}
+ body[data-art-layout=stacked] #opening #molecule{left:calc(360px - var(--opening-hero-size)/2);top:var(--opening-hero-y);width:var(--opening-hero-size);height:var(--opening-hero-size)}
+ body[data-art-layout=stacked] #opening .opening-imperial{left:43.2px;bottom:32px}
+ body[data-art-layout=stacked] #opening .memo{left:43.2px;top:var(--memo-local-top,120px)!important;width:633.6px;font-size:60px!important;line-height:1.14}
+ body[data-art-layout=stacked] #opening .memo-line{display:grid;width:633.6px;min-height:0;height:auto;grid-template-columns:minmax(0,1fr) 160px;gap:0 18px;padding:10px 0;align-content:center;align-items:center;white-space:normal}
+ body[data-art-layout=stacked] #opening .memo-phrase{white-space:normal;max-width:none;grid-column:1}
+ body[data-art-layout=stacked] #opening .memo-slot{grid-column:2;width:160px;height:144px}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="1"]{row-gap:12px}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="1"]>.memo-phrase:first-child{grid-row:1}body[data-art-layout=stacked] #opening .memo-line[data-row="1"]>.protein{grid-row:1}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="1"]>.memo-phrase:nth-child(3){grid-row:2}body[data-art-layout=stacked] #opening .memo-line[data-row="1"]>.crystal{grid-row:2}
  .page-heading h1{font-size:clamp(46px,12vw,68px)}
- .peak-link>span:first-child{font-size:15px!important;line-height:1.3;min-height:64px}
- .landscape-peaks .peak-link{height:64px!important;min-height:64px!important}
  .lab-footer .footer-main{gap:34px}
 }
 @media(max-width:700px){
- #opening .memo-line[data-row="2"]{display:grid;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto auto;gap:0 18px;align-content:center}
- #opening .memo-line[data-row="2"]>.memo-phrase:first-child{grid-column:1;grid-row:1;align-self:end}
- #opening .memo-line[data-row="2"]>.memo-phrase:last-child{grid-column:1;grid-row:2;align-self:start}
- #opening .memo-line[data-row="2"]>.memo-slot{grid-column:2;grid-row:1/3;align-self:center}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="2"]{display:grid;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto auto;gap:0 18px;align-content:center}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="2"]>.memo-phrase:first-child{grid-column:1;grid-row:1;align-self:end}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="2"]>.memo-phrase:last-child{grid-column:1;grid-row:2;align-self:start}
+ body[data-art-layout=stacked] #opening .memo-line[data-row="2"]>.memo-slot{grid-column:2;grid-row:1/3;align-self:center}
 }
 
 .is-static .landscape-map-area{height:auto!important;min-height:0!important}.is-static #research-landscape{display:none}.is-static .landscape-peaks{position:relative!important;display:flex!important;flex-wrap:wrap;gap:16px;padding:0!important}.is-static .landscape-peaks .peak-link{position:relative!important;left:auto!important;top:auto!important;transform:none!important;height:auto!important}
@@ -47,3 +45,22 @@
 .story-stage{height:calc(100vh + var(--story-travel,100vh))}
 
 body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-events:auto!important}
+
+/* The complete atlas and its attachments share one proportional coordinate space. */
+@media(max-width:1020px){
+ .landscape-overview{width:100%;margin-inline:0;container-type:inline-size}
+ .landscape-map-area,.landscape-map-area:has(.atlas-sequence.is-visible){height:auto;min-height:0;margin:20px 0 0}
+ .landscape-map-area #research-landscape,.atlas-instance-layer{inset:0 0 auto;height:auto;aspect-ratio:900/560}
+ .landscape-peaks{position:relative;inset:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:calc(100% * 560 / 900 + 16px) 0 0;pointer-events:auto}
+ .landscape-peaks .peak-link,.landscape-peaks .peak-link:has(.atlas-annotation.is-visible){position:relative!important;inset:auto!important;display:flex;width:100%;max-width:none;height:auto;min-height:0;margin:0!important;align-items:stretch}
+ .landscape-peaks .peak-link>span:first-child{display:flex;align-items:center;white-space:normal;width:100%;height:auto;min-height:4.6em;padding:.75em 1em;font-size:clamp(12px,3.3cqi,17px);line-height:1.3;font-weight:600;border-radius:22px;overflow-wrap:normal}
+ .peak-link .atlas-annotation,.peak-link .atlas-annotation.is-visible{display:none}
+ .atlas-science-pair,.atlas-science-pair.is-visible{width:100%;height:100%;transform:none}
+ .atlas-connectors path{vector-effect:none;stroke-width:1.2}.atlas-connectors circle{vector-effect:none;stroke-width:1.05}
+}
+/* Footer groups wrap as complete units instead of overflowing narrow columns. */
+.lab-footer>.footer-main{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:28px 40px}
+.footer-affiliation,.footer-contact{min-width:0;grid-template-rows:auto auto;align-content:start;row-gap:14px}
+.footer-imperial{width:min(205px,100%)}
+.lab-footer .text-link{border-bottom:0;padding-bottom:0;white-space:normal}
+@media(max-width:540px){.footer-contact{justify-self:start;justify-items:start;align-items:start}.footer-affiliation>.text-link,.footer-contact>.text-link{font-size:16px}.footer-contact .social-links{gap:12px}}
