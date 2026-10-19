@@ -3,7 +3,7 @@ import {runInNewContext} from 'node:vm';
 
 let renderer;
 export async function prerenderArticle(html){
- if(!renderer){const scope={};runInNewContext(await readFile('public/vendor/katex/katex.min.js','utf8'),scope);renderer=scope.katex;}
+ if(!renderer){const scope={};runInNewContext(await readFile('scripts/vendor/katex.min.js','utf8'),scope);renderer=scope.katex;}
  html=html.replace(/<span class="math (inline|display)">([\s\S]*?)<\/span>/g,(_,mode,source)=>{
   const tex=source.trim().slice(2,-2).replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&#39;',"'").replaceAll('&quot;','"');
   return `<span class="math ${mode}">${renderer.renderToString(tex,{displayMode:mode==='display',throwOnError:true})}</span>`;

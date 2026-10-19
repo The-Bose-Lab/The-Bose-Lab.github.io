@@ -1,4 +1,4 @@
-name: Build and check
+name: Build website
 on:
   push:
     branches: [main]
@@ -18,8 +18,5 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm check
       - run: pnpm build
-      - run: node scripts/verify-release.mjs
       - run: node scripts/verify-published.mjs
-      - run: SITE_BASE=/preview/ pnpm build

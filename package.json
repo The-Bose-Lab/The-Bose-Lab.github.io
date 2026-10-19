@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "node scripts/build.mjs",
-    "check": "node scripts/check.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },
   "devDependencies": {

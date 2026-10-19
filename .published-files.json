@@ -109,7 +109,6 @@
   "blog/index.html",
   "blog/normalizing-flow-maps/index.html",
   "favicon.ico",
-  "favicon.png",
   "favicon.svg",
   "index.html",
   "join.html",
@@ -128,7 +127,6 @@
   "team/index.html",
   "vendor/MOLSTAR-LICENSE",
   "vendor/THREE-LICENSE",
-  "vendor/katex/auto-render.min.js",
   "vendor/katex/fonts/KaTeX_AMS-Regular.ttf",
   "vendor/katex/fonts/KaTeX_AMS-Regular.woff",
   "vendor/katex/fonts/KaTeX_AMS-Regular.woff2",
@@ -190,7 +188,6 @@
   "vendor/katex/fonts/KaTeX_Typewriter-Regular.woff",
   "vendor/katex/fonts/KaTeX_Typewriter-Regular.woff2",
   "vendor/katex/katex.min.css",
-  "vendor/katex/katex.min.js",
   "vendor/molstar.css",
   "vendor/molstar.js"
 ]
