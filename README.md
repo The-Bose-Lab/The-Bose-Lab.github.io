@@ -55,3 +55,5 @@ The review build is mounted at `/preview/` on the existing design-review host. T
 The NFM article's 77 equations are rendered by the pinned KaTeX copy during generation. The browser loads only its font stylesheet. The two long molecular loops use muted inline H.264, load within 350px of the figure, and pause outside the viewport. Their original WebP files remain as no-JavaScript fallbacks. `scripts/optimize-article-video.py` regenerates the videos and verifies every decoded frame, dimensions and timing (local Python dependencies: Pillow and imageio-ffmpeg); the report is in `tests/fixtures/article-video-report.json`.
 
 Home starts its molecular runtime and known companion data requests in the document head, shares metadata requests and prepares companion renderers concurrently. Molecular coordinates, deformation, palette, camera framing and render sampling are unchanged.
+
+The canonical NFM article route is `/normalizing-flow-maps/`; the earlier `/blog/normalizing-flow-maps/` route remains available. Both preserve figure and equation fragments. The publication molecule marker supplies the SVG favicon, ICO fallback and Apple touch icon.

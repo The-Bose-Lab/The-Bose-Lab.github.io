@@ -1,6 +1,6 @@
 export const sitePages={home:'Home',team:'Team',research:'Research',latest:'News',blog:'Blog',post:'Blog Post',join:'Join & Contact',publications:'Publications'};
 export const siteTopics=['foundations','science','sampling','safety'];
-const paths={home:'',team:'team/',research:'research/',latest:'news/',blog:'blog/',post:'blog/normalizing-flow-maps/',join:'join/',publications:'publications/'};
+const paths={home:'',team:'team/',research:'research/',latest:'news/',blog:'blog/',post:'normalizing-flow-maps/',join:'join/',publications:'publications/'};
 let buildBase='/';
 export function setRouteBase(base){buildBase=base;}
 export function siteHref(page,topic=''){

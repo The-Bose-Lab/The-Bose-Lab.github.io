@@ -125,8 +125,8 @@ body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]
 @media(pointer:coarse){body[data-page=latest],body[data-page=latest] a,body[data-page=latest] button{cursor:auto!important}}
 
 /* The rounded menu outline and its hit area have identical bounds. */
-.content-header .clickable-link{padding-inline:12px;margin-inline:-12px;user-select:none}
-.content-header .clickable-link::after{inset-inline:0}
+.content-header .clickable-link{padding:10px 12px;min-height:0;height:auto;line-height:1.2;margin-inline:-12px;user-select:none}
+.content-header .clickable-link::after{inset:0}
 .content-header :is(a,button),.content-header :is(a,button) *{cursor:pointer!important}
 
 /* Pin native cursors on the actual hit elements, including nested text. */
