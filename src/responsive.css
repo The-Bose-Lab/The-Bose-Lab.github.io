@@ -43,3 +43,7 @@
 .is-static .landscape-map-area{height:auto!important;min-height:0!important}.is-static #research-landscape{display:none}.is-static .landscape-peaks{position:relative!important;display:flex!important;flex-wrap:wrap;gap:16px;padding:0!important}.is-static .landscape-peaks .peak-link{position:relative!important;left:auto!important;top:auto!important;transform:none!important;height:auto!important}
 
 .has-site-scroll .site-tail{margin-top:calc(-1 * var(--memo-tail-overlap,0px))}body[data-adaptive-tail=true] .home-content{padding-top:48px}
+
+.story-stage{height:calc(100vh + var(--story-travel,100vh))}
+
+body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-events:auto!important}

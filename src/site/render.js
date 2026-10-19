@@ -14,7 +14,7 @@ Object.assign(html.dataset,{actualSpecimen:specKey,capture:String(capture),skipE
 Object.assign(document.body.dataset,{layout:'split',lettercase:'title',affiliation:'logo-only',grouping:'close'});
 function fit(){
  const compact=innerWidth<=700,w=compact?720:1440,h=compact?1400:900,header=compact?76:0,s=Math.min(innerWidth/w,(innerHeight-header)/h),board=document.querySelector('#opening');
- board.dataset.artWidth=w;board.style.width=w+'px';board.style.height=h+'px';board.style.transform=`scale(${s})`;board.style.left=`${(innerWidth-w*s)/2}px`;board.style.top=`${header+(innerHeight-header-h*s)/2}px`;html.style.setProperty('--page-art-scale',s);
+ board.dataset.artWidth=w;board.style.width=w+'px';board.style.height=h+'px';board.style.transform=`scale(${s})`;board.style.left=`${(innerWidth-w*s)/2}px`;const centred=header+(innerHeight-header-h*s)/2,portrait=innerHeight>innerWidth,openingTop=portrait?header+(innerHeight-header-h*s)*.35:centred,memoTop=portrait?Math.min(centred,(compact?76:104)+24):centred;board.dataset.openingTop=openingTop;board.dataset.memoTop=memoTop;board.style.top=openingTop+'px';html.style.setProperty('--story-travel',(portrait?Math.min(innerHeight,Math.max(320,Math.min(680,h*s*.65))):innerHeight)+'px');html.style.setProperty('--page-art-scale',s);
 }
 addEventListener('resize',fit);fit();initHomeShell();
 const entrance=new Entrance(theme,null,{loader:choice.loader,widget:choice.widget,reveal:'quiet',capture:capture||skipEntrance});entrance.begin();

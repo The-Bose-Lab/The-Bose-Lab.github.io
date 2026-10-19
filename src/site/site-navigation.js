@@ -11,7 +11,7 @@ export function bindSiteNavigation(root=document){
  document.documentElement.dataset.navigationReady='true';
  for(const a of root.querySelectorAll('a[data-page]'))a.href=siteHref(a.dataset.page,a.dataset.topic);
  const toggle=root.querySelector('.nav-toggle'),nav=root.querySelector('#main-navigation');
- toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');nav.classList.toggle('is-open',open);});
+ toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';document.body.dataset.navOpen=String(open);const brand=root.querySelector('.wordmark'),hidden=!open&&document.body.dataset.page==='home'&&Number(document.documentElement.dataset.storyProgress||0)<.5;brand?.setAttribute('aria-hidden',String(hidden));if(brand)brand.tabIndex=hidden?-1:0;toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');nav.classList.toggle('is-open',open);});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){toggle.click();toggle.focus();}});
 }
 export function siteHeader(current=''){

@@ -36,7 +36,7 @@ export class MemoController {
   this.scroll=()=>{const length=this.stage.offsetHeight-innerHeight;this.target=clamp(scrollY/Math.max(1,length));};
   if(this.stage){addEventListener('scroll',this.scroll,{passive:true});if(query.get('scene')==='memo'&&scrollY<=1)this.go(1);this.scroll();}
   else{this.wheel=e=>{if(document.documentElement.dataset.state!=='ready')return;e.preventDefault();this.go(this.target+e.deltaY/950);};addEventListener('wheel',this.wheel,{passive:false});}
-  this.resize=()=>{this.measure();this.compose();};addEventListener('resize',this.resize);
+  this.resize=()=>{this.scroll?.();this.measure();this.compose();};addEventListener('resize',this.resize);
   this.reduced=query.get('capture')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches;
  }
  async init(){
@@ -81,8 +81,8 @@ export class MemoController {
   const board=this.board.getBoundingClientRect(),slot=this.slots[this.heroKind].getBoundingClientRect(),scale=board.width/Number(this.board.dataset.artWidth||1440);
   this.destination={x:(slot.left+slot.width/2-board.left)/scale,y:(slot.top+slot.height/2-board.top)/scale,scale:Math.min(slot.width,slot.height)/scale/560};
   this.phrases=[...this.el.querySelectorAll('.memo-phrase')];
-  const bottom=Math.max(...[...this.el.querySelectorAll('.memo-phrase,.memo-slot')].map(el=>el.getBoundingClientRect().bottom)),overlap=Math.max(0,innerHeight-bottom-24);
-  document.documentElement.style.setProperty('--memo-tail-overlap',overlap+'px');document.body.dataset.adaptiveTail=String(overlap>0);
+  const bottom=Math.max(...[...this.el.querySelectorAll('.memo-phrase,.memo-slot')].map(el=>el.getBoundingClientRect().bottom)),targetBottom=bottom-this.board.getBoundingClientRect().top+Number(this.board.dataset.memoTop),overlap=Math.max(0,innerHeight-targetBottom-24);
+  this.tailOverlap=overlap;document.body.dataset.adaptiveTail=String(overlap>0);
  }
  async prepareCompanion(){
   await loadMolecularRenderer();this.fields??=await loadJSON('elastic-modes');
@@ -105,7 +105,7 @@ export class MemoController {
  go(value){this.target=clamp(Number(value));if(this.stage)window.scrollTo({top:this.target*(this.stage.offsetHeight-innerHeight),behavior:'instant'});}
  control(data){if(data.command==='replay'){if(data.reveal)this.query.set('reveal',data.reveal);this.target=this.progress=0;this.go(0);this.compose();}if(data.command==='scene')this.go(data.progress);if(data.command==='memo-options'){if(!this.ready){Object.assign(this.options,data.options);return;}this.configQueue=(this.configQueue||Promise.resolve()).then(()=>this.configure(data.options)).then(()=>{if(parent!==window)parent.postMessage({type:'memo-ready'},location.origin);}).catch(error=>{document.documentElement.dataset.memoError=String(error);});}}
  compose(){
-  if(!this.destination)return;const p=this.progress,move=this.options.transition==='settle'?smooth((p-.16)/.74):smooth(p),d=this.destination,scale=1+(d.scale-1)*move;
+  if(!this.destination)return;const p=this.progress;this.board.style.top=(Number(this.board.dataset.openingTop)+(Number(this.board.dataset.memoTop)-Number(this.board.dataset.openingTop))*smooth(p))+'px';document.documentElement.style.setProperty('--memo-tail-overlap',(this.tailOverlap*smooth((p-.35)/.65))+'px');const move=this.options.transition==='settle'?smooth((p-.16)/.74):smooth(p),d=this.destination,scale=1+(d.scale-1)*move;
   const start=innerWidth<=700?{x:360,y:850}:{x:1080,y:450},bend=this.options.transition==='arc'?-Math.sin(move*Math.PI)*160:0,x=start.x+(d.x-start.x)*move,y=start.y+(d.y-start.y)*move-bend;
   this.hero.style.transform='none';const startSize=this.heroGraphic?.model.isBinding?660:560,size=this.reduced?(p>.5?d.scale*560:startSize):startSize+(d.scale*560-startSize)*move;
   const cx=this.reduced?(p>.5?d.x:start.x):x,cy=this.reduced?(p>.5?d.y:start.y):y;
