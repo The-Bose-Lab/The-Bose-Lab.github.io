@@ -55,7 +55,7 @@ try{
   else{(groups[spec.file]||[]).forEach((chain,i)=>r.color({color:[theme.a,theme.b,theme.c,theme.d][i%4],selector:spec.format==='mmcif'?{label_asym_id:chain}:{auth_asym_id:chain}}));st.component({selector:'ligand'}).representation({type:'spacefill',ignore_hydrogens:true,size_factor:1.05}).color({color:theme.b});}
   const p=bounds[spec.file],v=views[spec.file];b.camera({target:p.center,position:p.center.map((x,i)=>x+v.direction[i]*(p.radius+6)*3),up:v.up});
   await viewer.loadMvsData(b.getState(),'mvsj',{sanityChecks:true});entrance.stage(.8);
-  const cells=await illustrativeStyle(plugin,theme,{large:spec.large});await rendered(plugin,3);
+  const cells=await illustrativeStyle(plugin,theme,{large:spec.large});await rendered(plugin,1);
   framing=fitFootprint(plugin,cells,{box:{x:0,y:0,width:560,height:560},artWidth:560,artHeight:560,padding:specKey==='packing'?3.5:4,radius:p.radius});
   motion=new MolecularMotion(plugin,cells.map(c=>c.obj.data.repr),[],fields[spec.file],{capture:capture||reduced});motion.limitAmplitude(Math.min(2.2,Math.max(framing.width,framing.height)*.025));await rendered(plugin,1);
  }

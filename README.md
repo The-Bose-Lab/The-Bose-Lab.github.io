@@ -50,3 +50,8 @@ For local diagnostics, `?profile=1` exposes sampled rendering FPS and submission
 ## Preview and publication
 
 The review build is mounted at `/preview/` on the existing design-review host. The original panel remains at `/opening-studies/`. Publishing the actual lab domain is a separate step after responsive review. No application-intake backend has been added; the group review pipeline is still to be agreed.
+
+
+The NFM article's 77 equations are rendered by the pinned KaTeX copy during generation. The browser loads only its font stylesheet. The two long molecular loops use muted inline H.264, load within 350px of the figure, and pause outside the viewport. Their original WebP files remain as no-JavaScript fallbacks. `scripts/optimize-article-video.py` regenerates the videos and verifies every decoded frame, dimensions and timing (local Python dependencies: Pillow and imageio-ffmpeg); the report is in `tests/fixtures/article-video-report.json`.
+
+Home starts its molecular runtime and known companion data requests in the document head, shares metadata requests and prepares companion renderers concurrently. Molecular coordinates, deformation, palette, camera framing and render sampling are unchanged.

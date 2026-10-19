@@ -33,6 +33,8 @@ await generate();
 await import('../tests/framing.mjs');
 await import('../tests/intro-anchors.mjs');
 await import('../tests/memo-continuity.mjs');
+await import('../tests/research-selection.mjs');
+await import('../tests/article-loading.mjs');
 await import('../tests/loading-proteins.mjs');
 await import('../tests/elastic-neighbours.mjs');
 console.log(`Passed: 12 routes at root and /preview/, all local links/assets, 8 hero choices, 6 loaders, ${count} approved geometry/particle samples and ribbon timing.`);

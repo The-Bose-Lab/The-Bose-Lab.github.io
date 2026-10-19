@@ -169,7 +169,7 @@ html.has-site-scroll body{overflow:visible}
 .peak-link.is-preview::before{opacity:1}.peak-link.is-preview>.peak-title{border-color:transparent;background:none}
 .peak-link .atlas-annotation,.peak-link .atlas-annotation.is-visible{position:absolute;left:14px;right:14px;top:46px;width:auto;min-height:0;max-width:none;padding:0;border:0;background:none;box-shadow:none;display:block;visibility:visible;text-align:left;opacity:0;pointer-events:none}
 .peak-link .atlas-annotation.is-visible{opacity:1}.peak-link .atlas-annotation p{font:14px/1.4 var(--body)}.peak-link .atlas-explore{margin-top:8px}
-.peak-link:focus-within{outline:1px solid var(--ink);outline-offset:4px}
+.peak-title:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
 .atlas-publications{margin-top:32px}.atlas-sequence{font-size:18px}
 @media(max-width:560px){.landscape-map-area,.landscape-map-area:has(.atlas-sequence.is-visible){height:auto;min-height:440px}.landscape-peaks{padding-top:290px;display:grid;grid-template-columns:1fr;gap:8px}.peak-link,.peak-link:has(.atlas-annotation.is-visible),.peak-link[data-topic="science"]:has(.atlas-annotation.is-visible){position:relative!important;left:auto!important;top:auto!important;width:100%;max-width:100%;height:46px;min-height:46px;margin:0}.peak-link:has(.atlas-annotation.is-visible){height:145px;min-height:145px}.peak-link>.peak-title{font-size:14px}.atlas-sequence{font-size:13px}}
 
@@ -240,7 +240,7 @@ html.has-site-scroll body{overflow:visible}
 /* Compact title plaques expand inside stable, corner-aligned footprints. */
 @media(min-width:1021px){
  .peak-link,.peak-link:has(.atlas-annotation.is-visible){pointer-events:none}
- .peak-link.is-preview,.peak-link:focus-within{pointer-events:auto}
+ .peak-link.is-preview{pointer-events:auto}
  .peak-link>.peak-title{display:inline-block;width:max-content;max-width:100%;font-size:18px;font-weight:600;line-height:1.35;pointer-events:auto;border-color:transparent;background:transparent}
  .peak-link[data-topic=science]>.peak-title,.peak-link[data-topic=safety]>.peak-title{position:absolute;right:0;top:0}
  .peak-link::before{inset:auto;left:0;top:0;width:var(--pill-width);height:var(--pill-height);opacity:1;border-radius:22px;box-shadow:none;transition:none}

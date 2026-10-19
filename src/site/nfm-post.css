@@ -6,7 +6,7 @@
 .nfm-post figure{margin:0;min-width:0}
 .nfm-post .nfm-figure,.nfm-post .nfm-layout-panel{margin:1.8em 0}
 .nfm-post figure>p{margin:0;line-height:0}
-.nfm-post img{display:block;max-width:100%;height:auto;margin-inline:auto;border:0}
+.nfm-post :is(img,video){display:block;max-width:100%;height:auto;margin-inline:auto;border:0}
 .nfm-post figcaption{margin-top:14px;font:400 14px/1.55 var(--body);letter-spacing:0;text-transform:none;color:var(--muted);text-align:left;overflow-wrap:break-word}
 .nfm-post .nfm-layout-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch}
 .nfm-post #fig-posttrain .nfm-layout-row{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -32,3 +32,5 @@
 @media(max-width:700px){.nfm-post #fig-posttrain .nfm-layout-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.nfm-post .nfm-layout-row{grid-template-columns:minmax(0,1fr);gap:24px}.nfm-post .nfm-layout-cell figcaption{min-height:0}.nfm-post figcaption{font-size:13px}}
 .site-view[data-page=post][data-site-ready=true] #site-header{animation:none}
+
+.nfm-post video{width:100%;object-fit:contain}

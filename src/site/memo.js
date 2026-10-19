@@ -96,8 +96,8 @@ export class MemoController {
   await loadMolecularRenderer();this.fields??=await loadJSON('elastic-modes');
   const serial=++this.serial;for(const c of this.companions||[]){c.motion.dispose();c.resolution.dispose();c.viewer.plugin.dispose();}this.companions=[];
   const kinds=this.heroGraphic?['protein','crystal'].filter(k=>k!==this.heroKind):[this.heroKind==='protein'?'crystal':'protein'];
-  const [bounds,views]=await Promise.all(['bounds','views'].map(k=>fetch(`./assets/${k}.json`).then(r=>r.json())));
-  for(const kind of kinds){
+  const [bounds,views]=await Promise.all(['bounds','views'].map(loadJSON));
+  await Promise.all(kinds.map(async kind=>{
    const key=this.options[kind],allowed=kind==='protein'?['cofolding','myoglobin']:['packing'],spec=specimens[allowed.includes(key)?key:memoDefaults[kind]],container=this.slots[kind];container.replaceChildren();const stage=document.createElement('div');stage.id='memo-companion-'+kind;stage.className='molecular-stage';stage.style.cssText='position:absolute;inset:0;opacity:0';container.append(stage);
    const viewer=await molstar.Viewer.create(stage.id,viewerOptions(this.theme));if(serial!==this.serial){viewer.plugin.dispose();return;}const resolution=trackResolution(viewer.plugin);
    const b=molstar.PluginExtensions.mvs.createBuilder();b.canvas({background_color:this.theme.bg});const st=b.download({url:new URL(`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`,document.baseURI).href}).parse({format:spec.format||'pdb'}).modelStructure();
@@ -105,9 +105,9 @@ export class MemoController {
    if(kind==='crystal'){r.color({color:this.theme.c,selector:{type_symbol:'O'}});r.color({color:this.theme.d,selector:{type_symbol:'N'}});}
    else{r.color({color:this.theme.d,selector:{auth_asym_id:'D'}});st.component({selector:'ligand'}).representation({type:'spacefill',ignore_hydrogens:true,size_factor:1.05}).color({color:this.theme.c});}
    const p=bounds[spec.file],v=views[spec.file];b.camera({target:p.center,position:p.center.map((x,i)=>x+v.direction[i]*p.radius*3.45),up:v.up});await viewer.loadMvsData(b.getState(),'mvsj',{sanityChecks:true});if(serial!==this.serial){viewer.plugin.dispose();return;}
-   const cells=await illustrativeStyle(viewer.plugin,this.theme);viewer.plugin.canvas3d.setProps({postprocessing:{outline:{name:'on',params:{scale:1,threshold:.45,color:parseInt((this.theme.outline||(this.theme.mode==='dark'?this.theme.bg:this.theme.ink)).slice(1),16),includeTransparent:false}}}});await rendered(viewer.plugin,2);
+   const cells=await illustrativeStyle(viewer.plugin,this.theme);viewer.plugin.canvas3d.setProps({postprocessing:{outline:{name:'on',params:{scale:1,threshold:.45,color:parseInt((this.theme.outline||(this.theme.mode==='dark'?this.theme.bg:this.theme.ink)).slice(1),16),includeTransparent:false}}}});await rendered(viewer.plugin,1);
    const framing=fitFootprint(viewer.plugin,cells,{artWidth:memoMetrics.slotWidth,artHeight:memoMetrics.slotHeight,box:memoMetrics.box,padding:1.8,radius:p.radius});const motion=new MolecularMotion(viewer.plugin,cells.map(c=>c.obj.data.repr),[],this.fields[spec.file],{capture:this.reduced,report:false});motion.limitAmplitude(Math.min(2.2,p.radius*.045));container.setAttribute('aria-label',spec.name);await rendered(viewer.plugin,1);container.dataset.ready='true';stage.style.opacity='1';this.companions.push({viewer,resolution,framing,motion,kind,container});
-  }
+  }));
  }
 
  go(value){this.target=clamp(Number(value));if(this.stage)window.scrollTo({top:this.target*(this.stage.offsetHeight-this.viewportHeight),behavior:'instant'});}

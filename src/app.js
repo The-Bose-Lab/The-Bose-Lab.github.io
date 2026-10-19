@@ -9,14 +9,14 @@ import {bindPageLoading,beginPageLoading,finishPageLoading} from './site/page-lo
 const {page,topic}=document.body.dataset;
 bindPageLoading();beginPageLoading();
 bindSiteNavigation();bindNewsFilters();bindPublicationFilters();
-await document.fonts.ready;
+if(page==='research')await document.fonts.ready;
 document.documentElement.dataset.siteReady='true';document.body.dataset.siteReady='true';
 try{
  if(page==='research'){
   const {bindResearchLandscape}=await import('./site/research-landscape.js');
   const {getTheme}=await import('./site/config.js');await bindResearchLandscape(getTheme());
  }
- if(page==='post')await import('./site/nfm-math.js');
+ if(page==='post'){const {bindArticleMedia}=await import('./site/nfm-math.js');bindArticleMedia();}
 }catch(error){
  document.body.dataset.enhancementError=String(error);
  document.querySelector('.landscape-overview')?.classList.add('is-static');
