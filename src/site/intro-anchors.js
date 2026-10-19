@@ -1,4 +1,5 @@
 const ease=t=>t*t*(3-2*t);
+const captures=new Set(['wheel','touchstart','touchmove','touchend','touchcancel','click']);
 const inputEvents=['wheel','touchstart','touchmove','touchend','touchcancel','keydown','click','resize'];
 
 // One gesture chooses an anchor; one clock drives both scroll and scene progress.
@@ -6,7 +7,7 @@ const inputEvents=['wheel','touchstart','touchmove','touchend','touchcancel','ke
 // is consumed, so a new gesture never waits for an animation lock to expire.
 export class IntroAnchors{
  constructor({viewport=window,document:doc=document,stops,enabled=()=>true,reduced=false,onPosition=()=>{}}){
-  Object.assign(this,{w:viewport,doc,stops,enabled,reduced,onPosition});this.lastWheel=-Infinity;this.width=this.w.innerWidth;
+  Object.assign(this,{w:viewport,doc,stops,enabled,reduced,onPosition});this.lastWheel=-Infinity;this.width=this.w.innerWidth;this.height=this.w.innerHeight;
   this.wheel=e=>{
    if(e.ctrlKey||Math.abs(e.deltaX)>Math.abs(e.deltaY)||!this.available())return;
    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?this.w.innerHeight:1),direction=Math.sign(delta);if(!direction)return;
@@ -32,13 +33,13 @@ export class IntroAnchors{
    const target=this.targetFor(direction,true);if(target===null)return;e.preventDefault();if(!e.repeat)this.move(target);
   };
   this.click=e=>{if(e.target?.closest?.('a,button,input,textarea,select'))this.cancel();};
-  this.resize=()=>{if(this.width===this.w.innerWidth)return;this.width=this.w.innerWidth;const moving=this.busy;this.cancel();if(moving){const y=this.w.scrollY;this.move(this.stops().reduce((a,b)=>Math.abs(y-a)<Math.abs(y-b)?a:b));}};
+  this.resize=()=>{if(this.width===this.w.innerWidth&&(this.height===this.w.innerHeight||this.width<=700||this.w.matchMedia?.('(pointer:coarse)').matches))return;this.width=this.w.innerWidth;this.height=this.w.innerHeight;const moving=this.busy;this.cancel();if(moving){const y=this.w.scrollY;this.move(this.stops().reduce((a,b)=>Math.abs(y-a)<Math.abs(y-b)?a:b));}};
   this.handlers={wheel:this.wheel,touchstart:this.touchstart,touchmove:this.touchmove,touchend:this.touchend,touchcancel:()=>{this.touch=null;},keydown:this.key,click:this.click,resize:this.resize};
-  for(const type of inputEvents)this.w.addEventListener(type,this.handlers[type],{passive:!['wheel','touchmove','keydown'].includes(type),capture:type==='click'});
+  for(const type of inputEvents)this.w.addEventListener(type,this.handlers[type],{passive:!['wheel','touchmove','keydown'].includes(type),capture:captures.has(type)});
  }
  available(){return this.enabled()&&this.doc.body.dataset.navOpen!=='true';}
  next(direction,y=this.w.scrollY){
-  if(!direction)return null;const [opening,memo,news]=this.stops(),tolerance=12;if(y>news+tolerance)return null;
+  if(!direction)return null;const [opening,memo,news]=this.stops(),tolerance=Math.min(12,(memo-opening)/3,(news-memo)/3);if(y>news+tolerance)return null;
   if(direction>0)return y<memo-tolerance?memo:y<news-tolerance?news:null;
   return y>memo+tolerance?memo:y>opening+tolerance?opening:null;
  }
@@ -50,7 +51,7 @@ export class IntroAnchors{
   const step=now=>{const p=duration?Math.min(1,(now-start)/duration):1;this.w.scrollTo({top:from+distance*ease(p),behavior:'auto'});this.onPosition();if(p<1)this.raf=this.w.requestAnimationFrame(step);else{this.busy=false;this.destination=null;}};
   this.raf=this.w.requestAnimationFrame(step);
  }
- dispose(){this.cancel();for(const type of inputEvents)this.w.removeEventListener(type,this.handlers[type],{capture:type==='click'});}
+ dispose(){this.cancel();for(const type of inputEvents)this.w.removeEventListener(type,this.handlers[type],{capture:captures.has(type)});}
 }
 
 export function bindIntroAnchors(memo){

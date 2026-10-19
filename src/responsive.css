@@ -98,3 +98,15 @@ html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
 .molecular-stage{transition:opacity .18s ease}
 .peak-link:not(.is-preview) .atlas-annotation{visibility:hidden!important;pointer-events:none!important}
 .peak-link:not(.is-preview) .atlas-explore{pointer-events:none!important}
+
+/* Display-only molecular canvases must never capture page gestures. */
+#opening #molecule,#opening #molecule *,#opening .molecular-stage,#opening .molecular-stage *{pointer-events:none!important;touch-action:inherit!important}
+/* Keep the home composition, header and News on one generous desktop rail. */
+@media(min-width:1441px){html.has-site-scroll{--content-rail:min(1640px,85.56vw)}}
+
+/* Remove unused camera headroom on touch layouts; selected structures reserve their own room. */
+@media(max-width:1020px){
+ .landscape-map-area,.landscape-map-area:has(.atlas-sequence.is-visible){margin-top:0}
+ .landscape-map-area #research-landscape,.landscape-map-area .atlas-instance-layer{transform:translateY(calc(-1 * var(--atlas-top-trim,0px)))}
+ .landscape-peaks{padding-top:calc(100% * 560 / 900 - var(--atlas-top-trim,0px) + 16px)}
+}

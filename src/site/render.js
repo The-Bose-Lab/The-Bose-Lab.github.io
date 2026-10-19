@@ -15,7 +15,7 @@ Object.assign(html.dataset,{actualSpecimen:specKey,capture:String(capture),skipE
 Object.assign(document.body.dataset,{layout:'split',lettercase:'title',affiliation:'logo-only',grouping:'close'});
 let fittedWidth=0,viewportHeight=innerHeight;
 function fit(){
- if(fittedWidth===innerWidth)return;fittedWidth=innerWidth;viewportHeight=innerHeight;html.style.setProperty('--intro-height',viewportHeight+'px');
+ if(fittedWidth===innerWidth&&(viewportHeight===innerHeight||innerWidth<=700||matchMedia('(pointer:coarse)').matches))return;fittedWidth=innerWidth;viewportHeight=innerHeight;html.style.setProperty('--intro-height',viewportHeight+'px');
  const rail=document.querySelector('.home-content').getBoundingClientRect();
  const narrow=innerWidth<=700,stacked=narrow&&(viewportHeight-76)*720/innerWidth>=860,portrait=viewportHeight>innerWidth,w=stacked?720:1440,header=narrow?76:0,s=stacked?innerWidth/w:portrait?rail.width/1232:Math.min(rail.width/1232,(viewportHeight-header)/900),h=stacked?Math.min(1400,(viewportHeight-header)/s):900,board=document.querySelector('#opening');
  document.body.dataset.artLayout=stacked?'stacked':'split';board.dataset.artWidth=w;board.style.width=w+'px';board.style.height=h+'px';board.style.transform=`scale(${s})`;board.style.left=`${stacked?0:rail.left-104*s}px`;
@@ -25,7 +25,7 @@ function fit(){
  const centred=header+(viewportHeight-header-h*s)/2,openingTop=portrait?header+(viewportHeight-header-h*s)*.35:centred,memoTop=portrait?Math.min(centred,(narrow?76:104)+24):centred;
  board.dataset.openingTop=openingTop;board.dataset.memoTop=memoTop;board.style.top=openingTop+'px';html.style.setProperty('--story-travel',(portrait?Math.min(viewportHeight,Math.max(320,Math.min(680,h*s*.65))):viewportHeight)+'px');html.style.setProperty('--page-art-scale',s);
 }
-addEventListener('resize',fit);fit();initHomeShell();
+initHomeShell();addEventListener('resize',fit);fit();
 // Loading is a viewport layer, independent of either scaled artboard.
 document.querySelector('.story-viewport').append(document.querySelector('#arrival'));
 const entrance=new Entrance(theme,null,{loader:choice.loader,widget:choice.widget,reveal:'quiet',capture:capture||skipEntrance});entrance.begin();

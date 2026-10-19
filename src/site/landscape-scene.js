@@ -94,7 +94,17 @@ export class LandscapeScene extends BaseScene{
 
   if(this.particles.mesh.visible){const f=this.transport,points=this.cohort.map(({source:a,target:b})=>{const x=a[0]+(b[0]-a[0])*f,z=a[1]+(b[1]-a[1])*f;return this.surfacePoint(x,z);});this.particles.update(points,null,Array(this.cohort.length).fill(this.theme.mode==='dark'?this.theme.bg:this.theme.ink));}
  }
- measure(){let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;const add=q=>{const p=new T.Vector3(...q).applyMatrix4(this.camera.matrixWorldInverse);x0=Math.min(x0,p.x);x1=Math.max(x1,p.x);y0=Math.min(y0,p.y);y1=Math.max(y1,p.y);};const a=this.surface.geometry.attributes.position;for(let i=0;i<a.count;i++){add([a.getX(i),a.getY(i),a.getZ(i)]);add([a.getX(i),a.getY(i)+.48,a.getZ(i)]);for(const beta of [-3.2,3.2])add([a.getX(i),a.getY(i)+this.samplingRelief(a.getX(i),a.getZ(i),beta)-this.samplingRelief(a.getX(i),a.getZ(i),0)+.30,a.getZ(i)]);}for(const p of this.peaks)add(p.position);this.envelope={x0:x0-.15,x1:x1+.15,y0:y0-.22,y1:y1+.35};}
+ measure(){
+  let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;this.surfaceViewTop=-Infinity;
+  const add=(q,surface=false)=>{const p=new T.Vector3(...q).applyMatrix4(this.camera.matrixWorldInverse);x0=Math.min(x0,p.x);x1=Math.max(x1,p.x);y0=Math.min(y0,p.y);y1=Math.max(y1,p.y);if(surface)this.surfaceViewTop=Math.max(this.surfaceViewTop,p.y);};
+  const a=this.surface.geometry.attributes.position;
+  for(let i=0;i<a.count;i++){
+   const x=a.getX(i),y=a.getY(i),z=a.getZ(i);add([x,y,z],true);add([x,y+.48,z]);
+   add([x,y+.48*g(x,z,2.82,.94,.18,.26)-.48*g(x,z,2.29,.79,.28,.25),z],true);
+   for(const beta of[-3.2,3.2]){const h=y+this.samplingRelief(x,z,beta)-this.samplingRelief(x,z,0);add([x,h,z],true);add([x,h+.30,z]);}
+  }
+  for(const p of this.peaks)add(p.position);this.envelope={x0:x0-.15,x1:x1+.15,y0:y0-.22,y1:y1+.35};
+ }
  setViewport(w,h){this.viewportWidth=w;this.viewportHeight=h;this.desktopLayout=typeof innerWidth==='number'?innerWidth>1020:w>900;}
  fit(w,h){const e=this.envelope,vw=this.viewportWidth??w,vh=this.viewportHeight??h,desktop=this.desktopLayout??(vw>900),unit=Math.max((e.x1-e.x0)/(w*(desktop?1:.94)),(e.y1-e.y0)/(h-(desktop?0:w*.15)))*(desktop?1.18:1.04),cx=(e.x0+e.x1)/2,cy=(e.y0+e.y1)/2+(desktop?45*h*unit/vh:w*.075*unit);this.camera.left=cx-w*unit/2;this.camera.right=cx+w*unit/2;this.camera.top=cy+h*unit/2;this.camera.bottom=cy-h*unit/2;this.camera.updateProjectionMatrix();this.contours.setStrokeWidth(terrainContourStyle.width,this.camera,vw);}
  dispose(){this.restSurface.geometry.dispose();this.restSurface.material.dispose();super.dispose();}

@@ -69,6 +69,11 @@ export async function bindResearchLandscape(theme){
    placeSampling();
    const sp=sequenceAnchor.clone().project(model.camera),half=sequence.offsetWidth/2,box=map.getBoundingClientRect(),scale=map.clientWidth/box.width,cardLeft=(safetyLink.getBoundingClientRect().left-box.left)*scale,railInset=(map.clientWidth-map.closest('.content-main').clientWidth)/2;
    sequence.style.left=(mobile?(sp.x+1)*.5*map.clientWidth:Math.max(railInset+half,Math.min((sp.x+1)*.5*map.clientWidth,cardLeft-half-24)))+'px';sequence.style.top=((1-sp.y)*.5*map.clientHeight-sequence.offsetHeight/2)+'px';
+   if(mobile){
+    const surfaceTop=(model.camera.top-model.surfaceViewTop)/(model.camera.top-model.camera.bottom)*map.clientHeight;
+    const attachmentTop=model.hoverTopic==='science'&&scienceViews.length?Math.min(...scienceViews.map(v=>parseFloat(v.container.style.top))):surfaceTop;
+    wrapper.style.setProperty('--atlas-top-trim',Math.max(0,Math.min(surfaceTop,attachmentTop)-16)+'px');
+   }else wrapper.style.removeProperty('--atlas-top-trim');
    drawConnections();};
 
   const navigate=link=>navigatePage(link.querySelector('.peak-title').href);

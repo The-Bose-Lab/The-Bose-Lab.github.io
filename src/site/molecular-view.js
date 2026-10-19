@@ -22,14 +22,15 @@ export function fitFootprint(plugin,cells,{box,artWidth=1440,artHeight=900,paddi
  const result={width:x1-x0,height:y1-y0,count,padding,mode:camera.state.mode,centre,direction,up,radius};Object.defineProperty(result,'points',{value:Float32Array.from(points)});return result;
 }
 
-// Resolve contours in the final display pixel grid, with 2x supersampling at DPR 1.
+// Resolve contours in the final display pixel grid, with 3x spatial supersampling.
 // Large canvases have a bounded physical pixel budget, not a blanket low-DPI mode.
 export function trackResolution(plugin){
- const canvas=plugin.canvas3dContext.canvas;
+ const canvas=plugin.canvas3dContext.canvas;let lastScale;
  function sync(){const board=canvas.closest('#opening'),scale=board?board.getBoundingClientRect().width/Number(board.dataset.artWidth||1440):1;
   const gl=plugin.canvas3dContext.webgl.gl,limit=gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),dpr=Math.max(3,devicePixelRatio),w=canvas.clientWidth,h=canvas.clientHeight;
   const physical=Math.min(scale*dpr,Math.sqrt(12000000/(w*h)),limit/Math.max(w,h));
   const pixelScale=physical/devicePixelRatio;
+  if(pixelScale===lastScale)return;lastScale=pixelScale;
   plugin.canvas3dContext.setProps({resolutionMode:'native',pixelScale});plugin.canvas3d.requestDraw();
   canvas.dataset.displaySampling=String(physical/scale);document.documentElement.dataset.renderScale=String(pixelScale);
  }

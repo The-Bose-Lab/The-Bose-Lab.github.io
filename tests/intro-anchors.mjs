@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import {IntroAnchors} from '../src/site/intro-anchors.js';
-function harness(reduced=false){
- let now=0,id=0;const frames=new Map(),timers=new Map(),listeners=new Map(),doc={body:{dataset:{}}};
- const w={scrollY:0,innerHeight:800,performance:{now:()=>now},addEventListener:(type,fn)=>listeners.set(type,fn),removeEventListener:type=>listeners.delete(type),requestAnimationFrame:fn=>(frames.set(++id,fn),id),cancelAnimationFrame:id=>frames.delete(id),setTimeout:(fn,delay)=>(timers.set(++id,{fn,at:now+delay}),id),clearTimeout:id=>timers.delete(id),scrollTo:({top})=>{w.scrollY=top;}};
- const nav=new IntroAnchors({viewport:w,document:doc,stops:()=>[0,600,1200],reduced});
+function harness(reduced=false,stops=[0,600,1200]){
+ let now=0,id=0;const frames=new Map(),timers=new Map(),listeners=new Map(),options=new Map(),doc={body:{dataset:{}}};
+ const w={scrollY:0,innerHeight:800,performance:{now:()=>now},addEventListener:(type,fn,opts)=>{listeners.set(type,fn);options.set(type,opts)},removeEventListener:type=>listeners.delete(type),requestAnimationFrame:fn=>(frames.set(++id,fn),id),cancelAnimationFrame:id=>frames.delete(id),setTimeout:(fn,delay)=>(timers.set(++id,{fn,at:now+delay}),id),clearTimeout:id=>timers.delete(id),scrollTo:({top})=>{w.scrollY=top;}};
+ const nav=new IntroAnchors({viewport:w,document:doc,stops:()=>stops,reduced});
  const send=(type,values={})=>{let prevented=false;listeners.get(type)?.({deltaX:0,deltaY:0,deltaMode:0,preventDefault:()=>{prevented=true;},...values});return prevented;};
  const advance=ms=>{for(let end=now+ms;now<end;){now=Math.min(now+16,end);const jobs=[...frames.values()];frames.clear();jobs.forEach(fn=>fn(now));for(const[k,v]of timers)if(v.at<=now){timers.delete(k);v.fn();}}};
- return{w,nav,doc,send,advance};
+ return{w,nav,doc,send,advance,options};
 }
 {
  const h=harness();assert(h.send('wheel',{deltaY:12}));h.advance(700);assert.equal(h.w.scrollY,600,'One small wheel movement reaches the second frame');
@@ -55,3 +55,13 @@ console.log('Rapid reversals, successive gestures, touch interruption, and stale
  h.w.innerWidth=390;h.nav.width=390;h.send('wheel',{deltaY:12});h.advance(100);h.w.innerHeight=720;h.send('resize');h.advance(500);assert.equal(h.w.scrollY,600,'Safari toolbar height changes cannot cancel a frame transition');
 }
 console.log('Tiny iPhone swipes and toolbar-height changes passed.');
+
+{
+ const h=harness(false,[0,600,601]);h.send('wheel',{deltaY:12});h.advance(500);assert.equal(h.w.scrollY,600);
+ h.send('wheel',{deltaY:12});h.advance(500);assert.equal(h.w.scrollY,601,'A nearby News anchor cannot trap scrolling on the second frame');
+ assert(!h.send('wheel',{deltaY:12}),'Scrolling past the intro remains native');
+ assert.equal(h.options.get('wheel').capture,true,'Page gestures are received before embedded viewer handlers');
+ assert.equal(h.options.get('touchmove').capture,true,'Embedded viewers cannot consume the first swipe');
+ h.nav.dispose();
+}
+console.log('Viewer event capture and tightly spaced News anchor regressions passed.');
