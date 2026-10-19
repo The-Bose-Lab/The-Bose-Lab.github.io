@@ -111,3 +111,17 @@ html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
  .landscape-map-area #research-landscape,.landscape-map-area .atlas-instance-layer{transform:translateY(calc(-1 * var(--atlas-top-trim,0px)))}
  .landscape-peaks{padding-top:calc(100% * 560 / 900 - var(--atlas-top-trim,0px) + 16px)}
 }
+
+/* Research controls reveal as one panel and keep native cursor semantics on hybrid devices. */
+.landscape-peaks .peak-link:is(.is-preview,:focus-within){background:transparent;box-shadow:none}
+.landscape-peaks .atlas-annotation{transition:none;cursor:default}
+.landscape-peaks .peak-title,.landscape-peaks .atlas-explore{cursor:pointer}
+.landscape-peaks .peak-title{user-select:none}
+body.site-view:not([data-page=latest]){cursor:default}
+body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]){cursor:text}
+@media(pointer:coarse){body[data-page=latest],body[data-page=latest] a,body[data-page=latest] button{cursor:auto!important}}
+
+/* The rounded menu outline and its hit area have identical bounds. */
+.content-header .clickable-link{padding-inline:12px;margin-inline:-12px;user-select:none}
+.content-header .clickable-link::after{inset-inline:0}
+.content-header :is(a,button),.content-header :is(a,button) *{cursor:pointer!important}
