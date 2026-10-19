@@ -4,11 +4,11 @@
  .content-header .wordmark{font-size:26px}
  [data-navigation-ready=true] .nav-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:48px;flex:none;padding:8px;margin-left:auto;margin-right:-8px;background:transparent;border:0;color:var(--ink);cursor:pointer}
  .nav-toggle-icon{position:relative;display:block;width:28px;height:18px;flex:none}
- .nav-toggle-icon::before,.nav-toggle-icon::after{content:'';position:absolute;left:0;width:28px;height:1.5px;background:currentColor;transform-origin:center;transition:transform .2s ease,top .2s ease}
- .nav-toggle-icon::before{top:3px}.nav-toggle-icon::after{top:13.5px}
+ .nav-toggle-icon::before,.nav-toggle-icon::after{content:'';position:absolute;left:0;width:28px;height:1.5px;background:currentColor;border-radius:999px;transform-origin:center;transition:transform .2s ease,top .2s ease}
+ .nav-toggle-icon::before{top:1.5px}.nav-toggle-icon::after{top:15px}.nav-toggle-middle{position:absolute;left:0;top:8.25px;width:28px;height:1.5px;background:currentColor;border-radius:999px;transition:opacity .16s}.nav-toggle[aria-expanded=true] .nav-toggle-middle{opacity:0}
  .nav-toggle[aria-expanded=true] .nav-toggle-icon::before{top:8.25px;transform:rotate(45deg)}.nav-toggle[aria-expanded=true] .nav-toggle-icon::after{top:8.25px;transform:rotate(-45deg)}
 
- [data-navigation-ready=true] .content-header nav{display:none!important;position:absolute;left:0;right:0;top:100%;width:100%;min-width:0;margin:0;padding:8px 6vw 24px;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border:0;border-bottom:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:0;box-shadow:none;z-index:30}
+ [data-navigation-ready=true] .content-header nav{display:none!important;position:absolute;left:0;right:0;top:100%;width:100%;min-width:0;margin:0;padding:8px 6vw 24px;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border:0;border-bottom:1px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:0 0 22px 22px;box-shadow:none;z-index:30}
  [data-navigation-ready=true] .content-header nav.is-open{display:flex!important}.content-header nav a{padding:12px 0;font-size:20px;min-height:48px}
  .content-header:has(nav.is-open){border-bottom-color:transparent}
 
@@ -21,16 +21,20 @@
  #opening .sub{left:52px;top:395px;font-size:32px;width:620px;letter-spacing:-.6px}
  #opening #molecule{left:80px;top:570px;width:560px;height:560px}
  #opening .opening-imperial{left:52px;bottom:48px}
- #opening .memo{left:48px;top:120px!important;width:624px;font-size:64px!important}
- #opening .memo-line{width:624px;min-height:260px;height:auto;flex-wrap:wrap;align-content:center;gap:12px 18px;white-space:normal}
- #opening .memo-phrase{white-space:normal;max-width:420px}
+ #opening .memo{left:48px;top:120px!important;width:624px;font-size:60px!important;line-height:1.14}
+ #opening .memo-line{display:grid;width:624px;min-height:0;height:auto;grid-template-columns:minmax(0,1fr) 160px;gap:0 18px;padding:10px 0;align-content:center;align-items:center;white-space:normal}
+ #opening .memo-phrase{white-space:normal;max-width:none;grid-column:1}
+ #opening .memo-slot{grid-column:2;width:160px;height:144px}
+ #opening .memo-line[data-row="1"]{row-gap:12px}
+ #opening .memo-line[data-row="1"]>.memo-phrase:first-child{grid-row:1}#opening .memo-line[data-row="1"]>.protein{grid-row:1}
+ #opening .memo-line[data-row="1"]>.memo-phrase:nth-child(3){grid-row:2}#opening .memo-line[data-row="1"]>.crystal{grid-row:2}
  .page-heading h1{font-size:clamp(46px,12vw,68px)}
  .peak-link>span:first-child{font-size:15px!important;line-height:1.3;min-height:64px}
  .landscape-peaks .peak-link{height:64px!important;min-height:64px!important}
  .lab-footer .footer-main{gap:34px}
 }
 @media(max-width:700px){
- #opening .memo-line[data-row="2"]{display:grid;grid-template-columns:minmax(0,1fr) 184px;grid-template-rows:auto auto;gap:0 18px;align-content:center}
+ #opening .memo-line[data-row="2"]{display:grid;grid-template-columns:minmax(0,1fr) 160px;grid-template-rows:auto auto;gap:0 18px;align-content:center}
  #opening .memo-line[data-row="2"]>.memo-phrase:first-child{grid-column:1;grid-row:1;align-self:end}
  #opening .memo-line[data-row="2"]>.memo-phrase:last-child{grid-column:1;grid-row:2;align-self:start}
  #opening .memo-line[data-row="2"]>.memo-slot{grid-column:2;grid-row:1/3;align-self:center}
