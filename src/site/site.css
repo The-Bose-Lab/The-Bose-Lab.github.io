@@ -50,7 +50,7 @@ html.has-site-scroll body{overflow:visible}
 #research-landscape{position:absolute;inset:0}
 .landscape-peaks{position:absolute;inset:0;pointer-events:none}
 .peak-link{position:absolute;display:inline-flex;align-items:center;white-space:nowrap;transform:translate(-50%,-110%);padding:10px 16px;border:1px solid color-mix(in srgb,var(--ink) 40%,transparent);border-radius:999px;background:color-mix(in srgb,var(--bg) 94%,transparent);font:16px/1.2 var(--body);pointer-events:auto;box-shadow:0 3px 12px color-mix(in srgb,var(--bg) 70%,transparent);transition:background .2s,border-color .2s}
-.peak-link:hover,.peak-link:focus-within{background:color-mix(in srgb,var(--b) 32%,var(--bg));border-color:var(--ink)}
+
 .landscape-preview{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:center;padding:24px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);min-height:180px}
 #landscape-preview-visual{height:132px;position:relative}
 .landscape-preview h2{font-size:28px;letter-spacing:-.025em}
@@ -89,7 +89,7 @@ html.has-site-scroll body{overflow:visible}
 /* One continuous atlas; topic previews open at their own region. */
 .content-main:has(.landscape-overview){padding-top:32px}.content-main:has(.landscape-overview)>.page-heading{margin-bottom:8px}.content-main:has(.landscape-overview) h1{font-size:clamp(48px,5.2vw,72px)}
 .landscape-map-area{height:clamp(280px,calc(100svh - 240px),590px)}.landscape-overview{margin-top:0}.peak-link{display:flex;flex-direction:column;gap:0;max-width:250px;padding:9px 16px;transform:translate(-50%,-100%);box-shadow:none;font-size:16px;line-height:1.35;background:color-mix(in srgb,var(--bg) 96%,transparent);border-color:color-mix(in srgb,var(--ink) 34%,transparent);transition:background .2s,box-shadow .2s}
-.peak-preview{display:none;font-size:13px;line-height:1.4;color:var(--muted);padding-top:8px;white-space:normal;text-align:center}.peak-link.is-preview,.peak-link:focus-within{background:color-mix(in srgb,var(--b) 22%,var(--bg));box-shadow:0 5px 18px color-mix(in srgb,var(--ink) 9%,transparent)}.peak-link.is-preview .peak-preview,.peak-link:focus-within .peak-preview{display:block}
+.peak-preview{display:none;font-size:13px;line-height:1.4;color:var(--muted);padding-top:8px;white-space:normal;text-align:center}.peak-link.is-preview .peak-preview,.peak-link:focus-within .peak-preview{display:block}
 @media(max-width:850px){.peak-link{font-size:13px;padding:7px 11px}.peak-preview{font-size:12px}.landscape-map-area{height:440px}}
 @media(max-width:560px){.landscape-map-area{height:390px}.landscape-map-area #research-landscape{height:290px}.landscape-peaks{padding-top:295px}.peak-link{position:relative!important;transform:none;max-width:100%;font-size:12px}.peak-link .peak-preview{display:none!important}.content-main:has(.landscape-overview){padding-top:26px}}
 

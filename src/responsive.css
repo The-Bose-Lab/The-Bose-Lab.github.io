@@ -113,7 +113,10 @@ html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
 }
 
 /* Research controls reveal as one panel and keep native cursor semantics on hybrid devices. */
-.landscape-peaks .peak-link:is(.is-preview,:focus-within){background:transparent;box-shadow:none}
+.landscape-peaks .peak-link:is(:hover,:active,.is-preview,:focus-within){background:transparent;box-shadow:none}
+/* Safari synthesizes hover before click; neither that state nor its tap overlay paints a separate panel. */
+.landscape-peaks,.landscape-peaks *{-webkit-tap-highlight-color:transparent}
+.landscape-peaks .peak-title,.landscape-peaks .atlas-explore{touch-action:manipulation}
 .landscape-peaks .atlas-annotation{transition:none;cursor:default}
 .landscape-peaks .peak-title,.landscape-peaks .atlas-explore{cursor:pointer}
 .landscape-peaks .peak-title{user-select:none}
