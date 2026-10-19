@@ -16,8 +16,9 @@ function harness(reduced=false,stops=[0,600,1200]){
  h.nav.dispose();assert(!h.send('wheel',{deltaY:12}));
 }
 {
- const h=harness();for(let i=0;i<60;i++){h.send('wheel',{deltaY:20});h.advance(20);}assert.equal(h.w.scrollY,600,'A continuous trackpad burst must not skip the second frame');
- h.advance(200);h.send('wheel',{deltaY:20});h.advance(700);assert.equal(h.w.scrollY,1200);
+ const h=harness();for(let i=0;i<60;i++){const prevented=h.send('wheel',{deltaY:20});if(!prevented)h.w.scrollY+=20;h.advance(20);}
+ assert(h.w.scrollY>600,'A continuous stationary-pointer wheel stream must leave the second frame after its transition finishes');
+ assert(!h.send('wheel',{deltaY:20}),'The settled intro must not retain a wheel lock');
  h.w.scrollY=1300;assert(!h.send('wheel',{deltaY:-20}),'The news list scrolls normally');
 }
 {
@@ -31,7 +32,7 @@ function harness(reduced=false,stops=[0,600,1200]){
  h.send('keydown',{key:'PageDown'});h.advance(20);assert.equal(h.w.scrollY,600,'Reduced motion reaches its anchor without interpolation');
  assert(!h.send('keydown',{key:' ',target:{closest:()=>true}}),'Buttons and form controls retain keyboard behavior');
 }
-console.log('Opening anchors passed: small wheel/swipe, momentum isolation, reverse navigation, reduced motion, and normal News scrolling.');
+console.log('Opening anchors passed: small wheel/swipe, continuous wheel release, reverse navigation, reduced motion, and normal News scrolling.');
 
 // Regressions: inputs during motion must reverse or advance, never disappear.
 {

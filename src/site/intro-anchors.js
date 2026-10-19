@@ -3,8 +3,8 @@ const captures=new Set(['wheel','touchstart','touchmove','touchend','touchcancel
 const inputEvents=['wheel','touchstart','touchmove','touchend','touchcancel','keydown','click','resize'];
 
 // One gesture chooses an anchor; one clock drives both scroll and scene progress.
-// Reversals interrupt immediately. Only uninterrupted, same-direction momentum
-// is consumed, so a new gesture never waits for an animation lock to expire.
+// Reversals interrupt immediately. Consume momentum only while moving;
+// a settled frame must release the wheel stream to normal page scrolling.
 export class IntroAnchors{
  constructor({viewport=window,document:doc=document,stops,enabled=()=>true,reduced=false,onPosition=()=>{}}){
   Object.assign(this,{w:viewport,doc,stops,enabled,reduced,onPosition});this.lastWheel=-Infinity;this.width=this.w.innerWidth;this.height=this.w.innerHeight;
@@ -14,7 +14,8 @@ export class IntroAnchors{
    const now=this.w.performance.now(),fresh=direction!==this.wheelDirection||now-this.lastWheel>110;this.lastWheel=now;
    if(fresh){this.wheelUsed=false;this.wheelDelta=0;this.wheelDirection=direction;}
    const target=this.targetFor(direction,fresh);if(target===null)return;
-   e.preventDefault();if(this.wheelUsed)return;
+   if(this.wheelUsed){if(this.busy)e.preventDefault();return;}
+   e.preventDefault();
    this.wheelDelta+=delta;if(Math.abs(this.wheelDelta)<10)return;
    this.wheelUsed=true;this.move(target);
   };

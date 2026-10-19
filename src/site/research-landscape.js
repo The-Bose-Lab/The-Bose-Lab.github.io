@@ -71,7 +71,9 @@ export async function bindResearchLandscape(theme){
    sequence.style.left=(mobile?(sp.x+1)*.5*map.clientWidth:Math.max(railInset+half,Math.min((sp.x+1)*.5*map.clientWidth,cardLeft-half-24)))+'px';sequence.style.top=((1-sp.y)*.5*map.clientHeight-sequence.offsetHeight/2)+'px';
    if(mobile){
     const surfaceTop=(model.camera.top-model.surfaceViewTop)/(model.camera.top-model.camera.bottom)*map.clientHeight;
-    const attachmentTop=model.hoverTopic==='science'&&scienceViews.length?Math.min(...scienceViews.map(v=>parseFloat(v.container.style.top))):surfaceTop;
+    // Reserve both attachment footprints before their lazy-loaded models exist.
+    // Selecting a topic must never change the manifold's position or extent.
+    const attachmentTop=Math.min(...[[.76,-.92],[1.57,-.96]].map(([sx,sz])=>{const q=new T.Vector3(sx,model.baseHeight(sx,sz)+.02,sz).project(model.camera);return(1-q.y)*.5*map.clientHeight-(112+22)*unit;}));
     wrapper.style.setProperty('--atlas-top-trim',Math.max(0,Math.min(surfaceTop,attachmentTop)-16)+'px');
    }else wrapper.style.removeProperty('--atlas-top-trim');
    drawConnections();};

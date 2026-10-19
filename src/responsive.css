@@ -94,7 +94,7 @@ body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-e
 /* Safari must not run a second scrolling animation or resize the art when its toolbar moves. */
 html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
 .has-site-scroll .story-stage{height:calc(var(--intro-height,100svh) + var(--story-travel,100svh))}
-.has-site-scroll .story-viewport{height:var(--intro-height,100svh);touch-action:pan-x;overscroll-behavior:none}
+.has-site-scroll .story-viewport{height:var(--intro-height,100svh);touch-action:pan-x;overscroll-behavior:auto}
 .molecular-stage{transition:opacity .18s ease}
 .peak-link:not(.is-preview) .atlas-annotation{visibility:hidden!important;pointer-events:none!important}
 .peak-link:not(.is-preview) .atlas-explore{pointer-events:none!important}
@@ -104,8 +104,9 @@ html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
 /* Keep the home composition, header and News on one generous desktop rail. */
 @media(min-width:1441px){html.has-site-scroll{--content-rail:min(1640px,85.56vw)}}
 
-/* Remove unused camera headroom on touch layouts; selected structures reserve their own room. */
+/* A fixed attachment envelope prevents selection or lazy loading from shifting the atlas. */
 @media(max-width:1020px){
+ .landscape-overview{overflow-anchor:none}
  .landscape-map-area,.landscape-map-area:has(.atlas-sequence.is-visible){margin-top:0}
  .landscape-map-area #research-landscape,.landscape-map-area .atlas-instance-layer{transform:translateY(calc(-1 * var(--atlas-top-trim,0px)))}
  .landscape-peaks{padding-top:calc(100% * 560 / 900 - var(--atlas-top-trim,0px) + 16px)}
