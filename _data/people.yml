@@ -1,81 +1,72 @@
-# The group. Add yourself here — name, role, title, photo (drop it in
-# assets/images/), and whichever links you have. role: pi | phd | msc | visitor | alumni
 - name: Joey Bose
   role: pi
   title: Principal Investigator
   position: Assistant Professor of Computing, Imperial College London
-  photo: /assets/images/joey_headshot.jpg
+  photo: ./assets/people/joey_headshot.jpg
   email: joey.bose@imperial.ac.uk
   website: https://joeybose.github.io
   scholar: https://scholar.google.com/citations?user=ybPyI7IAAAAJ
   twitter: https://twitter.com/bose_joey
   github: https://github.com/joeybose
-  bio: ELLIS member and Mila affiliate. Previously a postdoc at Oxford with Michael Bronstein; PhD from McGill/Mila.
-
+  bio: ELLIS member and Mila affiliate. Previously a postdoc at Oxford with Michael Bronstein; PhD from
+    McGill/Mila.
 - name: Oscar Davis
   role: phd
   title: DPhil Student, University of Oxford
   cosupervised: with Michael Bronstein & İsmail İlkan Ceylan
-  photo: /assets/images/oscar.jpg
+  photo: ./assets/people/oscar.jpg
   website: https://olsdavis.github.io
-
 - name: Francesco Ruscio
   role: phd
   title: PhD Student, AITHYRA
   cosupervised: with Michael Bronstein
-  photo: /assets/images/francesco.jpg
+  photo: ./assets/people/francesco.jpg
   website: https://francescoshox.github.io
-
 - name: Timothy Hitge
   role: phd
   title: PhD Student, Imperial College London
   cosupervised: with Elizaveta Semenova
-  photo: /assets/images/ph-timothy.svg
+  photo: ./assets/people/ph-timothy.svg
   website: https://timhitge.com/
-
 - name: Christos Ziakas
   role: phd
   title: PhD Student, Imperial College London
   cosupervised: with Alessandra Russo
-  photo: /assets/images/christos.png
+  photo: ./assets/people/christos.png
   website: https://chziakas.github.io
-
 - name: Roman Poletukhin
   role: phd
   title: PhD Student, Imperial College London
-  photo: /assets/images/roman.jpg
+  photo: ./assets/people/roman-linkedin.jpeg
   website: https://rpoletukhin.github.io
-
+  photoSource: https://www.linkedin.com/in/romanpoletukhin/
+  linkedin: https://www.linkedin.com/in/romanpoletukhin/
 - name: Gabriel Greenstein
   role: phd
   title: PhD Student, Imperial College London
   cosupervised: with Shelly Conroy & Alex Ganose
-  photo: /assets/images/gabriel.jpg
+  photo: ./assets/people/gabriel.jpg
   website: https://www.linkedin.com/in/gabriel-greenstein-8ba505261/
-
 - name: Joshua Rooijakkers
   role: phd
   title: PhD Student, Imperial College London
-  photo: /assets/images/joshua.jpg
+  photo: ./assets/people/joshua.jpg
   website: https://joshuarooijakkers.github.io/
-
 - name: Hua-Chang Bakker
   role: alumni
   title: ELLIS MSc Honours 2026, University of Amsterdam
   cosupervised: with Erik Bekkers
-  photo: /assets/images/huachang.png
+  photo: ./assets/people/huachang.png
   website: https://huachangb.github.io
-
 - name: Odysseas Boufalis
   role: alumni
   title: ELLIS MSc Honours 2026, University of Amsterdam
   cosupervised: with Christian Naesseth
-  photo: /assets/images/ph-odysseas.svg
+  photo: ./assets/people/ph-odysseas.svg
   scholar: https://scholar.google.com/citations?user=bOMeLjgAAAAJ
-
 - name: Jacob Bamberger
   role: visitor
   title: Visiting PhD Student, University of Oxford
   cosupervised: Sep 2026 – Aug 2027
-  photo: /assets/images/jacob.jpg
+  photo: ./assets/people/jacob.jpg
   website: https://jacobbamb.github.io

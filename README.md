@@ -1,44 +1,25 @@
 # Bose Lab website
 
-Source for **https://the-bose-lab.github.io** — the Bose Lab (Department of
-Computing, Imperial College London). Built with Jekyll; GitHub Pages builds and
-deploys it automatically on every push to `main`. There is no build step to run.
+Static website at https://the-bose-lab.github.io/. The NFM article keeps https://the-bose-lab.github.io/normalizing-flow-maps/; its original content is preserved in `content/normalizing-flow-maps.html`.
 
-## Editing content — lab members start here
+## Develop
 
-All content is data, not markup. You should rarely need to touch HTML.
+Use Node.js 24 and pnpm 11:
 
-| What | Where |
-|---|---|
-| Add yourself / update your entry | `_data/people.yml` (photo goes in `assets/images/`) |
-| Add a paper | `_data/publications.yml` (figure goes in `assets/pubfigs/`, optional) |
-| Post news | `_data/news.yml` (newest first) |
-| Write a blog post | `_posts/YYYY-MM-DD-title.md` — see below |
-| Lab info, research areas, join text | `_data/lab.yml`, `_data/research.yml`, `_data/join.yml` |
-
-## Blog posts
-
-Create `_posts/2026-01-31-my-post.md`:
-
-```yaml
----
-layout: post
-title: My post title
-author: Your Name
-math: true   # only if you need LaTeX (KaTeX)
----
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-then write standard markdown. Code blocks get syntax highlighting; with
-`math: true`, `$...$` and `$$...$$` render as LaTeX. Open a PR; it publishes
-on merge.
+Edit `_data/` for people, papers, research, news and contact information; `src/` for layout, interactions and visualisations; and `public/` for self-hosted assets. `scripts/generate.mjs` generates the routes and renders article equations at build time. The site has no application server or external font/CDN dependency.
 
-## Previewing locally (optional)
+## Publish
 
-```bash
-gem install bundler && bundle install   # once
-bundle exec jekyll serve                # http://localhost:4000
+```sh
+pnpm build
+node scripts/publish-static.mjs
 ```
 
-Pushing to `main` without previewing is fine for data-only edits — Pages
-rebuilds in about a minute.
+Commit both the source changes and the refreshed static files. GitHub Pages serves the repository root from `main`, with `.nojekyll`. `.published-files.json` tracks generated files so publishing removes outdated bundles safely. CI rebuilds the site and verifies that the committed output matches it.
+
+The previous Jekyll page addresses redirect to their new routes. The article also remains accessible through `/blog/normalizing-flow-maps/`, including figure and equation anchors. To build a review copy under another path, use `SITE_BASE=/preview/ pnpm build`; publish that build separately.

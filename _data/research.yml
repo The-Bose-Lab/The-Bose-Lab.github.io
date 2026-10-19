@@ -1,8 +1,9 @@
-# Research areas shown on the home page.
 - title: Foundations of Generative Models
-  desc: The mathematics of modern generative modelling — flow matching, diffusion, and flow maps, from Riemannian manifolds to discrete spaces.
+  desc: The mathematics of modern generative modelling — flow matching, diffusion, and flow maps, from
+    Riemannian manifolds to discrete spaces.
 - title: AI for Science
-  desc: "Generative models for scientific discovery: protein design, molecular dynamics, crystal structure prediction, and beyond."
+  desc: "Generative models for scientific discovery: protein design, molecular dynamics, crystal structure
+    prediction, and beyond."
 - title: Neural Samplers & Boltzmann Generators
   desc: Sampling from unnormalized densities, iterated energy matching, and amortized inference.
 - title: Safety & Robustness

@@ -1,0 +1,188 @@
+/* Shared atoms, palette tints, ink contours and grouped surfaces. */
+:root{--surface:color-mix(in srgb,var(--ink) 2.5%,var(--bg));--label-surface:color-mix(in srgb,var(--ink) 4%,var(--bg));--interaction-surface:color-mix(in srgb,var(--b) 12%,var(--bg));--rule:color-mix(in srgb,var(--ink) 17%,transparent);--accent:var(--b)}
+.molecular-mark{display:inline-block;width:30px;height:30px;flex:0 0 30px;vertical-align:middle;overflow:visible}
+.molecule-label{display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 6px;border:1px solid var(--rule);border-radius:999px;background:var(--label-surface);color:var(--ink);font-size:14px;line-height:1.3;width:fit-content}
+.molecule-label .molecular-mark{width:24px;height:24px;flex-basis:24px}
+.section-heading h2,.direction-heading h2,.contact-location h2,.prose h2,.application-list h3{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:start;gap:14px}
+.section-heading h2>.molecular-mark,.direction-heading h2>.molecular-mark,.contact-location h2>.molecular-mark,.prose h2>.molecular-mark{margin-top:0;align-self:start;height:1.08em;min-height:32px;max-height:none;overflow:visible}
+.section-heading h2>.molecular-mark{width:32px;height:1.08em;min-height:32px}
+[data-area]{--accent:var(--b)}
+.motif-card,.latest-list{border:1px solid var(--rule);border-radius:16px;background:var(--surface)}
+.latest-list{padding:5px 30px;overflow:hidden}
+.latest-row{gap:32px;padding:26px 0;grid-template-columns:190px 1fr;border-top:1px solid var(--rule)}
+.latest-row:first-child{border-top:0}
+.latest-row .entry-meta{gap:14px}
+.latest-row .entry-copy{padding-top:5px}
+.latest-row .entry-copy p{font-size:20px}
+.latest-row h3{font-size:22px}
+.home-content{padding-top:90px}
+.recruitment-card{position:relative;margin-top:90px;border:1px solid color-mix(in srgb,var(--ink) 32%,transparent);border-radius:18px;background:var(--surface);padding:42px;gap:44px;overflow:hidden}
+.recruitment-card .section-heading{margin:0}
+.recruitment-card h2{display:block;margin-top:26px}
+.recruitment-card em{white-space:nowrap;font-style:normal;font-weight:650;background:none;box-shadow:none;padding:0}
+body:is([data-theme=cameo],[data-theme=axiom],[data-theme=matter],[data-theme=stratum]) .recruitment-card em{font-style:italic;font-weight:inherit;font-synthesis:style}
+.recruitment-card .positions-copy>p{font-size:20px}
+.action-link{display:inline-flex;align-items:center;gap:10px;padding:9px 18px 9px 12px;border:1px solid color-mix(in srgb,var(--ink) 50%,transparent);border-radius:999px;background:var(--label-surface);font-size:17px;line-height:1.3;transition:background .18s,border-color .18s}
+.action-link:hover{background:var(--interaction-surface);border-color:var(--ink)}
+.action-link .molecular-mark{width:24px;height:24px;flex-basis:24px}
+.recruitment-card .link-row{align-items:center;gap:22px}
+.application-list{margin-top:30px}
+.application-list article{padding:24px 0}
+.application-list h3{align-items:center;font-size:21px}
+.application-list h3 .molecular-mark{width:26px;height:26px;flex-basis:26px}
+.application-list article p{margin-top:14px}
+.page-heading{margin-bottom:48px}
+.page-heading h1{margin-top:0}
+.page-heading p{max-width:800px}
+.topic-index{gap:12px 14px;margin-bottom:38px}
+.topic-chip{display:inline-flex;align-items:center;gap:10px;line-height:1.2;padding:10px 16px 10px 11px;border:1px solid var(--rule);border-radius:999px;background:var(--label-surface);color:var(--ink);font-size:16px;transition:background .18s,border-color .18s}
+.topic-chip:hover,.topic-chip:focus-visible{border-color:color-mix(in srgb,var(--ink) 55%,transparent);background:var(--interaction-surface)}
+.topic-chip .molecular-mark{width:24px;height:24px;flex-basis:24px}
+.research-direction{grid-template-columns:.88fr 1.3fr;gap:36px;padding:32px;border:1px solid var(--rule);border-radius:18px;background:var(--surface);margin-bottom:32px}
+.direction-heading{position:sticky;top:136px;align-self:start;padding:4px 8px 0 0}
+.direction-heading h2{font-size:clamp(30px,3vw,43px);margin:0}
+.direction-heading h2 .molecular-mark{width:32px;height:1.08em;min-height:32px}
+.direction-heading p{font-size:20px;margin-top:25px}
+.direction-heading .direction-detail{font-size:17px;line-height:1.6}
+.literature-heading{font-size:17px;font-weight:500;color:var(--muted);margin:4px 0 18px}
+.paper-list{display:grid;gap:14px}
+.paper{display:grid;grid-template-columns:160px minmax(0,1fr);align-items:start;gap:22px;padding:20px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);transition:border-color .18s,background .18s}
+.paper:hover{border-color:color-mix(in srgb,var(--accent) 65%,var(--ink));background:var(--interaction-surface)}
+.paper-figure{padding:8px;background:var(--label-surface);border:1px solid var(--rule);border-radius:8px}
+.paper-figure a{display:block}.paper-figure img{display:block;width:100%;height:112px;object-fit:contain;background:white;border-radius:2px}
+.paper h3{font-size:20px;line-height:1.35;margin-top:13px}
+.paper h3 .text-link{border:0;padding:0}
+.paper h3 .text-link:hover{color:var(--ink)}
+.paper .entry-meta{display:block}
+.venue-label{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 3px;border:1px solid var(--rule);border-radius:999px;background:var(--label-surface);font-size:12px;line-height:1.3;color:var(--ink)}
+.venue-label .molecular-mark{width:20px;height:20px;flex-basis:20px}
+.paper-authors strong{color:var(--ink);font-weight:700}
+.paper-authors{font-size:14px;line-height:1.45;margin-top:12px}
+#archive .paper{grid-template-columns:210px minmax(0,1fr);gap:30px;padding:24px}
+#archive .paper-figure img{height:145px}
+#archive .paper h3{font-size:24px}
+.publication-tools{padding:24px 28px;margin-bottom:28px}
+.principal{padding:28px;background:var(--surface);border:1px solid var(--rule);border-radius:16px;gap:42px;margin-bottom:60px}
+.person:not(.principal){padding:16px;border:1px solid var(--rule);border-radius:12px;background:var(--surface)}
+.person:not(.principal) h3{margin-top:20px}
+.people-grid{gap:26px}
+.people-section .section-heading{border:0;padding-bottom:0}
+.people-section h2{font-size:30px}
+.alumni-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.person.alumnus{padding:25px}
+.person.alumnus h3{margin-top:0}
+.blog-entry{padding:32px;max-width:100%;background:var(--surface)}
+.blog-entry h2{font-size:clamp(32px,3.8vw,50px);margin:25px 0}
+.blog-entry p{font-size:20px;max-width:850px}
+.blog-entry .entry-meta{flex-direction:row;align-items:center;gap:24px;flex-wrap:wrap}
+.blog-post .entry-meta{align-items:center;flex-wrap:wrap}
+.prose.motif-card{padding:36px}
+.prose h2{font-size:34px}
+.prose h2 .molecular-mark{width:27px;height:1.08em;min-height:27px}
+.prose pre{border-radius:10px}
+.contact-location{padding:32px;margin-top:36px}
+.contact-location h2{font-size:34px}
+.lab-footer{align-items:center;padding:42px 0 48px;gap:50px}
+.footer-affiliation,.footer-links{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+.footer-imperial{display:block;width:205px;color:var(--ink)}
+.footer-imperial svg{display:block;width:100%;height:auto}
+.site-credit{font-size:13px;color:var(--muted);padding-top:7px}
+.content-header{border-bottom:1px solid var(--rule)}
+.content-header nav a:is(:hover,:focus-visible){color:var(--ink)}
+@media(max-width:1050px){.research-direction{grid-template-columns:1fr;gap:32px}.direction-heading{position:static}.paper{grid-template-columns:160px 1fr}.principal{grid-template-columns:240px 1fr}}
+@media(max-width:850px){.latest-list{padding:3px 22px}.latest-row{grid-template-columns:150px 1fr;gap:24px}.recruitment-card{grid-template-columns:1fr;padding:28px;gap:32px}.research-direction{padding:25px}.principal{padding:22px;grid-template-columns:180px 1fr;gap:26px}.principal h2{font-size:40px}.people-grid{gap:22px}.person:not(.principal){padding:12px}.person:not(.principal) h3{font-size:22px}.paper,#archive .paper{grid-template-columns:140px minmax(0,1fr);padding:18px;gap:20px}#archive .paper h3{font-size:21px}#archive .paper-figure img{height:104px}.lab-footer{gap:30px}.blog-entry{padding:25px}.prose.motif-card{padding:25px}}
+@media(max-width:560px){.latest-row{grid-template-columns:1fr;gap:17px}.latest-row .entry-meta{flex-direction:row;align-items:center;flex-wrap:wrap;gap:15px}.latest-row .entry-copy{padding:0}.latest-row .entry-copy p{font-size:18px}.molecule-label{font-size:12px}.recruitment-card{padding:24px}.recruitment-card h2{font-size:34px}.recruitment-card .positions-copy>p{font-size:18px}.topic-chip{font-size:14px}.research-direction{padding:22px}.direction-heading h2{font-size:30px}.paper,#archive .paper{grid-template-columns:100px minmax(0,1fr);gap:15px;padding:14px}.paper-figure{padding:5px}.paper-figure img,#archive .paper-figure img{height:78px}.paper h3,#archive .paper h3{font-size:18px}.paper-authors strong{color:var(--ink);font-weight:700}
+.paper-authors{font-size:12px}.venue-label{font-size:10px}.venue-label .molecular-mark{display:none}.principal{grid-template-columns:1fr}.principal img{max-width:260px}.people-grid,.alumni-grid{grid-template-columns:1fr}.person:not(.principal){padding:20px}.person img{max-height:400px}.blog-entry h2{font-size:32px}.prose{font-size:18px}.prose h2{font-size:29px}.prose.motif-card{padding:20px}.publication-tools{padding:20px}.lab-footer{align-items:flex-start}}
+.github-link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;color:var(--ink);transition:background .18s}
+.github-link svg{width:26px;height:26px}
+.github-link:hover{background:var(--interaction-surface)}
+.mode-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border:0;border-radius:50%;padding:10px;background:transparent;color:var(--ink);cursor:none;transition:background .18s}
+.mode-toggle svg{width:20px;height:20px;flex:0 0 20px}
+.mode-toggle:hover{background:var(--interaction-surface)}
+#home-header .mode-toggle{width:44px;height:44px;flex-basis:44px;opacity:0;transition:opacity .6s,background .18s}
+html:is([data-state=revealing],[data-state=ready]) #home-header .mode-toggle{opacity:1}
+
+/* On narrow pages, keep the appearance switch at the top right rather than wrapping it alone. */
+@media(min-width:851px) and (max-width:1050px){.content-header nav{font-size:18px;gap:22px}}
+@media(max-width:850px){.content-header{display:block}.content-header .wordmark{min-height:36px}.content-header nav{margin-top:8px;justify-content:flex-start;gap:18px;font-size:15px}.content-header nav a{min-height:36px}.content-header .mode-toggle{position:absolute;top:18px;right:6vw}.content-header nav .mode-toggle{font-size:13px}body:not([data-home-region=intro]) #home-header{height:auto}}
+
+/* Two aligned footer groups, then one quiet attribution baseline. */
+.lab-footer{display:block;padding:42px 0 30px}
+.lab-footer>.footer-main{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+.footer-contact{display:flex;flex-direction:column;align-items:flex-end;gap:14px;justify-self:end}
+.footer-affiliation{gap:14px}
+.social-links{display:flex;align-items:center;gap:10px}
+.social-links .github-link{width:36px;height:36px}
+.social-links .github-link svg{width:24px;height:24px}
+.social-links .x-link svg{width:21px;height:21px}
+.lab-footer>.footer-bottom{display:block;margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)}
+.site-credit{display:block;padding:0;font-size:13px;line-height:1.4}
+@media(max-width:560px){.lab-footer>.footer-main{grid-template-columns:1fr;gap:26px}.footer-contact{align-items:flex-start;justify-self:start}}
+
+@media(max-width:560px){.recruitment-card em{white-space:normal}}
+
+/* Restrained colour roles: scientific/publication primary-chain, writing warm-chain, recruitment mineral-chain. */
+[data-kind=publication],[data-kind=preprint]{--category:var(--a)}
+[data-kind=writing]{--category:var(--b)}
+[data-kind=opportunity]{--category:var(--c)}
+[data-kind=news]{--category:var(--b)}
+.latest-row .molecule-label,.news-filter[data-kind]{background:color-mix(in srgb,var(--category) 22%,var(--bg));border-color:color-mix(in srgb,var(--category) 40%,var(--ink) 18%)}
+.recruitment-card{background:color-mix(in srgb,var(--c) 9%,var(--bg))}
+.recruitment-card .molecule-label{background:color-mix(in srgb,var(--c) 20%,var(--bg))}
+.topic-chip{background:color-mix(in srgb,var(--b) 12%,var(--bg))}
+.venue-label{background:color-mix(in srgb,var(--b) 12%,var(--bg))}
+/* Reveal filled content only after it and its fonts are ready. */
+/* Static content remains visible even if optional graphics cannot initialise. */
+.site-view .quiet-content{animation:none}
+.site-view[data-site-ready=true] .quiet-content{animation:quiet-content .55s cubic-bezier(.16,1,.3,1) both}
+.site-view[data-site-ready=true] #site-header{animation:quiet-header .25s ease both}
+@keyframes quiet-header{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.site-view[data-site-ready=true] .quiet-content,.site-view[data-site-ready=true] #site-header{animation:none}}
+
+/* A shared jade accent recurs in scientific marks and editorial surfaces. */
+[data-area=foundations]{--accent:var(--g)}
+[data-area=science]{--accent:var(--a)}
+[data-area=sampling]{--accent:var(--c)}
+[data-area=safety]{--accent:var(--b)}
+.topic-member:hover,.person .text-link:hover{background:color-mix(in srgb,var(--e) 14%,var(--bg))}
+.blog-entry{background:color-mix(in srgb,var(--e) 6%,var(--bg))}
+.publication-tools{background:color-mix(in srgb,var(--e) 5%,var(--bg))}
+
+.lab-footer>.footer-main{align-items:stretch}
+.footer-affiliation,.footer-contact{display:grid;grid-template-rows:36px 36px;row-gap:14px;align-items:center}
+.footer-contact{justify-items:end;gap:14px;justify-self:end}
+.footer-imperial{align-self:center}
+.footer-contact>.text-link{line-height:1.35}
+.footer-affiliation>.text-link{align-self:center}
+.footer-contact .social-links{align-self:center}
+.principal-section{margin-top:0}
+@media(max-width:560px){.lab-footer>.footer-main{grid-template-columns:1fr 1fr;gap:16px}.footer-imperial{width:150px}.footer-affiliation>.text-link{font-size:13px}.footer-contact{justify-items:end;align-items:center;justify-self:end}.footer-contact>.text-link{font-size:14px}.social-links{gap:3px}}
+
+.footer-affiliation>.text-link{justify-self:start}
+
+/* Each News category has one distinct, shared semantic accent. */
+[data-kind=blog]{--category:var(--c)}
+[data-kind=opportunity]{--category:var(--f)}
+[data-kind=publication]{--category:var(--a)}
+[data-kind=preprint]{--category:var(--e)}
+[data-kind=news]{--category:var(--ink)}
+.latest-row .molecule-label,.news-filter[data-kind]{background:color-mix(in srgb,var(--category) 20%,var(--bg));border-color:color-mix(in srgb,var(--category) 60%,var(--ink) 15%)}
+.latest-row .molecular-mark,.news-filter[data-kind] .molecular-mark{--a:var(--category);--b:color-mix(in srgb,var(--category) 60%,var(--bg));--c:color-mix(in srgb,var(--category) 80%,var(--bg));--d:color-mix(in srgb,var(--category) 70%,var(--bg))}
+.latest-row[hidden]{display:none}
+.latest-row .news-announcement{font-weight:400}
+.news-announcement a{font-weight:700}
+/* The News archive has one stable filter row below its heading. */
+.news-filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:26px}
+.news-filter{min-height:40px;cursor:pointer;text-align:left;transition:background .18s,border-color .18s,box-shadow .18s}
+.news-filter:is(:hover,[aria-pressed=true]){background:color-mix(in srgb,var(--category,var(--ink)) 30%,var(--bg));border-color:var(--category,var(--ink))}
+.news-filter[aria-pressed=true]{box-shadow:inset 0 0 0 1px var(--category,var(--ink))}
+.news-filter:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.news-filter-status{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:560px){.news-filters{gap:8px;margin-top:22px}.news-filter{min-height:42px}}
+.home-content #latest>.section-heading{align-items:center}
+.home-content #latest>.section-heading h2{align-items:center}
+.latest-row:not([hidden]){border-top:0}
+.latest-row:not([hidden])~.latest-row:not([hidden]){border-top:1px solid var(--rule)}
+
+.recruitment-card{background:color-mix(in srgb,var(--f) 9%,var(--bg))}
+.recruitment-card .molecule-label{background:color-mix(in srgb,var(--f) 20%,var(--bg))}

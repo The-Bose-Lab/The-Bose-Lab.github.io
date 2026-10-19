@@ -1,19 +1,23 @@
-# News items, newest first. Keep the emoji at the start of the text.
 - date: 2026-10-11
   text: 🏅 Four papers accepted at the NeurIPS 2026 STODY workshop, including Normalizing Flow Maps as an Oral.
 - date: 2026-09-20
-  text: 🏅 Three papers accepted at NeurIPS 2026 — Few-step Cofolding with All-Atom Flow Maps (Spotlight), Aligning Flow Map Policies with Optimal Q-Guidance, and Coupling Models for One-Step Discrete Generation.
+  text: 🏅 Three papers accepted at NeurIPS 2026 — Few-step Cofolding with All-Atom Flow Maps (Spotlight),
+    Aligning Flow Map Policies with Optimal Q-Guidance, and Coupling Models for One-Step Discrete Generation.
 - date: 2026-09-01
   text: 🎓 The lab is recruiting PhD students for 2026/27 — see the Join page.
 - date: 2026-06-12
-  text: 📄 New preprint — Few-step Cofolding with All-Atom Flow Maps — few-step all-atom structure prediction with flow maps.
+  text: 📄 New preprint — Few-step Cofolding with All-Atom Flow Maps — few-step all-atom structure prediction
+    with flow maps.
 - date: 2026-05-15
-  text: "📄 Three new preprints: Aligning Flow Map Policies with Optimal Q-Guidance (led by Christos Ziakas), Coupling Models for One-Step Discrete Generation, and Learned Relay Representations for Forward-Thinking Discrete Diffusion Models."
+  text: "📄 Three new preprints: Aligning Flow Map Policies with Optimal Q-Guidance (led by Christos Ziakas),
+    Coupling Models for One-Step Discrete Generation, and Learned Relay Representations for Forward-Thinking
+    Discrete Diffusion Models."
 - date: 2026-05-01
   text: 🏅 Autoregressive Boltzmann Generators accepted as a Spotlight at ICML 2026.
 - date: 2026-04-08
   text: "📄 New preprint: General Multimodal Protein Design Enables DNA-Encoding of Chemistry."
 - date: 2026-01-22
-  text: "🏅 Four papers at ICLR 2026: Planner Aware Path Learning (Oral), Generalised Flow Maps (led by Oscar Davis), RegFlow, and OXtal."
+  text: "🏅 Four papers at ICLR 2026: Planner Aware Path Learning (Oral), Generalised Flow Maps (led by Oscar
+    Davis), RegFlow, and OXtal."
 - date: 2026-01-05
   text: 🚀 Bose Lab officially launches at Imperial College London!

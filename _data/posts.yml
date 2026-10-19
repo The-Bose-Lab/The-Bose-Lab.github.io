@@ -1,0 +1,12 @@
+- id: normalizing-flow-maps
+  title: Normalizing Flow Maps
+  newsTitle: The Normalizing Flow Maps blogpost is out!
+  author: Tim Hitge
+  readingTime: 11 min read
+  date: 2026-10-19
+  excerpt: Normalizing Flow Maps combine few-step sampling with tractable exact likelihoods, enabling scalable
+    generation, likelihood-based post-training, and equilibrium sampling.
+  source:
+    repository: https://github.com/The-Bose-Lab/the-bose-lab.github.io
+    commit: e3c77526dcc616be500766cee2e8460aa9ff898d
+    path: _posts/2026-10-19-normalizing-flow-maps.html

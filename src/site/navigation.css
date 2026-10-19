@@ -1,0 +1,7 @@
+/* One interaction vocabulary, inherited from each design's own ink and font. */
+.clickable-link{position:relative;isolation:isolate}
+.clickable-link::after{content:'';position:absolute;inset:5px -12px;pointer-events:none;opacity:0;transform:scale(.96);transition:opacity .18s ease,transform .18s ease;border:1px solid currentColor}
+.clickable-link:is(:hover,:focus-visible)::after{opacity:1;transform:scale(1)}
+.clickable-link:focus-visible{outline:none;color:var(--ink)}
+[data-link-style=capsule] .clickable-link::after{border-radius:999px}
+@media(prefers-reduced-motion:reduce){.clickable-link::after{transition:none!important}}
