@@ -60,7 +60,7 @@ body[data-nav-open=true] .content-header .wordmark{opacity:1!important;pointer-e
 }
 /* Footer groups wrap as complete units instead of overflowing narrow columns. */
 .lab-footer>.footer-main{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:28px 40px}
-.footer-affiliation,.footer-contact{min-width:0;grid-template-rows:auto auto;align-content:start;row-gap:14px}
+.footer-affiliation,.footer-contact{min-width:0;grid-row:span 2;grid-template-rows:subgrid;align-content:start;row-gap:14px}
 .footer-imperial{width:min(205px,100%)}
 .lab-footer .text-link{text-decoration:none;border-bottom:0;padding-bottom:0;white-space:normal}
 @media(max-width:540px){.footer-contact{justify-self:start;justify-items:start;align-items:start}.footer-affiliation>.text-link,.footer-contact>.text-link{font-size:16px}.footer-contact .social-links{gap:12px}}
