@@ -30,6 +30,6 @@ pnpm build
 node scripts/publish-static.mjs
 ```
 
-Commit both the source changes and the refreshed static files. GitHub Pages serves the repository root from `main`, with `.nojekyll`. `.published-files.json` tracks generated files so publishing removes outdated bundles safely. CI rebuilds the site and verifies that the committed output matches it.
+To preview the published output exactly as GitHub Pages serves it (including which files are gzip-compressed), run `node scripts/serve-static.mjs . 8081` and open http://127.0.0.1:8081/. Commit both the source changes and the refreshed static files. GitHub Pages serves the repository root from `main`, with `.nojekyll`. `.published-files.json` tracks generated files so publishing removes outdated bundles safely. CI rebuilds the site and verifies that the committed output matches it.
 
 The previous Jekyll page addresses redirect to their new routes. The article also remains accessible through `/blog/normalizing-flow-maps/`, including figure and equation anchors. To build a review copy under another path, use `SITE_BASE=/preview/ pnpm build`; publish that build separately.
