@@ -135,5 +135,8 @@ body.site-view:not([data-page=latest]) :is(a,button,select,summary,[role=button]
 body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]){cursor:text}
 
 @media(min-width:1021px) and (hover:hover) and (pointer:fine){
- body.site-view .landscape-peaks .peak-link.is-preview,body.site-view .landscape-peaks .peak-link.is-preview *{cursor:pointer}
+ body.site-view .landscape-peaks .peak-link,body.site-view .landscape-peaks .peak-link *{cursor:default}
+ body.site-view .landscape-peaks .atlas-explore,body.site-view .landscape-peaks .atlas-explore *{cursor:pointer}
 }
+
+.landscape-peaks .peak-title{appearance:none;text-align:inherit;color:inherit}
