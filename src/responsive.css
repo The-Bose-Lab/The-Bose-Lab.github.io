@@ -133,3 +133,7 @@ body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]
 body.site-view:not([data-page=latest]) *{cursor:inherit}
 body.site-view:not([data-page=latest]) :is(a,button,select,summary,[role=button]),body.site-view:not([data-page=latest]) :is(a,button,select,summary,[role=button]) *{cursor:pointer}
 body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]){cursor:text}
+
+@media(min-width:1021px) and (hover:hover) and (pointer:fine){
+ body.site-view .landscape-peaks .peak-link.is-preview,body.site-view .landscape-peaks .peak-link.is-preview *{cursor:pointer}
+}

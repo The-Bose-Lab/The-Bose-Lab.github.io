@@ -93,7 +93,7 @@ body:is([data-theme=cameo],[data-theme=axiom],[data-theme=matter],[data-theme=st
 @media(max-width:850px){.latest-list{padding:3px 22px}.latest-row{grid-template-columns:150px 1fr;gap:24px}.recruitment-card{grid-template-columns:1fr;padding:28px;gap:32px}.research-direction{padding:25px}.principal{padding:22px;grid-template-columns:180px 1fr;gap:26px}.principal h2{font-size:40px}.people-grid{gap:22px}.person:not(.principal){padding:12px}.person:not(.principal) h3{font-size:22px}.paper,#archive .paper{grid-template-columns:140px minmax(0,1fr);padding:18px;gap:20px}#archive .paper h3{font-size:21px}#archive .paper-figure img{height:104px}.lab-footer{gap:30px}.blog-entry{padding:25px}.prose.motif-card{padding:25px}}
 @media(max-width:560px){.latest-row{grid-template-columns:1fr;gap:17px}.latest-row .entry-meta{flex-direction:row;align-items:center;flex-wrap:wrap;gap:15px}.latest-row .entry-copy{padding:0}.latest-row .entry-copy p{font-size:18px}.molecule-label{font-size:12px}.recruitment-card{padding:24px}.recruitment-card h2{font-size:34px}.recruitment-card .positions-copy>p{font-size:18px}.topic-chip{font-size:14px}.research-direction{padding:22px}.direction-heading h2{font-size:30px}.paper,#archive .paper{grid-template-columns:100px minmax(0,1fr);gap:15px;padding:14px}.paper-figure{padding:5px}.paper-figure img,#archive .paper-figure img{height:78px}.paper h3,#archive .paper h3{font-size:18px}.paper-authors strong{color:var(--ink);font-weight:700}
 .paper-authors{font-size:12px}.venue-label{font-size:10px}.venue-label .molecular-mark{display:none}.principal{grid-template-columns:1fr}.principal img{max-width:260px}.people-grid,.alumni-grid{grid-template-columns:1fr}.person:not(.principal){padding:20px}.person img{max-height:400px}.blog-entry h2{font-size:32px}.prose{font-size:18px}.prose h2{font-size:29px}.prose.motif-card{padding:20px}.publication-tools{padding:20px}.lab-footer{align-items:flex-start}}
-.github-link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;color:var(--ink);transition:background .18s}
+.github-link{display:inline-flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;min-height:40px;border-radius:50%;color:var(--ink);transition:background .18s}
 .github-link svg{width:26px;height:26px}
 .github-link:hover{background:var(--interaction-surface)}
 .mode-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border:0;border-radius:50%;padding:10px;background:transparent;color:var(--ink);cursor:none;transition:background .18s}
@@ -112,7 +112,7 @@ html:is([data-state=revealing],[data-state=ready]) #home-header .mode-toggle{opa
 .footer-contact{display:flex;flex-direction:column;align-items:flex-end;gap:14px;justify-self:end}
 .footer-affiliation{gap:14px}
 .social-links{display:flex;align-items:center;gap:10px}
-.social-links .github-link{width:36px;height:36px}
+.social-links .github-link{width:36px;height:36px;min-height:36px}
 .social-links .github-link svg{width:24px;height:24px}
 .social-links .x-link svg{width:21px;height:21px}
 .lab-footer>.footer-bottom{display:block;margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)}
