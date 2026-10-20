@@ -2,7 +2,7 @@ import {ResearchVisual} from './research-renderer.js';
 import {initHomeShell} from './site-home.js';
 import {getTheme,heroSpecimens} from './config.js';
 import {selectVisit} from './selection.js';
-import {loadJSON,loadMolecularRenderer} from './assets.js';
+import {loadJSON,loadMolecularRenderer,molecularSource,molecularUrl} from './assets.js';
 import {Entrance} from './entrance.js';
 import {MolecularMotion} from './molecular-motion.js';
 import {MemoController} from './memo.js';
@@ -44,12 +44,12 @@ try{
  }else{
   // Start independent asset requests before the molecular runtime is parsed.
   const metadata=Promise.all(['bounds','chain-groups','views','elastic-modes'].map(loadJSON));
-  const modelPreload=document.createElement('link');modelPreload.rel='preload';modelPreload.as='fetch';modelPreload.crossOrigin='anonymous';modelPreload.href=`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`;document.head.append(modelPreload);
+  const modelPreload=document.createElement('link');modelPreload.rel='preload';modelPreload.as='fetch';modelPreload.crossOrigin='anonymous';modelPreload.href='./'+molecularSource(spec).path;document.head.append(modelPreload);
   await loadMolecularRenderer();entrance.stage(.3);
   const [bounds,groups,views,elastic]=await metadata;fields=elastic;
   const viewer=await molstar.Viewer.create('molecule',viewerOptions(theme));plugin=viewer.plugin;resolution=trackResolution(plugin);
   const b=molstar.PluginExtensions.mvs.createBuilder();b.canvas({background_color:theme.bg});
-  const st=b.download({url:new URL(`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`,document.baseURI).href}).parse({format:spec.format||'pdb'}).modelStructure();
+  const st=b.download({url:molecularUrl(spec)}).parse({format:molecularSource(spec).format}).modelStructure();
   const r=st.component({selector:specKey==='packing'?'all':'protein'}).representation({type:'spacefill',ignore_hydrogens:true,...(specKey==='packing'?{size_factor:.76}:{})});r.color({color:theme.a});
   if(specKey==='packing'){r.color({color:theme.c,selector:{type_symbol:'O'}});r.color({color:theme.d,selector:{type_symbol:'N'}});}
   else{(groups[spec.file]||[]).forEach((chain,i)=>r.color({color:[theme.a,theme.b,theme.c,theme.d][i%4],selector:spec.format==='mmcif'?{label_asym_id:chain}:{auth_asym_id:chain}}));st.component({selector:'ligand'}).representation({type:'spacefill',ignore_hydrogens:true,size_factor:1.05}).color({color:theme.b});}

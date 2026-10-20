@@ -1,4 +1,4 @@
-import {loadMolecularRenderer,loadJSON} from './assets.js';
+import {loadMolecularRenderer,loadJSON,molecularUrl,molecularSource} from './assets.js';
 import {visualSpeed} from './motion-clock.js';
 import {memoMetrics} from './memo-metrics.js';
 import {specimens,heroSpecimens} from './config.js';
@@ -100,7 +100,7 @@ export class MemoController {
   await Promise.all(kinds.map(async kind=>{
    const key=this.options[kind],allowed=kind==='protein'?['cofolding','myoglobin']:['packing'],spec=specimens[allowed.includes(key)?key:memoDefaults[kind]],container=this.slots[kind];container.replaceChildren();const stage=document.createElement('div');stage.id='memo-companion-'+kind;stage.className='molecular-stage';stage.style.cssText='position:absolute;inset:0;opacity:0';container.append(stage);
    const viewer=await molstar.Viewer.create(stage.id,viewerOptions(this.theme));if(serial!==this.serial){viewer.plugin.dispose();return;}const resolution=trackResolution(viewer.plugin);
-   const b=molstar.PluginExtensions.mvs.createBuilder();b.canvas({background_color:this.theme.bg});const st=b.download({url:new URL(`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`,document.baseURI).href}).parse({format:spec.format||'pdb'}).modelStructure();
+   const b=molstar.PluginExtensions.mvs.createBuilder();b.canvas({background_color:this.theme.bg});const st=b.download({url:molecularUrl(spec)}).parse({format:molecularSource(spec).format}).modelStructure();
    const r=st.component({selector:kind==='protein'?'protein':'all'}).representation({type:'spacefill',ignore_hydrogens:true,size_factor:kind==='crystal'?.76:1});r.color({color:this.theme.a});
    if(kind==='crystal'){r.color({color:this.theme.c,selector:{type_symbol:'O'}});r.color({color:this.theme.d,selector:{type_symbol:'N'}});}
    else{r.color({color:this.theme.d,selector:{auth_asym_id:'D'}});st.component({selector:'ligand'}).representation({type:'spacefill',ignore_hydrogens:true,size_factor:1.05}).color({color:this.theme.c});}

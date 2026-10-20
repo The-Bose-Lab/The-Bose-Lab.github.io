@@ -13,6 +13,16 @@ pnpm dev
 
 Edit `_data/` for people, papers, research, news and contact information; `src/` for layout, interactions and visualisations; and `public/` for self-hosted assets. `scripts/generate.mjs` generates the routes and renders article equations at build time. The site has no application server or external font/CDN dependency.
 
+Structure files in `public/assets/` are published as `.pdb.txt` / `.cif.txt` so that GitHub Pages serves them gzip-compressed (it sends `chemical/*` responses uncompressed, which quadruples the download), and the mmCIF hero is additionally stored as BinaryCIF (`.bcif`) for the Mol* viewer. After replacing a structure file, run `node scripts/molstar/encode-bcif.mjs` to refresh the `.bcif` copy.
+
+`public/vendor/molstar.js` is a trimmed build of the pinned Mol* release: the standard viewer with only the MolViewSpec extension compiled in, which is all the site uses (about a quarter smaller than the stock bundle and faster to initialise). It is committed; rebuild it only when upgrading Mol*:
+
+```sh
+cd scripts/molstar
+pnpm install --frozen-lockfile
+pnpm build
+```
+
 ## Publish
 
 ```sh

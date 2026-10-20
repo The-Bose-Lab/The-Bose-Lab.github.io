@@ -1,0 +1,15 @@
+{
+  "name": "bose-lab-molstar-build",
+  "private": true,
+  "type": "module",
+  "description": "Builds public/vendor/molstar.js: the Mol* viewer with only the MolViewSpec extension compiled in.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1",
+    "molstar": "5.13.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

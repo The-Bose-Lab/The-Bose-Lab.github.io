@@ -1,6 +1,7 @@
 import {researchSelection} from './research-selection.js';
 import {motionRate} from './motion-clock.js';
-import {openingMolecules} from './config.js';
+import {openingMolecules,specimens} from './config.js';
+import {structurePath} from './assets.js';
 import {SceneView,ResearchVisual} from './research-renderer.js';
 import {LandscapeScene} from './landscape-scene.js?v=20261019-rim';
 import {TopicDetailScene} from './detail-scenes.js';
@@ -26,7 +27,7 @@ export async function bindResearchLandscape(theme){
   }else{
    let model;if(topic==='science'){
     const choices=Object.keys(openingMolecules),key=choices[Math.floor(Math.random()*choices.length)],spec=openingMolecules[key],crystal=key==='packing';
-    const [text,views,groups]=await Promise.all([fetch(`./assets/${spec.file}.${spec.format==='mmcif'?'cif':'pdb'}`).then(r=>r.text()),fetch('./assets/views.json').then(r=>r.json()),fetch('./assets/chain-groups.json').then(r=>r.json())]);
+    const [text,views,groups]=await Promise.all([fetch('./'+structurePath(spec)).then(r=>r.text()),fetch('./assets/views.json').then(r=>r.json()),fetch('./assets/chain-groups.json').then(r=>r.json())]);
     const chainColours=Object.fromEntries((groups[spec.file]||[]).map((chain,i)=>[chain,[theme.a,theme.b,theme.c,theme.d][i%4]]));model=new AtlasMolecularScene(text,views[spec.file],theme,crystal,{format:spec.format,chainColours});detail.dataset.visual=key;detail.setAttribute('aria-label',spec.name);
    }
    else model=new TopicDetailScene(topic,theme);
@@ -50,7 +51,7 @@ export async function bindResearchLandscape(theme){
    const box=map.getBoundingClientRect(),scale=map.clientWidth/box.width;connectors.setAttribute('viewBox',`0 0 ${map.clientWidth} ${map.clientHeight}`);
    scienceViews.forEach((view,i)=>{const q=view.model.connectorPoint(),r=view.container.getBoundingClientRect(),source=[(r.left+(q.x+1)*r.width/2-box.left)*scale,(r.top+(1-q.y)*r.height/2-box.top)*scale],[x,z]=i?[1.57,-.96]:[.76,-.92],p=new T.Vector3(x,model.height(x,z)+.02,z).project(model.camera),target=[(p.x+1)*map.clientWidth/2,(1-p.y)*map.clientHeight/2],part=connectorParts[i],bend=Math.min(24,Math.abs(target[1]-source[1])*.4);part.path.setAttribute('d',`M ${source[0]} ${source[1]} C ${source[0]} ${source[1]+bend},${target[0]} ${target[1]-bend},${target[0]} ${target[1]}`);[source,target].forEach((p,j)=>{part.dots[j].setAttribute('cx',p[0]);part.dots[j].setAttribute('cy',p[1]);});});
   }
-  const prepareScience=()=>scienceReady??=(async()=>{const [protein,crystal,views]=await Promise.all([fetch('./assets/complex.pdb').then(r=>r.text()),fetch('./assets/aspirin-packing.pdb').then(r=>r.text()),fetch('./assets/views.json').then(r=>r.json())]);for(const [text,file,isCrystal]of [[protein,'complex',false],[crystal,'aspirin-packing',true]]){const cell=document.createElement('div');cell.className=isCrystal?'atlas-crystal':'atlas-protein';science.append(cell);const view=new SceneView(cell,new AtlasMolecularScene(text,views[file],theme,isCrystal),theme,isCrystal?'Aspirin crystal packing':'Barnase–barstar protein complex');cell.style.position='absolute';view.onDraw=drawConnections;scienceViews.push(view);}science.style.position='absolute';place();for(const view of scienceViews)view.setActive(model.hoverTopic==='science');science.classList.toggle('is-visible',model.hoverTopic==='science');drawConnections();})();
+  const prepareScience=()=>scienceReady??=(async()=>{const [protein,crystal,views]=await Promise.all([fetch('./'+structurePath(specimens.cofolding)).then(r=>r.text()),fetch('./'+structurePath(specimens.packing)).then(r=>r.text()),fetch('./assets/views.json').then(r=>r.json())]);for(const [text,file,isCrystal]of [[protein,'complex',false],[crystal,'aspirin-packing',true]]){const cell=document.createElement('div');cell.className=isCrystal?'atlas-crystal':'atlas-protein';science.append(cell);const view=new SceneView(cell,new AtlasMolecularScene(text,views[file],theme,isCrystal),theme,isCrystal?'Aspirin crystal packing':'Barnase–barstar protein complex');cell.style.position='absolute';view.onDraw=drawConnections;scienceViews.push(view);}science.style.position='absolute';place();for(const view of scienceViews)view.setActive(model.hoverTopic==='science');science.classList.toggle('is-visible',model.hoverTopic==='science');drawConnections();})();
   let foundationLayoutKey='',foundationSweep=[],samplingFront=0;
   const sequenceAnchor=new T.Vector3(1.30,model.baseHeight(1.30,1.16)+.055,1.16);
   const project=id=>new T.Vector3(...model.peaks.find(p=>p.id===id).position).project(model.camera);
