@@ -9,6 +9,11 @@ export function siteHref(page,topic=''){
 }
 export function bindSiteNavigation(root=document){
  document.documentElement.dataset.navigationReady='true';
+ const shell=root.querySelector('#site-header');
+ if(shell){
+  const reserve=()=>document.body.style.setProperty('--site-header-height',shell.getBoundingClientRect().height+'px');
+  reserve();new ResizeObserver(reserve).observe(shell);document.body.dataset.headerPinned='true';
+ }
  for(const a of root.querySelectorAll('a[data-page]'))a.href=siteHref(a.dataset.page,a.dataset.topic);
  const toggle=root.querySelector('.nav-toggle'),nav=root.querySelector('#main-navigation');
  toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';document.body.dataset.navOpen=String(open);const brand=root.querySelector('.wordmark'),hidden=!open&&document.body.dataset.page==='home'&&Number(document.documentElement.dataset.storyProgress||0)<.5;brand?.setAttribute('aria-hidden',String(hidden));if(brand)brand.tabIndex=hidden?-1:0;toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');nav.classList.toggle('is-open',open);});

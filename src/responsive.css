@@ -138,3 +138,9 @@ body.site-view:not([data-page=latest]) :is(input,textarea,[contenteditable=true]
 }
 
 .landscape-peaks .peak-title{appearance:none;text-align:inherit;color:inherit}
+
+/* Pin compact subpage headers independently of Safari's sticky scroll position. */
+@media(max-width:700px){
+ body.site-view[data-header-pinned=true]{padding-top:var(--site-header-height)}
+ body.site-view[data-header-pinned=true] #site-header{position:fixed;inset:0 0 auto;animation:none}
+}
