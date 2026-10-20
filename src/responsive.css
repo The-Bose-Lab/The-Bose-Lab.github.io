@@ -101,8 +101,6 @@ html.has-site-scroll{scroll-behavior:auto;overscroll-behavior-y:none}
 
 /* Display-only molecular canvases must never capture page gestures. */
 #opening #molecule,#opening #molecule *,#opening .molecular-stage,#opening .molecular-stage *{pointer-events:none!important;touch-action:inherit!important}
-/* Keep the home composition, header and News on one generous desktop rail. */
-@media(min-width:1441px){html.has-site-scroll{--content-rail:min(1640px,85.56vw)}}
 
 /* A fixed attachment envelope prevents selection or lazy loading from shifting the atlas. */
 @media(max-width:1020px){
