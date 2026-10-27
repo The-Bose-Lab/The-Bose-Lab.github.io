@@ -1,5 +1,5 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/binding-scene-Cj7XzYwv.js","assets/research-models-JSYSiRno.js"])))=>i.map(i=>d[i]);
-import{a as e,i as t,n,o as r}from"./page-loading-DJH5LRIE.js";import{Hn as i,Wn as a}from"./research-models-JSYSiRno.js";import{i as o,n as s,r as c,s as l,t as u}from"./research-renderer-BCikJOKr.js";import{a as d,n as f,r as p,u as m}from"./config-TEBKibGX.js";import{i as h,r as g,t as _}from"./loading-widget-tVbirQLN.js";var v=`<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+import{a as e,i as t,n,o as r}from"./page-loading-BuP5rwHL.js";import{Hn as i,Wn as a}from"./research-models-JSYSiRno.js";import{i as o,n as s,r as c,s as l,t as u}from"./research-renderer-BCikJOKr.js";import{a as d,n as f,r as p,u as m}from"./config-TEBKibGX.js";import{i as h,r as g,t as _}from"./loading-widget-tVbirQLN.js";var v=`<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 1548 170" style="enable-background:new 0 0 1548 170;" xml:space="preserve">
 <g fill="currentColor">
 	<polygon points="641.97,0 641.97,170 752.47,170 752.47,140.25 674.27,140.25 674.27,97.75 745.67,97.75 745.67,68.85

@@ -9,7 +9,7 @@ import {siteHeader,setRouteBase,sitePages,siteHref} from '../src/site/site-navig
 export async function generate(base='/'){
  setRouteBase(base);const imageSizes=JSON.parse(await readFile('scripts/image-sizes.json','utf8'));const data={};for(const f of await readdir('_data'))if(f.endsWith('.yml'))data[f.slice(0,-4)]=parse(await readFile('_data/'+f,'utf8'));
  data.posts[0].html=await prerenderArticle((await readFile('content/normalizing-flow-maps.html','utf8')).replaceAll('.gif"','.webp"'));
- const routes=[['home',''],['team','team'],['research','research'],...['foundations','science','sampling','safety'].map(t=>['research','research/'+t,t]),['latest','news'],['blog','blog'],['post','normalizing-flow-maps'],['post','blog/normalizing-flow-maps'],['join','join'],['publications','publications']];
+ const routes=[['home',''],['team','team'],['research','research'],...['foundations','science','sampling','safety'].map(t=>['research','research/'+t,t]),['latest','news'],['blog','blog'],['talks','talks'],['post','normalizing-flow-maps'],['post','blog/normalizing-flow-maps'],['join','join'],['publications','publications']];
  const inputs=[];
  for(const[page,path,topic='']of routes){
   const dir='.generated/'+path;await mkdir(dir,{recursive:true});
