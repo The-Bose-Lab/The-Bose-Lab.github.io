@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/assets/images/logo-small.svg">
+<title>Welcome to the Bose Lab blog — Bose Lab</title>
+<meta name="description" content="Our work spans diffusion, flow matching, and neural samplers — from mathematical foundations to what they make possible in science: protein design, molecular...">
+<meta property="og:title" content="Welcome to the Bose Lab blog — Bose Lab">
+<meta property="og:description" content="Our work spans diffusion, flow matching, and neural samplers — from mathematical foundations to what they make possible in science: protein design, molecular dynamics, and sampling from unnormalize...">
+<meta property="og:url" content="https://the-bose-lab.github.io/blog/2026/welcome-to-the-bose-lab-blog/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/main.css">
+<link type="application/atom+xml" rel="alternate" href="https://the-bose-lab.github.io/feed.xml" title="Bose Lab" />
+</head>
+<body>
+
+<header id="hdr"><div class="wrap nav">
+  <a class="brand" href="/"><svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true"><polygon points="32,2.5 57.5,17.2 57.5,46.8 32,61.5 6.5,46.8 6.5,17.2" stroke="currentColor" stroke-width="2" opacity=".5" stroke-linejoin="round"/><g stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M25 17 V47"/><path d="M25 17 L36 16 L42 22 L41 27 L35 32 L25 32"/><path d="M35 32 L44 37 L44.5 43 L38 47 L25 47"/></g><g fill="#ffffff" stroke="currentColor" stroke-width="2.4"><circle cx="25" cy="17" r="3.4"/><circle cx="25" cy="32" r="3.4"/><circle cx="25" cy="47" r="3.4"/><circle cx="36" cy="16" r="3.4"/><circle cx="42" cy="22" r="3.4"/><circle cx="41" cy="27" r="3.4"/><circle cx="35" cy="32" r="3.4"/><circle cx="44" cy="37" r="3.4"/><circle cx="38" cy="47" r="3.4"/></g><circle cx="44.5" cy="43" r="4" fill="#b4351f"/></svg>
+Bose <i>Lab</i></a>
+  <nav class="nav-links">
+    
+    
+      
+      
+      
+      <a href="/">Home</a>
+    
+      
+      
+      
+      <a href="/people/">People</a>
+    
+      
+      
+      
+      <a href="/publications/">Publications</a>
+    
+      
+      
+      
+      <a href="/blog/" class="active" aria-current="page">Blog</a>
+    
+      
+      
+      
+      <a href="/news/">News</a>
+    
+      
+      
+      
+      <a href="/join/">Join</a>
+    
+  </nav>
+</div></header>
+
+<article class="post wrap">
+  <div class="post-head">
+    <div class="meta">
+      <span>11 Oct 2026</span>
+      <span class="au">Joey Bose</span>
+      <span>1 min read</span>
+    </div>
+    <h1>Welcome to the Bose Lab blog</h1>
+  </div>
+  <div class="post-body">
+    <p>This is the lab’s new home for technical writing — paper deep-dives, tutorials, negative results worth sharing, and the folklore that never fits in an eight-page paper. Every lab member is encouraged to write here.</p>
+
+<h2 id="writing-a-post">Writing a post</h2>
+
+<p>A post is one markdown file in <code class="language-plaintext highlighter-rouge">_posts/</code>, named <code class="language-plaintext highlighter-rouge">YYYY-MM-DD-your-title.md</code>, starting with front matter:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">post</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">Your title here</span>
+<span class="na">author</span><span class="pi">:</span> <span class="s">Your Name</span>
+<span class="na">math</span><span class="pi">:</span> <span class="no">true</span>   <span class="c1"># only if you need LaTeX</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<p>Everything below the front matter is standard markdown. Code blocks are syntax-highlighted:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">euler_step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="s">"""One integration step along the learned vector field."""</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And with <code class="language-plaintext highlighter-rouge">math: true</code> in the front matter, LaTeX renders via KaTeX — inline like $u_t(x)$ or displayed:</p>
+
+\[\frac{\mathrm{d}}{\mathrm{d}t}\,\psi_t(x) = u_t\big(\psi_t(x)\big), \qquad \psi_0(x) = x.\]
+
+<p>Open a pull request with your post, and it publishes when merged. That’s the whole pipeline.</p>
+
+<h2 id="what-to-expect-here">What to expect here</h2>
+
+<p>To start, we’re planning posts on the foundations the lab works on — flow matching from first principles, what flow maps actually buy you at inference time, and how Boltzmann generators earn (or don’t earn) their equilibrium samples. If you’re a student in the lab: your first post is a rite of passage. Pick the thing you most recently had to explain twice at a whiteboard.</p>
+
+  </div>
+  <div class="post-foot">
+    <a href="/blog/">← All posts</a>
+    <a href="mailto:joey.bose@imperial.ac.uk">Discuss by email</a>
+  </div>
+</article>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$', right: '$', display: false},
+    {left: '\\(', right: '\\)', display: false},
+    {left: '\\[', right: '\\]', display: true}
+  ]});"></script>
+
+
+
+<footer><div class="wrap" style="display:contents">
+  <span class="mono">© 2026 Bose Lab — Department of Computing, Imperial College London</span>
+  <span class="mono"><a href="mailto:joey.bose@imperial.ac.uk">joey.bose@imperial.ac.uk</a> · <a href="https://github.com/The-Bose-Lab" target="_blank" rel="noopener">GitHub</a> · <a href="/feed.xml">RSS</a></span>
+</div></footer>
+
+<script>
+/* nav border on scroll */
+addEventListener('scroll', () => document.getElementById('hdr').classList.toggle('scrolled', scrollY > 8), { passive: true });
+/* reveal on scroll */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

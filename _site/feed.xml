@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://the-bose-lab.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://the-bose-lab.github.io/" rel="alternate" type="text/html" /><updated>2026-10-11T20:22:20+01:00</updated><id>https://the-bose-lab.github.io/feed.xml</id><title type="html">Bose Lab</title><subtitle>Our work spans diffusion, flow matching, and neural samplers — from mathematical foundations to what they make possible in science: protein design, molecular dynamics, and sampling from unnormalized densities.</subtitle><entry><title type="html">Welcome to the Bose Lab blog</title><link href="https://the-bose-lab.github.io/blog/2026/welcome-to-the-bose-lab-blog/" rel="alternate" type="text/html" title="Welcome to the Bose Lab blog" /><published>2026-10-11T00:00:00+01:00</published><updated>2026-10-11T00:00:00+01:00</updated><id>https://the-bose-lab.github.io/blog/2026/welcome-to-the-bose-lab-blog</id><content type="html" xml:base="https://the-bose-lab.github.io/blog/2026/welcome-to-the-bose-lab-blog/">&lt;p&gt;This is the lab’s new home for technical writing — paper deep-dives, tutorials, negative results worth sharing, and the folklore that never fits in an eight-page paper. Every lab member is encouraged to write here.&lt;/p&gt;
+
+&lt;h2 id=&quot;writing-a-post&quot;&gt;Writing a post&lt;/h2&gt;
+
+&lt;p&gt;A post is one markdown file in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts/&lt;/code&gt;, named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YYYY-MM-DD-your-title.md&lt;/code&gt;, starting with front matter:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;post&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Your title here&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Your Name&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;math&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# only if you need LaTeX&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Everything below the front matter is standard markdown. Code blocks are syntax-highlighted:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;euler_step&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;One integration step along the learned vector field.&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;math: true&lt;/code&gt; in the front matter, LaTeX renders via KaTeX — inline like $u_t(x)$ or displayed:&lt;/p&gt;
+
+\[\frac{\mathrm{d}}{\mathrm{d}t}\,\psi_t(x) = u_t\big(\psi_t(x)\big), \qquad \psi_0(x) = x.\]
+
+&lt;p&gt;Open a pull request with your post, and it publishes when merged. That’s the whole pipeline.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-to-expect-here&quot;&gt;What to expect here&lt;/h2&gt;
+
+&lt;p&gt;To start, we’re planning posts on the foundations the lab works on — flow matching from first principles, what flow maps actually buy you at inference time, and how Boltzmann generators earn (or don’t earn) their equilibrium samples. If you’re a student in the lab: your first post is a rite of passage. Pick the thing you most recently had to explain twice at a whiteboard.&lt;/p&gt;</content><author><name>Joey Bose</name></author><summary type="html">This is the lab’s new home for technical writing — paper deep-dives, tutorials, negative results worth sharing, and the folklore that never fits in an eight-page paper. Every lab member is encouraged to write here.</summary></entry></feed>
