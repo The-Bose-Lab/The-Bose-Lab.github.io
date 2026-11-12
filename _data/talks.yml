@@ -1,5 +1,36 @@
 # Talks listed on /talks/. Each talk's slides are a self-contained HTML deck at
 # public/talks/<id>/index.html, served at /talks/<id>/.
+- id: fast-cofolding
+  title: Fast Cofolding and the Rewards That Guide It
+  speaker: Joey Bose
+  kind: In Silico (Pillar VC)
+  when: November 2026
+  abstract:
+    - >-
+      Cofolding models in the AlphaFold 3 family place every atom by denoising, over roughly two
+      hundred network evaluations per structure. That cost shapes everything downstream, because
+      inference-time search multiplies it by the number of particles and by every reward call. This
+      talk covers two pieces of work: one on the cost of generation, the other on the reward that
+      guides it.
+    - >-
+      DeCAF distils a pretrained all-atom cofolding model into a few-step flow map. Distilling Pearl
+      gives a student that matches its teacher's success rate on Runs N' Poses with five times fewer
+      network evaluations, and the flow map's look-ahead makes reward-guided search both cheaper and
+      better aimed. MARTINI then addresses the reward itself. Given a small set of oracle values or
+      rankings, it learns how several cheap surrogates combine and steers with those surrogates
+      alone, with no oracle queries at inference. Fitted once to measured binding affinities, the
+      composition improves joint pose accuracy on complexes released after the training cutoff.
+  links:
+    - label: DeCAF paper
+      href: https://arxiv.org/abs/2606.08375
+    - label: DeCAF code
+      href: https://github.com/genesistherapeutics/decaf
+    - label: DeCAF blog post
+      href: https://www.genesis.ml/news/genesis-model-distillation
+    - label: MARTINI paper
+      href: https://arxiv.org/abs/2610.25502
+    - label: MARTINI project page
+      href: https://alecsargood.github.io/martini/
 - id: learning-generative-maps
   title: Learning Generative Maps and the Rewards That Guide Them
   speaker: Joey Bose
